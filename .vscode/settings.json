@@ -1,0 +1,18 @@
+{
+  "eslint.format.enable": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "css.lint.unknownAtRules": "ignore", // Tailwind CSS
+  "cSpell.words": [
+    // tailwindcss
+    "tailwindcss",
+    "callees",
+    "classname",
+
+    // shadcn-ui
+    "cmdk",
+
+    // font
+    "pretendard"
+  ]
+}
