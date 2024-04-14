@@ -1,3 +1,55 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:tailwindcss/recommended"
+  ],
+  "plugins": [
+    "simple-import-sort",
+    "unused-imports",
+    "tailwindcss"
+  ],
+  "settings": {
+    "tailwindcss": {
+      "callees": ["cn"],
+      "config": "tailwind.config.js"
+    },
+    "next": {
+      "rootDir": ["./src/"]
+    }
+  },
+  "rules": {
+    // Code style
+    "indent": ["error", 2],
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"],
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "never",
+      "exports": "never",
+      "functions": "never"
+    }],
+    "comma-spacing": ["error", { "before": false, "after": true }],
+    "no-console": "warn",
+    "tailwindcss/no-custom-classname": "off",
+
+    // import / export
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "unused-imports/no-unused-imports-ts": ["error"],
+
+    // React
+    "react/react-in-jsx-scope": 0,
+    "react/jsx-first-prop-new-line": "error",
+    "react/self-closing-comp": ["error", {
+      "component": true,
+      "html": true
+    }],
+    "react/no-unknown-property": ["error", { "ignore": ["cmdk-input-wrapper"] }],
+
+    //shadcn-ui
+    "react/prop-types": [2, { "ignore": ["className", "sideOffset"] }] // https://github.com/shadcn-ui/ui/issues/120
+  }
 }
