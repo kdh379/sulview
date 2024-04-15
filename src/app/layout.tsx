@@ -5,10 +5,14 @@ import localFont from "next/font/local";
 
 import { auth } from "@/auth";
 import Providers from "@/components/Providers";
+import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "술뷰",
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
   description: "위스키 리뷰 사이트",
 };
 

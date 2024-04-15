@@ -5,6 +5,8 @@ import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 import AppHeader from "./layout/app-header";
+import Navigation from "./layout/navigation";
+import { TooltipProvider } from "./ui/tooltip";
 
 const queryClient = new QueryClient();
 
@@ -17,10 +19,13 @@ export default function Providers({ session, children }: ProvidersProps) {
   return (
     <SessionProvider session={session}>
       <QueryClientProvider client={queryClient}>
-        <div className="flex min-h-screen flex-col">
-          <AppHeader />
-          {children}
-        </div>
+        <TooltipProvider delayDuration={0}>
+          <Navigation />
+          <div className="bg-muted/40 flex min-h-screen w-full flex-col sm:gap-4 sm:py-4 sm:pl-14">
+            <AppHeader />
+            {children}
+          </div>
+        </TooltipProvider>
       </QueryClientProvider>
     </SessionProvider>
   );
