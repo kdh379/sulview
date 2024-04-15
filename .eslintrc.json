@@ -50,6 +50,6 @@
     "react/no-unknown-property": ["error", { "ignore": ["cmdk-input-wrapper"] }],
 
     //shadcn-ui
-    "react/prop-types": [2, { "ignore": ["className", "sideOffset"] }] // https://github.com/shadcn-ui/ui/issues/120
+    "react/prop-types": [2, { "ignore": ["className", "sideOffset", "checked", "position", "align"] }] // https://github.com/shadcn-ui/ui/issues/120
   }
 }
