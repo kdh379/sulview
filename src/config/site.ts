@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: "sulview",
+  name: "SULVIEW",
   description: "위스키 리뷰 사이트",
   image: "/images/profile.png",
   links: {
