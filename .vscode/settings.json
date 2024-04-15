@@ -3,6 +3,7 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "css.lint.unknownAtRules": "ignore", // Tailwind CSS
+  "typescript.preferences.importModuleSpecifier": "non-relative", // use ts path alias
   "cSpell.words": [
     // tailwindcss
     "tailwindcss",
