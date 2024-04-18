@@ -4,6 +4,8 @@ import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
+import { Toaster } from "@/components/ui/toaster";
+
 import AppHeader from "./layout/app-header";
 import Navigation from "./layout/navigation";
 import { TooltipProvider } from "./ui/tooltip";
@@ -26,6 +28,7 @@ export default function Providers({ session, children }: ProvidersProps) {
             {children}
           </div>
         </TooltipProvider>
+        <Toaster />
       </QueryClientProvider>
     </SessionProvider>
   );
