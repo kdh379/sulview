@@ -5,15 +5,20 @@
   "css.lint.unknownAtRules": "ignore", // Tailwind CSS
   "typescript.preferences.importModuleSpecifier": "non-relative", // use ts path alias
   "cSpell.words": [
-    // tailwindcss
+    // dependencies
     "tailwindcss",
     "callees",
     "classname",
-
-    // shadcn-ui
     "cmdk",
+    "hookform",
+    "uniqid",
+    "lucide",
+    "clsx",
 
     // font
-    "pretendard"
+    "pretendard",
+
+    // etc
+    "sulview"
   ]
 }

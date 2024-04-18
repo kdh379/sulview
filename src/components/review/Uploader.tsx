@@ -11,11 +11,10 @@ import { createPreviewMedia } from "@/lib/upload";
 export type FilePreview = File & { preview: string };
 
 const MAX_FILES = 5;
-const MAX_FILE_SIZE = 10; // MB
 
 const DROPZONE_MSG_BOX: {[key: string]: string} = {
-  "file-invalid-type": "png, jpg, jpeg, webp 형식의 이미지 파일만 업로드할 수 있습니다.",
-  "file-too-large": `파일 크기가 너무 큽니다. 최대 ${MAX_FILE_SIZE}MB까지 업로드할 수 있습니다.`,
+  "file-invalid-type": "png, jpg, jpeg, webP 형식의 이미지 파일만 업로드할 수 있습니다.",
+  "file-too-large": "파일 크기가 너무 큽니다.",
 };
 
 interface UploaderProps {
@@ -30,7 +29,6 @@ export default function Uploader({disabled, onChange}: UploaderProps) {
     accept: {
       "image/*": [".png", ".jpg", ".jpeg", ".webp"],
     },
-    maxSize: MAX_FILE_SIZE * 1024 * 1024,
     onDropRejected: (events) => {
 
       toast({
