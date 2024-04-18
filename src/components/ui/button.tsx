@@ -21,6 +21,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 active:bg-secondary/60",
         ghost: "hover:bg-accent",
         link: "text-primary underline-offset-4 hover:underline",
+        dashed: "border-dashed border-2 hover:border-muted-foreground/50",
       },
       size: {
         default: "h-9 px-4 py-2",
@@ -48,6 +49,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
+        type="button"
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         disabled={isLoading || disabled}
