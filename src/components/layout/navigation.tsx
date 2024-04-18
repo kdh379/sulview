@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 
 import { Icons } from "../ui/icons";
 
-const NAV_ITEMS = [
+export const NAV_ITEMS = [
   {
     icon: Home,
     label: "홈",

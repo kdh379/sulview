@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { signIn, signOut, useSession } from "next-auth/react";
 import React from "react";
 
+import { NAV_ITEMS } from "@/components/layout/navigation";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -88,10 +89,10 @@ const AppHeader = () => {
       <Breadcrumb className="hidden md:flex">
         <BreadcrumbList>
           {
-            pathname.split("/").map((path, index, paths) => {
-              const href = paths.slice(0, index + 1).join("/");
+            pathname.split("/").slice(1).map((path, index, paths) => {
+              const href = `/${paths.slice(0, index + 1).join("/")}`;
               const isLast = index === paths.length - 1;
-              const label = path === "" ? "Home" : path;
+              const label = NAV_ITEMS.find((item) => item.href === href)?.label || path;
 
               return (
                 <React.Fragment key={label}>
