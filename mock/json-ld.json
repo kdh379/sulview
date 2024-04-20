@@ -1,0 +1,28 @@
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "Stagg Jr. Kentucky Straight Bourbon Whiskey",
+  "sku": 73691,
+  "brand": {
+    "@type": "Brand",
+    "name": "Stagg Jr."
+  },
+  "gtin": "088004018580",
+  "gtin12": "088004018580",
+  "image": "https://static.whiskybase.com/storage/whiskies/7/3/691/211560-normal.png",
+  "offers": {
+    "@type": "AggregateOffer",
+    "lowPrice": 480,
+    "highPrice": 590,
+    "priceCurrency": "EUR",
+    "offerCount": 4
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "bestRating": 100,
+    "worstRating": 0,
+    "ratingValue": 88.6099999999999994315658113919198513031005859375,
+    "reviewCount": 78
+  },
+  "description": "Stagg Jr. Kentucky Straight Bourbon Whiskey . The strength of this whisky is 64.85 % Vol. A bottle from Buffalo Trace Distillery"
+}

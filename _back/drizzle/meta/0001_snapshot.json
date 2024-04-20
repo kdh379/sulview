@@ -1,6 +1,6 @@
 {
-  "id": "3cc56001-e82f-4434-ba87-555c08c5417f",
-  "prevId": "f6d4af7f-6d05-4820-8c13-0c0e20846cec",
+  "id": "2ddefbb2-f8c2-4077-b9b8-455431f2dda5",
+  "prevId": "653e0334-ca6d-46e1-99c8-0c930144b576",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -108,7 +108,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
@@ -120,6 +120,12 @@
         },
         "region": {
           "name": "region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "country": {
+          "name": "country",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -140,15 +146,7 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "distillery_name_unique": {
-          "name": "distillery_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "review": {
       "name": "review",
@@ -156,13 +154,13 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
-          "primaryKey": false,
+          "type": "text",
+          "primaryKey": true,
           "notNull": true
         },
         "whiskyId": {
           "name": "whiskyId",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -181,12 +179,6 @@
         "password": {
           "name": "password",
           "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "images": {
-          "name": "images",
-          "type": "text[]",
           "primaryKey": false,
           "notNull": true
         },
@@ -290,10 +282,9 @@
         }
       },
       "compositePrimaryKeys": {
-        "review_id_whiskyId_userId_pk": {
-          "name": "review_id_whiskyId_userId_pk",
+        "review_whiskyId_userId_pk": {
+          "name": "review_whiskyId_userId_pk",
           "columns": [
-            "id",
             "whiskyId",
             "userId"
           ]
@@ -425,18 +416,18 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "text",
           "primaryKey": true,
-          "notNull": true
-        },
-        "distilleryId": {
-          "name": "distilleryId",
-          "type": "integer",
-          "primaryKey": false,
           "notNull": true
         },
         "name": {
           "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "distilleryId": {
+          "name": "distilleryId",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -449,19 +440,19 @@
         },
         "abv": {
           "name": "abv",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
         "age": {
           "name": "age",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
         "caskType": {
           "name": "caskType",
-          "type": "text[]",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },

@@ -1,6 +1,6 @@
 {
-  "id": "3cc56001-e82f-4434-ba87-555c08c5417f",
-  "prevId": "f6d4af7f-6d05-4820-8c13-0c0e20846cec",
+  "id": "5b08eea5-f5b9-4a91-9371-70d308b930bb",
+  "prevId": "9f4eabf7-094d-4ae8-be3a-cc71134d62e5",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -140,15 +140,7 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "distillery_name_unique": {
-          "name": "distillery_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "review": {
       "name": "review",
@@ -157,12 +149,12 @@
         "id": {
           "name": "id",
           "type": "serial",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true
         },
         "whiskyId": {
           "name": "whiskyId",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -290,10 +282,9 @@
         }
       },
       "compositePrimaryKeys": {
-        "review_id_whiskyId_userId_pk": {
-          "name": "review_id_whiskyId_userId_pk",
+        "review_whiskyId_userId_pk": {
+          "name": "review_whiskyId_userId_pk",
           "columns": [
-            "id",
             "whiskyId",
             "userId"
           ]
@@ -425,18 +416,18 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "text",
           "primaryKey": true,
-          "notNull": true
-        },
-        "distilleryId": {
-          "name": "distilleryId",
-          "type": "integer",
-          "primaryKey": false,
           "notNull": true
         },
         "name": {
           "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "distilleryId": {
+          "name": "distilleryId",
           "type": "text",
           "primaryKey": false,
           "notNull": true

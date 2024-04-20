@@ -3,6 +3,7 @@ import {
   integer,
   pgTable,
   primaryKey,
+  serial,
   text,
   timestamp
 } from "drizzle-orm/pg-core";
@@ -61,10 +62,9 @@ export const verificationTokens = pgTable(
 );
 
 export const distillery = pgTable("distillery", {
-  id: text("id").notNull().primaryKey(),
-  name: text("name").notNull(),
+  id: serial("id").primaryKey(),
+  name: text("name").unique().notNull(),
   region: text("region").notNull(),
-  country: text("country").notNull(),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
   createdBy: text("createdBy").notNull(),
 });
@@ -72,13 +72,13 @@ export const distillery = pgTable("distillery", {
 export const whisky = pgTable(
   "whisky",
   {
-    id: text("id").notNull().primaryKey(),
+    id: serial("id").primaryKey(),
+    distilleryId: integer("distilleryId").notNull().references(() => distillery.id, { onDelete: "cascade" }),
     name: text("name").notNull(),
-    distilleryId: text("distilleryId").notNull().references(() => distillery.id, { onDelete: "cascade" }),
     bottler: text("bottler").notNull(),
-    abv: integer("abv").notNull(),
-    age: integer("age").notNull(),
-    caskType: text("caskType").notNull(),
+    abv: text("abv").notNull(),
+    age: text("age").notNull(),
+    caskType: text("caskType").array().notNull(),
     caskNumber: text("caskNumber").notNull(),
     image: text("image").notNull(),
     createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
@@ -93,10 +93,12 @@ export const whisky = pgTable(
 export const review = pgTable(
   "review",
   {
-    whiskyId: text("whiskyId").notNull().references(() => whisky.id, { onDelete: "cascade" }),
+    id: serial("id"),
+    whiskyId: integer("whiskyId").notNull().references(() => whisky.id, { onDelete: "cascade" }),
     userId: text("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
     userName: text("userName").notNull(),
     password: text("password").notNull(),
+    images: text("images").array().notNull(),
     score: integer("score").notNull(),
     nose: text("nose").notNull(),
     noseScore: integer("noseScore").notNull(),
@@ -108,7 +110,7 @@ export const review = pgTable(
     createdBy: text("createdBy").notNull(),
   },
   (review) => ({
-    compoundKey: primaryKey({ columns: [review.whiskyId, review.userId] }),
+    compoundKey: primaryKey({ columns: [review.id, review.whiskyId, review.userId] }),
     whiskyIdx: index("whisky_idx").on(review.whiskyId),
     userIdx: index("user_idx").on(review.userId),
   })
