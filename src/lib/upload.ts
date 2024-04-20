@@ -37,17 +37,21 @@ export const calculateAspectRatioFit = ({
     maxLength: number;
   }) => {
 
-  if (width <= maxLength && height <= maxLength) {
+  if (width <= maxLength && height <= maxLength)
     return { width, height };
-  }
   
   const ratio = width / height;
   
-  if (width > height) {
-    return { width: maxLength, height: Number((maxLength / ratio).toFixed(1)) };
-  }
-  
-  return { width: Number((maxLength * ratio).toFixed(1)), height: maxLength };
+  if (width > height)
+    return {
+      width: maxLength,
+      height: Number((maxLength / ratio).toFixed(1)),
+    };
+  else 
+    return {
+      width: Number((maxLength * ratio).toFixed(1)),
+      height: maxLength,
+    };
 };
 
 const getImageSize = (imageFile: File): Promise<{ width: number; height: number }> => {

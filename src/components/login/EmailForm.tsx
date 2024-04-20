@@ -34,16 +34,11 @@ export default function EmailForm() {
     mutate: login,
     isLoading,
     isSuccess,
-  } = useMutation("login", (
-    values: z.infer<typeof formSchema>
-  ) => signIn("nodemailer", {
-    email: values.email,
-    redirect: false,
-  }));
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    return login(values);
-  }
+  } = useMutation("login", () => 
+    signIn("nodemailer", {
+      email: form.getValues("email"),
+      redirect: false,
+    }));
 
   if (isSuccess) {
     return (
@@ -58,7 +53,7 @@ export default function EmailForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(() => login())} className="space-y-4">
         <FormField
           control={form.control}
           name="email"

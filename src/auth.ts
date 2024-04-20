@@ -4,7 +4,7 @@ import Nodemailer from "next-auth/providers/nodemailer";
 import { createTransport } from "nodemailer";
 
 import { html } from "@/components/template/nodemailer";
-import { db } from "@/core/db";
+import { db } from "@/db/drizzle";
 
 import { siteConfig } from "./config/site";
 
