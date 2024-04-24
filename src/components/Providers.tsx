@@ -10,7 +10,14 @@ import AppHeader from "./layout/app-header";
 import Navigation from "./layout/navigation";
 import { TooltipProvider } from "./ui/tooltip";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: false,
+    },
+  },
+});
 
 interface ProvidersProps {
   session: Session | null;

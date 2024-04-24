@@ -6,27 +6,32 @@ import { z } from "zod";
 
 import { addDistillery } from "@/actions/distilleryActions";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import { customErrorMap } from "@/lib/zod";
 
 const formSchema = z.object({
   name: z.string().min(1),
   region: z.string().min(1),
 });
+z.setErrorMap(customErrorMap);
 
 export type DistilleryFormValues = z.infer<typeof formSchema>;
 
+const INIT_VALUES: DistilleryFormValues = {
+  name: "",
+  region: "",
+};
+
 export default function DistilleryForm({ handleOnAction }: { handleOnAction: () => void }) {
 
-  const [submitting, setSubmitting] = React.useState(false);
   const form = useForm<DistilleryFormValues>({
     resolver: zodResolver(formSchema),
+    defaultValues: INIT_VALUES,
   });
   const onSubmit = async(data: z.infer<typeof formSchema>) => {
-    setSubmitting(true);
     const result = await addDistillery(data);
-    setSubmitting(false);
 
     if("error" in result)
       return toast({
@@ -59,7 +64,10 @@ export default function DistilleryForm({ handleOnAction }: { handleOnAction: () 
               name="name"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>증류소</FormLabel>
+                  <FormLabel>
+                    증류소
+                    <FormMessage />
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="글렌알라키" />
                   </FormControl>
@@ -71,7 +79,10 @@ export default function DistilleryForm({ handleOnAction }: { handleOnAction: () 
               name="region"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>지역</FormLabel>
+                  <FormLabel>
+                    지역
+                    <FormMessage />
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="스코틀랜드" />
                   </FormControl>
@@ -85,13 +96,13 @@ export default function DistilleryForm({ handleOnAction }: { handleOnAction: () 
             <Button 
               variant="outline"
               onClick={handleOnAction}
-              disabled={submitting}
+              disabled={form.formState.isSubmitting}
             >
               취소
             </Button>
             <Button
               type="submit"
-              isLoading={submitting}
+              isLoading={form.formState.isSubmitting}
             >
               추가
             </Button>

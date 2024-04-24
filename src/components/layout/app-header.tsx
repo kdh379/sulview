@@ -53,7 +53,10 @@ function SignButton() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel
             >
-              내 계정
+              {session.user?.name}
+              <p className="text-muted-foreground/75 text-xs">
+                {session.user?.email}
+              </p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>

@@ -23,7 +23,7 @@ const formSchema = z.object({
   name: z.string().min(1),
   score: z.coerce.number().min(0).max(100).multipleOf(0.1),
   images: z.array(z.string()),
-  distillery: z.string(),
+  distillery: z.coerce.number(),
   bottler: z.string(),
   age: z.string(),
   abv: z.string(),
@@ -38,6 +38,8 @@ const formSchema = z.object({
   content: z.string(),
 });
 
+type ReviewFormValues = z.infer<typeof formSchema>;
+
 const WHISKY_LIST = [
   {
     label: "와일드 터키 레어브리드",
@@ -49,11 +51,11 @@ const WHISKY_LIST = [
   },
 ];
 
-const FORM_INITIAL_VALUES = {
+const FORM_INITIAL_VALUES: ReviewFormValues = {
   name: "",
   score: 0,
   images: [],
-  distillery: "",
+  distillery: -1,
   bottler: "",
   age: "",
   abv: "",
@@ -79,6 +81,7 @@ export default function ReviewForm() {
     resolver: zodResolver(formSchema),
     defaultValues: FORM_INITIAL_VALUES,
   });
+  
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
@@ -96,7 +99,6 @@ export default function ReviewForm() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
         className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4"
       >
         <ReviewFormHeader />

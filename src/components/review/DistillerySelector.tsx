@@ -6,6 +6,7 @@ import {
   PlusCircledIcon
 } from "@radix-ui/react-icons";
 import * as React from "react";
+import { useQuery } from "react-query";
 
 import DistilleryForm from "@/components/review/DistilleryForm";
 import { Button } from "@/components/ui/button";
@@ -29,53 +30,55 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { distillery } from "@/db/schema";
+import api from "@/lib/api";
 import { cn } from "@/lib/utils";
 
-const groups = [
-  {
-    label: "스코틀랜드",
-    distilleries: [
-      {
-        label: "에드라두어",
-        value: "edradour",
-      },
-      {
-        label: "글렌알라키",
-        value: "glenallachie",
-      },
-    ],
-  },
-  {
-    label: "미국",
-    distilleries: [
-      {
-        label: "와일드터키",
-        value: "wildturkey",
-      },
-      {
-        label: "버팔로 트레이스",
-        value: "buffalo trace",
-      },
-      {
-        label: "일라이저 크레이그",
-        value: "elijah craig",
-      },
-    ],
-  },
-];
+type DistilleryType = typeof distillery.$inferSelect;
 
-type Team = (typeof groups)[number]["distilleries"][number]
+type GroupedDistilleries = {
+  region: string;
+  distilleries: DistilleryType[]; 
+}
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 
 interface DistillerySelectorProps extends PopoverTriggerProps {
-  onValueChange?: (value: string) => void
+  onValueChange?: (value: number) => void
 }
 
 export default function DistillerySelector({ className, onValueChange }: DistillerySelectorProps) {
   const [open, setOpen] = React.useState(false);
   const [showNewDistilleryDialog, setShowNewDistilleryDialog] = React.useState(false);
-  const [selectedItem, setSelectedItem] = React.useState<Team>();
+  const [selectedItem, setSelectedItem] = React.useState<DistilleryType>();
+
+  const {
+    data: distilleries,
+    isLoading,
+    isError,
+    error,
+  } = useQuery(
+    "distilleries",
+    () => api("distilleries"),
+    {
+      select: (data) => {
+        const grouped = data.reduce((acc, dist) => {
+    
+          const draft = acc.find((group) => group.region === dist.region);
+      
+          if (draft)
+            draft.distilleries.push(dist);
+          else
+            acc.push({ region: dist.region, distilleries: [dist] });
+      
+          
+          return acc;
+        }, [] as GroupedDistilleries[]);
+
+        return grouped;
+      },
+    }
+  );
 
   return (
     <Dialog open={showNewDistilleryDialog} onOpenChange={setShowNewDistilleryDialog}>
@@ -88,7 +91,7 @@ export default function DistillerySelector({ className, onValueChange }: Distill
             aria-label="Select a team"
             className={cn("w-[200px] justify-between", className)}
           >
-            {selectedItem?.label || ""}
+            {selectedItem?.name || ""}
             <CaretSortIcon className="ml-auto size-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -105,23 +108,23 @@ export default function DistillerySelector({ className, onValueChange }: Distill
                   <p>찾으시는 증류소가 없나요?</p>
                   <p>아래 버튼을 클릭하여 증류소를 추가해주세요.</p>
                 </CommandEmpty>
-                {groups.map((group) => (
-                  <CommandGroup key={group.label} heading={group.label}>
+                {distilleries?.map((group) => (
+                  <CommandGroup key={group.region} heading={group.region}>
                     {group.distilleries.map((distillery) => (
                       <CommandItem
-                        key={distillery.value}
+                        key={distillery.id}
                         onSelect={() => {
                           setSelectedItem(distillery);
-                          onValueChange?.(distillery.value);
+                          onValueChange?.(distillery.id);
                           setOpen(false);
                         }}
                         className="text-sm"
                       >
-                        {distillery.label}
+                        {distillery.name}
                         <CheckIcon
                           className={cn(
                             "ml-auto size-4",
-                            selectedItem?.value === distillery.value
+                            selectedItem?.id === distillery.id
                               ? "opacity-100"
                               : "opacity-0"
                           )}
