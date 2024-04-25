@@ -1,7 +1,7 @@
 import { CirclePlus, Minus } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import DistillerySelector from "@/components/review/DistillerySelector";
+import DistillerySelector from "@/components/distillery/distillery-selector";
 import { Button } from "@/components/ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";

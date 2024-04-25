@@ -6,10 +6,10 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import ReviewFormHeader from "@/components/review/ReviewFormHeader";
-import TasteInput from "@/components/review/TasteInput";
-import Uploader, { FilePreview } from "@/components/review/Uploader";
-import WhiskyInputField from "@/components/review/WhiskyInput";
+import ReviewFormHeader from "@/components/review/review-form-header";
+import TasteInput from "@/components/review/taste-input";
+import Uploader, { FilePreview } from "@/components/review/uploader";
+import WhiskyInputField from "@/components/review/whisky-input";
 import { AutoComplete } from "@/components/ui/autocomplete";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,39 +51,36 @@ const WHISKY_LIST = [
   },
 ];
 
-const FORM_INITIAL_VALUES: ReviewFormValues = {
-  name: "",
-  score: 0,
-  images: [],
-  distillery: -1,
-  bottler: "",
-  age: "",
-  abv: "",
-  caskType: [
-    " ",
-  ],
-  caskNumber: "",
-  content: "",
-  nose: "",
-  noseScore: 0,
-  palate: "",
-  palateScore: 0,
-  finish: "",
-  finishScore: 0,
-};
-
 export default function ReviewForm() {
 
   const { uploadToS3 } = useS3Upload();
   const [files, setFiles] = React.useState<FilePreview[]>([]);
   const [detailReviewVisible, setDetailReviewVisible] = React.useState(false);
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<ReviewFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: FORM_INITIAL_VALUES,
+    defaultValues: {
+      name: "",
+      score: 0,
+      images: [],
+      distillery: -1,
+      bottler: "",
+      age: "",
+      abv: "",
+      caskType: [
+        " ",
+      ],
+      caskNumber: "",
+      content: "",
+      nose: "",
+      noseScore: 0,
+      palate: "",
+      palateScore: 0,
+      finish: "",
+      finishScore: 0,
+    },
   });
-  
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: ReviewFormValues) => {
 
     for(const file of files) {
       const webP = await convertImageToWebP(file);
@@ -121,7 +118,7 @@ export default function ReviewForm() {
                       />
                     </FormControl>
                     <FormDescription>
-                          위스키 선택 시 자동으로 정보를 불러옵니다.
+                      위스키 선택 시 자동으로 정보를 불러옵니다.
                     </FormDescription>
                   </FormItem>
                 )}
@@ -144,7 +141,7 @@ export default function ReviewForm() {
                       />
                     </FormControl>
                     <FormDescription>
-                          최대 5장까지 업로드 가능합니다.
+                      최대 5장까지 업로드 가능합니다.
                     </FormDescription>
                   </FormItem>
                 )}
