@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SULVIEW
 
-## Getting Started
+위스키를 좋아하는 사람들을 위한 위스키 리뷰 웹사이트입니다.
 
-First, run the development server:
+## 디자인 노트
+
+- Next.js 14의 App Router와 RSC를 사용하였습니다.
+- React-Hook-Form, Drizzle ORM, Zod를 사용하여 데이터를 처리하였습니다.
+  - RSC의 경우 ServerAction, RCC는 React-Query를 이용하여 데이터를 처리합니다.
+- Auth.js를 이용하여 사용자 인증이 처리됩니다.
+- Tailwind, Shadcn UI를 사용하여 디자인을 구성하였습니다.
+- 이미지는 webP로 변경되어 S3에 업로드됩니다.
+  - 이미지 조회 시 CloudFront를 통해 제공됩니다.
+- pnpm을 사용하여 패키지를 관리합니다.
+
+## 개발 환경 셋업
+
+- pnpm 설치
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+npm install -pnpm
+pnpm i
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 환경 변수 설정
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```dotenv
+DATABASE_URL=PostgreSQL URL
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+AUTH_SECRET=NEXT_AUTH SECRET
 
-## Learn More
+EMAIL_FROM=이메일 로그인 시 보내는 이메일
+EMAIL_SERVER=이메일 SMTP 서버
 
-To learn more about Next.js, take a look at the following resources:
+S3_UPLOAD_KEY=AWS S3 ACCESS KEY
+S3_UPLOAD_SECRET=AWS S3 SECRET KEY
+S3_UPLOAD_BUCKET=AWS S3 BUCKET
+S3_UPLOAD_REGION=AWS S3 REGION
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+CLOUDFRONT_URL=AWS CLOUDFRONT URL
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- 데이터베이스 마이그레이션
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+pnpm drizzle:generate
+pnpm drizzle:push
+```
