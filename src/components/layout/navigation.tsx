@@ -1,3 +1,5 @@
+"use client";
+
 import {
   GlassWater,
   Home,
@@ -27,7 +29,7 @@ export const NAV_ITEMS = [
   {
     icon: SquarePen,
     label: "리뷰 작성",
-    href: "/write",
+    href: "/review",
   },
   {
     icon: Icons.barrels,

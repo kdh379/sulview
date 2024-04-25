@@ -3,18 +3,11 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { signIn, signOut, useSession } from "next-auth/react";
 import React from "react";
 
-import { NAV_ITEMS } from "@/components/layout/navigation";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator
-} from "@/components/ui/breadcrumb";
+import { auth } from "@/auth";
+import { AppBreadcrumb } from "@/components/layout/app-breadcrumb";
+import { Logout } from "@/components/layout/logout";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -28,8 +21,8 @@ import { Input } from "@/components/ui/input";
 
 import MobileNavigation from "./mobile-navigation";
 
-function SignButton() {
-  const { data: session } = useSession();
+async function SignButton() {
+  const session = await auth();
 
   return (
     <>
@@ -47,6 +40,7 @@ function SignButton() {
                 height={36}
                 alt="Avatar"
                 className="overflow-hidden rounded-full"
+                priority
               />
             </Button>
           </DropdownMenuTrigger>
@@ -64,55 +58,28 @@ function SignButton() {
             </DropdownMenuItem>
             <DropdownMenuItem>Support</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => signOut()}
-            >
-              로그아웃
+            <DropdownMenuItem>
+              <Logout />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <Button 
-          onClick={() => signIn()}
-        >
+        <Link href="/login">
+          <Button>
             로그인
-        </Button>
+          </Button>
+        </Link>
       )}
     </>
   );
 }
 
-const AppHeader = () => {
-
-  const pathname = usePathname();
+export default async function AppHeader() {
 
   return (
     <header className="bg-background sticky top-0 z-30 flex h-14 items-center gap-4 border-b px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <MobileNavigation />
-      <Breadcrumb className="hidden md:flex">
-        <BreadcrumbList>
-          {
-            pathname.split("/").slice(1).map((path, index, paths) => {
-              const href = `/${paths.slice(0, index + 1).join("/")}`;
-              const isLast = index === paths.length - 1;
-              const label = NAV_ITEMS.find((item) => item.href === href)?.label || path;
-
-              return (
-                <React.Fragment key={label}>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink asChild>
-                      <Link href={href}>
-                        {label}
-                      </Link>
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  {!isLast && <BreadcrumbSeparator />}
-                </React.Fragment>
-              );
-            })
-          }
-        </BreadcrumbList>
-      </Breadcrumb>
+      <AppBreadcrumb />
       <div className="relative ml-auto flex-1 md:grow-0">
         <Search className="text-muted-foreground absolute left-2.5 top-2.5 size-4" />
         <Input
@@ -125,5 +92,3 @@ const AppHeader = () => {
     </header>
   );
 };
-
-export default AppHeader;

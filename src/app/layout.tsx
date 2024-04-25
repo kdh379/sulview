@@ -3,8 +3,10 @@ import "@/styles/globals.css";
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 
-import { auth } from "@/auth";
-import Providers from "@/components/Providers";
+import AppHeader from "@/components/layout/app-header";
+import Navigation from "@/components/layout/navigation";
+import Providers from "@/components/providers";
+import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
@@ -53,13 +55,17 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
 
   return (
     <html lang="ko">
       <body className={cn(pretendard.className, "antialiased transition ease-in-out")}>
-        <Providers session={session}>
-          {children}
+        <Providers>
+          <Navigation />
+          <div className="bg-muted/40 flex min-h-screen w-full flex-col sm:gap-4 sm:py-4 sm:pl-14">
+            <AppHeader />
+            {children}
+          </div>
+          <Toaster />
         </Providers>
       </body>
     </html>
