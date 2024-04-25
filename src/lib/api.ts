@@ -1,71 +1,46 @@
-import { distillery } from "@/db/schema";
+import { FieldValues, UseFormReturn } from "react-hook-form";
 
-type HttpReqRes<T_Req, T_Res> = {
-  res: T_Res;
-  req?: T_Req;
+import { toast } from "@/components/ui/use-toast";
+
+export const hasError = (state: ActionError | unknown): state is ActionError => {
+
+  if(!state || typeof state !== "object") return false;
+
+  return "error" in state;
 };
 
-type APIInfo = {
-  url: string;
-  method: "GET" | "POST" | "PUT" | "DELETE";
-}
+export const handleApiError = <TFieldValues extends FieldValues>(err: ActionError, form: UseFormReturn<TFieldValues>) => {
 
-type APIInterface = {
-  "create-distillery": HttpReqRes<{}, {}>;
-  "distilleries": HttpReqRes<{}, typeof distillery.$inferSelect[]>;
-}
+  const { error } = err;
 
-type ErrorRes = {
-  status: number;
-  message: string;
-}
+  if(!error) return console.error(err);
 
-const URLDict: Record<keyof APIInterface, APIInfo> = {
-  "create-distillery": {
-    url: "/api/distillery",
-    method: "POST",
-  },
-  "distilleries": {
-    url: "/api/distillery",
-    method: "GET",
-  },
-};
-
-export default async function api<T extends keyof APIInterface>(
-  key: T,
-  req?: APIInterface[T]["req"]
-): Promise<APIInterface[T]["res"]> {
-  const { url, method } = URLDict[key];
-
-  const response = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: req && method !== "GET" ? JSON.stringify(req) : undefined,
-  });
-
-  if (!response.ok) {
-    const errorRes: ErrorRes = await response.json();
-    const message = "message" in errorRes ? errorRes.message : response.statusText;
-    
-    throw {
-      message,
-      status: response.status,
-    };
-    
+  switch (error.code) {
+  case "INTERNAL_ERROR":
+    toast({
+      title: "알 수 없는 오류가 발생했습니다.",
+      description: "잠시 후 다시 시도해주세요.",
+      variant: "destructive",
+      duration: 5000,
+    });
+    form.setError("root", { message: error.message, type: error.code });
+    break;
+  case "EXISTS_ERROR":
+    form.setError(error.key as any, { message: error.message });
+    break;
+  case "AUTH_ERROR":
+    toast({
+      title: "인증 오류",
+      description: error.message,
+      variant: "destructive",
+      duration: 5000,
+    });
+    break;
+  case "VALIDATION_ERROR":
+    const { fieldErrors } = error;
+    Object.keys(fieldErrors).forEach((key) => {
+      form.setError(key as any, { message: fieldErrors[key].flat().join(" ") });
+    });
+    break;
   }
-
-  return response.json();
-}
-
-export function getReactQueryArgs<T extends keyof APIInterface>(
-  key: T,
-  req: APIInterface[T]["req"]
-): [string, () => Promise<APIInterface[T]["res"]>] {
-  return [
-    key,
-    () => api(key, req),
-  ];
-}
-
+};
