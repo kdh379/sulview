@@ -1,13 +1,21 @@
 import { imageConverter } from "upload-images-converter";
 
-export async function convertImageToWebP(file: File) {
+type Options = {
+  maxLength?: number;
+}
+
+export async function convertImageToWebP(file: File, options?: Options) {
   
+  const {
+    maxLength = 1280,
+  } = options || {};
+
   const { width: originWidth, height: originHeight } = await getImageSize(file);
 
   const { width, height } = calculateAspectRatioFit({
     width: originWidth,
     height: originHeight,
-    maxLength: 1280,
+    maxLength,
   });
 
   const webP = await imageConverter({

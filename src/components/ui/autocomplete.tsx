@@ -9,6 +9,7 @@ import {
   CommandItem,
   CommandList
 } from "@/components/ui/command";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
@@ -21,14 +22,16 @@ interface AutoCompleteProps extends React.ComponentProps<typeof CommandPrimitive
   emptyMessage?: string
   onValueChange?: (value: string) => void
   isLoading?: boolean
+  allowDirectInput?: boolean
 }
 
 export const AutoComplete = ({
   itemList,
   emptyMessage = "",
-  value,
+  value = "",
   onValueChange,
   isLoading = false,
+  allowDirectInput = false,
   className,
   ...restProps
 }: AutoCompleteProps) => {
@@ -65,9 +68,14 @@ export const AutoComplete = ({
   const handleBlur = useCallback(() => {
     const value = inputRef.current?.value || "";
     setOpen(false);
-    setInputValue(value);
-    onValueChange?.(value);
-  }, [onValueChange]);
+    if(allowDirectInput) {
+      setInputValue(value);
+      onValueChange?.(value);
+    } else {
+      setInputValue(selected);
+      onValueChange?.(selected);
+    }
+  }, [selected, allowDirectInput, onValueChange]);
 
   const handleSelectOption = useCallback(
     (selectedOption: Item) => {
@@ -109,28 +117,30 @@ export const AutoComplete = ({
                 </CommandPrimitive.Loading>
               )}
               {itemList.length > 0 && !isLoading && (
-                <CommandGroup>
-                  {itemList.map((option) => {
-                    const isSelected = selected === inputValue && inputValue === option.value;
-                    return (
-                      <CommandItem
-                        key={option.value}
-                        value={option.label}
-                        onMouseDown={(event) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                        }}
-                        onSelect={() => handleSelectOption(option)}
-                      >
-                        {option.label}
-                        <Check className={cn(
-                          "invisible ml-auto w-4",
-                          isSelected && "visible"
-                        )} />
-                      </CommandItem>
-                    );
-                  })}
-                </CommandGroup>
+                <ScrollArea className="h-[200px]">
+                  <CommandGroup>
+                    {itemList.map((option) => {
+                      const isSelected = selected === inputValue && inputValue === option.value;
+                      return (
+                        <CommandItem
+                          key={option.value}
+                          value={option.label}
+                          onMouseDown={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                          }}
+                          onSelect={() => handleSelectOption(option)}
+                        >
+                          {option.label}
+                          <Check className={cn(
+                            "invisible ml-auto w-4",
+                            isSelected && "visible"
+                          )} />
+                        </CommandItem>
+                      );
+                    })}
+                  </CommandGroup>
+                </ScrollArea>
               )}
               {!isLoading && <CommandEmpty>{emptyMessage}</CommandEmpty>}
             </CommandList>

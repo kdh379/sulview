@@ -13,8 +13,10 @@ export type FilePreview = File & { preview: string };
 const MAX_FILES = 5;
 
 const DROPZONE_MSG_BOX: {[key: string]: string} = {
+  "title": "파일을 가져오는 중 오류가 발생했습니다.",
   "file-invalid-type": "png, jpg, jpeg, webP 형식의 이미지 파일만 업로드할 수 있습니다.",
   "file-too-large": "파일 크기가 너무 큽니다.",
+  "too-many-files": `최대 ${MAX_FILES}개의 파일까지 업로드할 수 있습니다.`,
 };
 
 interface UploaderProps {
@@ -30,10 +32,9 @@ export default function Uploader({disabled, onChange}: UploaderProps) {
       "image/*": [".png", ".jpg", ".jpeg", ".webp"],
     },
     onDropRejected: (events) => {
-
       toast({
         variant: "destructive",
-        title: "파일을 가져오는 중 오류가 발생했습니다.",
+        title: DROPZONE_MSG_BOX["title"],
         description: events.map((event) => event.errors.map((error) => DROPZONE_MSG_BOX[error.code] || error.message)).join("\n"),
         duration: 3000,
       });
@@ -42,7 +43,8 @@ export default function Uploader({disabled, onChange}: UploaderProps) {
       if(files.length + acceptedFiles.length > MAX_FILES) {
         toast({
           variant: "destructive",
-          title: `최대 ${MAX_FILES}개의 파일까지 업로드할 수 있습니다.`,
+          title: DROPZONE_MSG_BOX["title"],
+          description: DROPZONE_MSG_BOX["too-many-files"],
           duration: 3000,
         });
 
@@ -73,13 +75,13 @@ export default function Uploader({disabled, onChange}: UploaderProps) {
         <CloudUpload className="size-12" />
         <span className="sr-only">Upload</span>
         <p className="mt-2 text-sm">
-              파일을 여기에 끌어다 놓거나 클릭하여 업로드하세요.
+          파일을 여기에 끌어다 놓거나 클릭하여 업로드하세요.
         </p>
       </Button>
       {files.map((file, index) => (
         <div 
           key={file.name}
-          className="border-border before:bg-primary relative rounded-md border p-4 before:absolute before:size-[calc(100%-2rem)] before:rounded-md before:opacity-0 before:transition-opacity before:hover:opacity-50"
+          className="border-border before:bg-accent relative rounded-md border p-4 before:absolute before:size-[calc(100%-2rem)] before:rounded-md before:opacity-0 before:transition-opacity before:hover:opacity-50"
         >
           <Image
             className="size-full rounded-md object-cover transition-colors"
@@ -94,7 +96,7 @@ export default function Uploader({disabled, onChange}: UploaderProps) {
               variant="link"
               disabled={disabled}
             >
-              <Eye className="text-primary-foreground size-6" />
+              <Eye className="text-accent-foreground size-6" />
             </Button>
             <Button
               size="icon"
@@ -104,7 +106,7 @@ export default function Uploader({disabled, onChange}: UploaderProps) {
                 setFiles(files.filter((_, i) => i !== index));
               }}
             >
-              <Trash className="text-primary-foreground size-6" />
+              <Trash className="text-accent-foreground size-6" />
             </Button>
           </div>
         </div>

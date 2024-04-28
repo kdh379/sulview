@@ -61,19 +61,20 @@ export const verificationTokens = pgTable(
   })
 );
 
-export const distillery = pgTable("distillery", {
+export const distilleryTable = pgTable("distillery", {
   id: serial("id").primaryKey(),
   name: text("name").unique().notNull(),
   region: text("region").notNull(),
+  images: text("images").array().notNull(),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
   createdBy: text("createdBy").notNull(),
 });
 
-export const whisky = pgTable(
+export const whiskyTable = pgTable(
   "whisky",
   {
     id: serial("id").primaryKey(),
-    distilleryId: integer("distilleryId").notNull().references(() => distillery.id, { onDelete: "cascade" }),
+    distilleryId: integer("distilleryId").notNull().references(() => distilleryTable.id, { onDelete: "cascade" }),
     name: text("name").notNull(),
     bottler: text("bottler").notNull(),
     abv: text("abv").notNull(),
@@ -90,14 +91,12 @@ export const whisky = pgTable(
   })
 );
 
-export const review = pgTable(
+export const reviewTable = pgTable(
   "review",
   {
     id: serial("id"),
-    whiskyId: integer("whiskyId").notNull().references(() => whisky.id, { onDelete: "cascade" }),
-    userId: text("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
-    userName: text("userName").notNull(),
-    password: text("password").notNull(),
+    whiskyId: integer("whiskyId").notNull().references(() => whiskyTable.id, { onDelete: "cascade" }),
+    createdBy: text("createdBy").notNull().references(() => users.id, { onDelete: "cascade" }),
     images: text("images").array().notNull(),
     score: integer("score").notNull(),
     nose: text("nose").notNull(),
@@ -107,12 +106,10 @@ export const review = pgTable(
     finish: text("finish").notNull(),
     finishScore: integer("finishScore").notNull(),
     createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
-    createdBy: text("createdBy").notNull(),
   },
   (review) => ({
-    compoundKey: primaryKey({ columns: [review.id, review.whiskyId, review.userId] }),
+    compoundKey: primaryKey({ columns: [review.id, review.whiskyId, review.createdBy] }),
     whiskyIdx: index("whisky_idx").on(review.whiskyId),
-    userIdx: index("user_idx").on(review.userId),
+    createdByIdx: index("user_idx").on(review.createdBy),
   })
 );
-// TODO - userId가 없으면 password를 사용하여 수정, 삭제 가능. client에서 변조할 수도 있으므로 저장 시 server에서 검증 필요

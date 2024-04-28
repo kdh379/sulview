@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 import { db } from "@/db/drizzle";
-import { distillery } from "@/db/schema";
+import { distilleryTable } from "@/db/schema";
 import { getCurrentUser } from "@/lib/session";
 
 export async function POST(request: Request) {
@@ -17,9 +17,9 @@ export async function POST(request: Request) {
     }, { status: 401 });
 
   try {
-    const { name, region } = await request.json();
+    const { name, region, images } = await request.json();
 
-    const exists = await db.select().from(distillery).where(eq(distillery.name, name));
+    const exists = await db.select().from(distilleryTable).where(eq(distilleryTable.name, name));
 
     if(exists.length)
       return NextResponse.json<ActionError>({
@@ -30,12 +30,14 @@ export async function POST(request: Request) {
         },
       }, { status: 400 });
 
-    await db.insert(distillery).values({
+    await db.insert(distilleryTable).values({
       name,
       region,
+      images,
       createdAt: new Date(),
       createdBy: user.id,
     });
+    
     return NextResponse.json({}, { status: 201 });
   }
   catch(error) {
@@ -53,7 +55,7 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
-    const distilleries = await db.select().from(distillery).orderBy(distillery.name);
+    const distilleries = await db.select().from(distilleryTable).orderBy(distilleryTable.name);
     return NextResponse.json(distilleries);
   }
   catch(error) {
