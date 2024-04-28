@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Home,
   ListOrdered
 } from "lucide-react";
 import Link from "next/link";
@@ -15,19 +14,14 @@ import { Icons } from "../ui/icons";
 
 export const NAV_ITEMS = [
   {
-    icon: Home,
-    label: "홈",
-    href: "/",
-  },
-  {
     icon: ListOrdered,
     label: "리뷰",
-    href: "/reviews",
+    pathname: "/reviews",
   },
   {
     icon: Icons.barrels,
     label: "증류소",
-    href: "/distilleries",
+    pathname: "/distilleries",
   },
 ];
 
@@ -50,11 +44,11 @@ const MainNav = () => {
         {
           NAV_ITEMS.map((item) => (
             <Link
-              key={item.href}
-              href={item.href}
+              key={item.pathname}
+              href={item.pathname}
               className={cn(
                 "text-muted-foreground/75 hover:text-primary font-medium transition-colors",
-                pathname === item.href && "text-primary"
+                pathname.startsWith(item.pathname) && "text-primary"
               )}
             >
               <span>{item.label}</span>
