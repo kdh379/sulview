@@ -13,7 +13,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-export default function MobileNavigation() {
+export default function MobileNav() {
   return (
     <Sheet>
       <SheetTrigger asChild>

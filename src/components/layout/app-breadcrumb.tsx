@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-import { NAV_ITEMS } from "@/components/layout/navigation";
+import { NAV_ITEMS } from "@/components/layout/main-nav";
 import {
   Breadcrumb,
   BreadcrumbItem,

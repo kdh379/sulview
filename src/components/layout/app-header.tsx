@@ -1,13 +1,15 @@
 import {
+  Bell,
   Search
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-import { auth } from "@/auth";
-import { AppBreadcrumb } from "@/components/layout/app-breadcrumb";
 import { Logout } from "@/components/layout/logout";
+import MainNav from "@/components/layout/main-nav";
+import MobileNav from "@/components/layout/mobile-nav";
+import ToggleTheme from "@/components/layout/toggle-theme";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -18,15 +20,14 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-
-import MobileNavigation from "./mobile-navigation";
+import { getCurrentUser } from "@/lib/session";
 
 async function SignButton() {
-  const session = await auth();
+  const user = await getCurrentUser();
 
   return (
     <>
-      {session ? (
+      {user ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -47,9 +48,9 @@ async function SignButton() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel
             >
-              {session.user?.name}
+              {user.name}
               <p className="text-muted-foreground/75 text-xs">
-                {session.user?.email}
+                {user.email}
               </p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -77,18 +78,30 @@ async function SignButton() {
 export default async function AppHeader() {
 
   return (
-    <header className="bg-background sticky top-0 z-30 flex h-14 items-center gap-4 border-b px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-      <MobileNavigation />
-      <AppBreadcrumb />
-      <div className="relative ml-auto flex-1 md:grow-0">
-        <Search className="text-muted-foreground absolute left-2.5 top-2.5 size-4" />
-        <Input
-          type="search"
-          placeholder="Search..."
-          className="bg-background w-full rounded-lg pl-8 md:w-[200px] lg:w-[336px]"
-        />
+    <header className="border-border bg-background supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 border-b backdrop-blur">
+      <div className="container flex h-14 items-center">
+        <MobileNav />
+        <MainNav />
+        <div className="ml-4 flex flex-1 items-center justify-end gap-x-4">
+          <div className="relative w-full max-w-80">
+            <Search className="text-muted-foreground absolute left-2.5 top-2.5 size-4" />
+            <Input
+              type="search"
+              placeholder="위스키 검색"
+              className="w-full pl-8"
+            />
+          </div>
+          <ToggleTheme />
+          <Button
+            variant="outline"
+            size="icon"
+          >
+            <Bell className="size-4" />
+            <span className="sr-only">알림</span>
+          </Button>
+          <SignButton />
+        </div>
       </div>
-      <SignButton />
     </header>
   );
 };

@@ -4,6 +4,7 @@ export const siteConfig = {
   image: "/images/profile.png",
   links: {
     github: "https://github.com/kdh379/sulview",
+    mailTo: "mailto:ehgus37625@naver.com",
   },
   keywords: [
     "위스키",

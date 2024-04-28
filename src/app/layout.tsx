@@ -4,7 +4,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 
 import AppHeader from "@/components/layout/app-header";
-import Navigation from "@/components/layout/navigation";
+import Footer from "@/components/layout/footer";
 import Providers from "@/components/providers";
 import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/config/site";
@@ -57,14 +57,16 @@ export default async function RootLayout({
 }>) {
 
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <body className={cn(pretendard.className, "antialiased transition ease-in-out")}>
         <Providers>
-          <Navigation />
-          <div className="bg-muted/40 flex min-h-screen w-full flex-col sm:gap-4 sm:py-4 sm:pl-14">
+          <div className="border-border flex min-h-screen flex-col border-b">
             <AppHeader />
-            {children}
+            <div className="container my-6 flex-1">
+              {children}
+            </div>
           </div>
+          <Footer />
           <Toaster />
         </Providers>
       </body>
