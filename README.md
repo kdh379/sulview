@@ -18,7 +18,7 @@
 - pnpm 설치
 
 ```bash
-npm install -pnpm
+npm install -g pnpm
 pnpm i
 pnpm dev
 ```
