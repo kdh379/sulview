@@ -1,9 +1,14 @@
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import EmailForm from "@/components/login/email-form";
 import SocialForm from "@/components/login/social-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCurrentUser } from "@/lib/session";
+
+export const metadata: Metadata = {
+  title: "로그인",
+};
 
 export default async function Login () {
   const user = await getCurrentUser();

@@ -44,9 +44,9 @@ export default function EmailForm() {
     return (
       <>
         <p className="text-2xl font-bold">
-          이메일을 확인해주세요 <Icons.emailAdd className="mb-2 ml-2 inline-block" />
+          로그인 메일을 전송하였습니다. <Icons.emailAdd className="mb-2 ml-2 inline-block" />
         </p>
-        <p>로그인 링크를 메일로 전송하였습니다.</p>
+        <p>메일함을 확인해주세요.</p>
       </>
     );
   }
