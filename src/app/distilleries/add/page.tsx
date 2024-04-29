@@ -1,10 +1,15 @@
 
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import * as React from "react";
 
 import DistilleryForm from "@/app/distilleries/add/form";
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { getCurrentUser } from "@/lib/session";
+
+export const metadata: Metadata = {
+  title: "증류소 추가",
+};
 
 export default async function DistilleryAddPage() {
 
@@ -16,10 +21,10 @@ export default async function DistilleryAddPage() {
   return (
     <main className="flex items-center justify-center">
       <Card className="w-full max-w-[500px]">
-        <CardHeader className="mb-8">
-          <h1 className="text-lg font-semibold leading-none tracking-tight">증류소 추가</h1>
+        <CardHeader>
+          <h1 className="text-lg font-semibold leading-none tracking-tight">증류소 / 독립 병입자 추가</h1>
           <CardDescription>
-          추가할 증류소의 이름과 위치를 입력해주세요.
+          추가할 증류소 혹은 독립 병입자의 정보를 입력해주세요.
           </CardDescription>
         </CardHeader>
         <CardContent>

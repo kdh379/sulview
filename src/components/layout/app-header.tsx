@@ -10,7 +10,7 @@ import { Logout } from "@/components/layout/logout";
 import MainNav from "@/components/layout/main-nav";
 import MobileNav from "@/components/layout/mobile-nav";
 import ToggleTheme from "@/components/layout/toggle-theme";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,7 +33,7 @@ async function SignButton() {
             <Button
               variant="outline"
               size="icon"
-              className="overflow-hidden rounded-full"
+              className="shrink-0 overflow-hidden rounded-full"
             >
               <Image
                 src="/placeholder-user.jpg"
@@ -65,7 +65,10 @@ async function SignButton() {
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <Link href="/login">
+        <Link 
+          href="/login"
+          className={buttonVariants()}
+        >
           <Button>
             로그인
           </Button>
@@ -95,6 +98,7 @@ export default async function AppHeader() {
           <Button
             variant="outline"
             size="icon"
+            className="shrink-0"
           >
             <Bell className="size-4" />
             <span className="sr-only">알림</span>

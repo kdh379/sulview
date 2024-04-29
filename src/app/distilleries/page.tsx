@@ -7,7 +7,8 @@ import { z } from "zod";
 
 import Distilleries from "@/app/distilleries/distilleries";
 import SearchInput from "@/app/distilleries/search-input";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const SearchParamsSchema = z.object({
   q: z.string().max(256).optional().default(""),
@@ -38,11 +39,17 @@ export default function DistilleriesPage({
         className="flex items-center justify-end gap-x-4"
       >
         <SearchInput {...parse.data} />
-        <Link href="/distilleries/add">
-          <Button>
-            <PlusCircledIcon className="mr-2 size-5" />
-            증류소 추가
-          </Button>
+        <Link 
+          href="/distilleries/add"
+          className={cn(
+            buttonVariants(),
+            "size-9 shrink-0 p-0 sm:w-auto sm:px-4 sm:py-2"
+          )}
+        >
+          <PlusCircledIcon className="size-4 sm:mr-2" />
+          <span className="sr-only inline-block sm:not-sr-only">
+            추가
+          </span>
         </Link>
       </div>
       <Suspense fallback={null}>

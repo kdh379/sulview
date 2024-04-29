@@ -48,7 +48,7 @@ export default async function Distilleries({ q, region }: SearchParams) {
           <TableHead className="hidden w-[100px] sm:table-cell">
             <span className="sr-only">Image</span>
           </TableHead>
-          <TableHead>증류소</TableHead>
+          <TableHead>증류소 / 독립 병입자</TableHead>
           <TableHead>지역</TableHead>
           <TableHead>위스키</TableHead>
           <TableHead>리뷰</TableHead>
@@ -60,7 +60,7 @@ export default async function Distilleries({ q, region }: SearchParams) {
             key={distillery.id}
             className="relative"
           >
-            <TableCell>
+            <TableCell className="hidden w-[100px] sm:table-cell">
               <Image
                 src={distillery.images[0]}
                 width={64}

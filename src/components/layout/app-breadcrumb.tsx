@@ -25,7 +25,7 @@ export function AppBreadcrumb() {
           pathname.split("/").slice(1).map((path, index, paths) => {
             const href = `/${paths.slice(0, index + 1).join("/")}`;
             const isLast = index === paths.length - 1;
-            const label = NAV_ITEMS.find((item) => item.href === href)?.label || path;
+            const label = NAV_ITEMS.find((item) => item.pathname === href)?.label || path;
 
             return (
               <React.Fragment key={label}>

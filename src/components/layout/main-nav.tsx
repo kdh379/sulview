@@ -15,13 +15,18 @@ import { Icons } from "../ui/icons";
 export const NAV_ITEMS = [
   {
     icon: ListOrdered,
-    label: "리뷰",
-    pathname: "/reviews",
+    label: "위스키",
+    pathname: "/whiskies",
   },
   {
     icon: Icons.barrels,
-    label: "증류소",
+    label: "증류소/독병",
     pathname: "/distilleries",
+  },
+  {
+    icon: ListOrdered,
+    label: "리뷰",
+    pathname: "/reviews",
   },
 ];
 

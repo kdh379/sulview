@@ -49,7 +49,7 @@ export default function DistilleryForm() {
     (data: DistilleryFormValues) => axios.post("/api/distillery", data),
     {
       onSuccess: () => {
-        router.push(`/${form.getValues("name")}`);
+        router.push(`/distilleries/${form.getValues("name")}`);
       },
       onError: (err: AxiosError<ActionError>) => {
         if(err.response?.data)
@@ -82,7 +82,7 @@ export default function DistilleryForm() {
           <FormField
             control={form.control}
             name="images"
-            render={({field}) => (
+            render={() => (
               <FormItem>
                 <FormLabel className="flex justify-between">
                   사진
@@ -100,7 +100,7 @@ export default function DistilleryForm() {
             render={({field}) => (
               <FormItem>
                 <FormLabel className="flex justify-between">
-                    증류소
+                    증류소 / 독립 병입자
                   <FormMessage />
                 </FormLabel>
                 <FormControl>
@@ -112,7 +112,7 @@ export default function DistilleryForm() {
           <FormField
             control={form.control}
             name="region"
-            render={({field}) => (
+            render={() => (
               <FormItem>
                 <FormLabel className="flex justify-between">
                     지역

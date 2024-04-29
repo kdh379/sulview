@@ -18,6 +18,7 @@ export default function ThemeToggle() {
     <Button
       variant="ghost"
       size="icon"
+      className="hidden sm:inline-flex"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
       {mounted && (<>
