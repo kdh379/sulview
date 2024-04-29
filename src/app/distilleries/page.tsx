@@ -1,16 +1,20 @@
 import { PlusCircledIcon } from "@radix-ui/react-icons";
-import { Search } from "lucide-react";
 import { Metadata } from "next";
-import { headers } from "next/headers";
+import { headers as dynamic } from "next/headers";
 import Link from "next/link";
+import React, { Suspense } from "react";
 import { z } from "zod";
 
+import Distilleries from "@/app/distilleries/distilleries";
+import SearchInput from "@/app/distilleries/search-input";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 const SearchParamsSchema = z.object({
   q: z.string().max(256).optional().default(""),
+  region: z.string().max(256).optional().default(""),
 });
+
+export type SearchParams = z.infer<typeof SearchParamsSchema>;
 
 export const metadata: Metadata = {
   title: "증류소",
@@ -19,13 +23,13 @@ export const metadata: Metadata = {
 export default function DistilleriesPage({
   searchParams,
 }: {
-  searchParams: z.infer<typeof SearchParamsSchema>;
+  searchParams: SearchParams;
 }) {
-  headers();
+  dynamic();
 
-  const query = SearchParamsSchema.safeParse(searchParams);
+  const parse = SearchParamsSchema.safeParse(searchParams);
 
-  if (!query.success)
+  if (!parse.success)
     return <p>잘못된 요청입니다.</p>;
 
   return (
@@ -33,14 +37,7 @@ export default function DistilleriesPage({
       <div
         className="flex items-center justify-end gap-x-4"
       >
-        <div className="relative">
-          <Search className="text-muted-foreground absolute left-2.5 top-2.5 size-4" />
-          <Input
-            type="search"
-            placeholder="증류소 검색"
-            className="w-full pl-8"
-          />
-        </div>
+        <SearchInput {...parse.data} />
         <Link href="/distilleries/add">
           <Button>
             <PlusCircledIcon className="mr-2 size-5" />
@@ -48,6 +45,9 @@ export default function DistilleriesPage({
           </Button>
         </Link>
       </div>
+      <Suspense fallback={null}>
+        <Distilleries {...parse.data} />
+      </Suspense>
     </main>
   );
 }

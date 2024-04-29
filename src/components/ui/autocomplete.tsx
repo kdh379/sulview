@@ -1,8 +1,9 @@
 import { Command as CommandPrimitive } from "cmdk";
-import { Check } from "lucide-react";
+import { Check, XIcon } from "lucide-react";
 import { type KeyboardEvent, useCallback, useRef, useState } from "react";
 import * as React from "react";
 
+import { Button } from "@/components/ui/button";
 import {
   CommandEmpty,
   CommandGroup,
@@ -80,7 +81,6 @@ export const AutoComplete = ({
   const handleSelectOption = useCallback(
     (selectedOption: Item) => {
       setInputValue(selectedOption.value);
-
       setSelected(selectedOption.value);
       onValueChange?.(selectedOption.value);
 
@@ -93,22 +93,40 @@ export const AutoComplete = ({
 
   return (
     <CommandPrimitive onKeyDown={handleKeyDown}>
-      <CommandPrimitive.Input
-        ref={inputRef}
-        value={inputValue}
-        onValueChange={isLoading ? undefined : setInputValue}
-        onBlur={handleBlur}
-        onFocus={() => setOpen(true)}
-        className={cn(
-          "border-input placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50",
-          className
-        )}
-        {...restProps}
-      />
-      <div className="relative mt-1">
+      <div className="relative">
+        <CommandPrimitive.Input
+          ref={inputRef}
+          value={inputValue}
+          onValueChange={isLoading ? undefined : setInputValue}
+          onBlur={handleBlur}
+          onFocus={() => setOpen(true)}
+          className={cn(
+            "border-input placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50",
+            className
+          )}
+          {...restProps}
+        />
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn(
+            "invisible absolute right-0 top-0",
+            inputValue && "visible"
+          )}
+          onClick={() => {
+            setInputValue("");
+            setSelected("");
+            onValueChange?.("");
+          }}
+        >
+          <XIcon className="size-4" />
+          <span className="sr-only">Clear</span>
+        </Button>
+      </div>
+      <div className="relative">
         {isOpen && (
-          <div className="animate-in fade-in-0 zoom-in-95 absolute top-0 z-10 w-full rounded-xl bg-stone-50 outline-none">
-            <CommandList className="rounded-lg ring-1 ring-slate-200">
+          <div className="animate-in fade-in-0 zoom-in-95 absolute top-0 z-10 mt-1 w-full outline-none">
+            <CommandList className="bg-popover text-popover-foreground rounded-lg border">
               {isLoading && (
                 <CommandPrimitive.Loading>
                   <div className="p-1">
