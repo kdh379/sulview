@@ -66,6 +66,7 @@ export default function WhiskyAddForm({ distilleryName }: WhiskyAddFormProps) {
   });
 
   const {
+    isLoading,
     mutate: handleAddWhisky,
   } = useMutation(
     (data: WhiskyFormSchemaType) => axios.post("/api/whisky", data),
@@ -87,21 +88,16 @@ export default function WhiskyAddForm({ distilleryName }: WhiskyAddFormProps) {
     if(bottler === "independent" && form.getValues("independentDistillery") === "")
       return form.setError("independentDistillery", { type: "required" });
 
-
-    console.log(files);
-
     for(const file of files) {
       const webP = await convertImageToWebP(file);
-
-      console.log(webP);
       
-      
-      // const { url } = await uploadToS3(webP);
+      const { url } = await uploadToS3(webP);
 
-      // form.setValue("images", [...form.getValues("images"), new URL(url).pathname]);
+      form.setValue("images", 
+        [...form.getValues("images"), `${process.env.NEXT_PUBLIC_CLOUDFRONT}${new URL(url).pathname}`]);
     }
 
-    // handleAddWhisky(form.getValues());
+    handleAddWhisky(form.getValues());
   };
 
   return (
@@ -142,14 +138,14 @@ export default function WhiskyAddForm({ distilleryName }: WhiskyAddFormProps) {
         <div className="col-span-2 flex items-center justify-end gap-2">
           <Button
             variant="outline"
-            disabled={form.formState.isSubmitting}
+            disabled={isLoading}
             onClick={() => router.back()}
           >
             취소
           </Button>
           <Button
             type="submit"
-            isLoading={form.formState.isSubmitting}
+            isLoading={isLoading}
             className="w-24"
           >
             <Check className="mr-2 size-4" />

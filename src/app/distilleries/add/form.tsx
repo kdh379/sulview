@@ -45,6 +45,7 @@ export default function DistilleryForm() {
   });
 
   const {
+    isLoading,
     mutate: handleAddDistillery,
   } = useMutation(
     (data: DistilleryFormValues) => axios.post("/api/distillery", data),
@@ -135,14 +136,14 @@ export default function DistilleryForm() {
         >
           <Button
             variant="outline"
-            disabled={form.formState.isSubmitting}
+            disabled={isLoading}
             onClick={() => router.back()}
           >
             취소
           </Button>
           <Button
             type="submit"
-            isLoading={form.formState.isSubmitting}
+            isLoading={isLoading}
             className="w-24"
           >
             <Check className="mr-2 size-4" />
