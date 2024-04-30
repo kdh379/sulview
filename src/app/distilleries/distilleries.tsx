@@ -52,6 +52,9 @@ export default async function Distilleries({ q, region }: SearchParams) {
           <TableHead>지역</TableHead>
           <TableHead>위스키</TableHead>
           <TableHead>리뷰</TableHead>
+          <TableHead className="w-0 p-0">
+            <span className="sr-only">Link</span>
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -77,7 +80,9 @@ export default async function Distilleries({ q, region }: SearchParams) {
               <Link 
                 href={`/distilleries/${distillery.name}`}
                 className="absolute inset-0"
-              />
+              >
+                <span className="sr-only">Link</span>
+              </Link>
             </TableCell>
           </TableRow>
         ))}
