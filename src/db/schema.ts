@@ -67,7 +67,7 @@ export const distilleryTable = pgTable("distillery", {
   region: text("region").notNull(),
   images: text("images").array().notNull(),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
-  createdBy: text("createdBy").notNull(),
+  createdBy: text("createdBy").notNull().references(() => users.id, { onDelete: "cascade" }),
 });
 
 export const whiskyTable = pgTable(
@@ -75,19 +75,20 @@ export const whiskyTable = pgTable(
   {
     id: serial("id").primaryKey(),
     distilleryId: integer("distilleryId").notNull().references(() => distilleryTable.id, { onDelete: "cascade" }),
+    createdBy: text("createdBy").notNull().references(() => users.id, { onDelete: "cascade" }),
     name: text("name").notNull(),
     bottler: text("bottler").notNull(),
     abv: text("abv").notNull(),
-    age: text("age").notNull(),
-    caskType: text("caskType").array().notNull(),
+    independentDistillery: text("independentDistillery").notNull(),
+    aged: text("age").notNull(),
+    caskTypes: text("caskTypes").array().notNull(),
     caskNumber: text("caskNumber").notNull(),
-    image: text("image").notNull(),
+    bottled: text("bottled").notNull(),
+    images: text("images").array().notNull(),
     createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
-    createdBy: text("createdBy").notNull(),
   },
   (whisky) => ({
     distilleryIdx: index("distillery_idx").on(whisky.distilleryId),
-    nameIdx: index("name_idx").on(whisky.name),
   })
 );
 

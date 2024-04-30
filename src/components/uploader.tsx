@@ -104,6 +104,7 @@ export default function Uploader({disabled, onChange}: UploaderProps) {
               disabled={disabled}
               onClick={() => {
                 setFiles(files.filter((_, i) => i !== index));
+                onChange?.(files.filter((_, i) => i !== index));
               }}
             >
               <Trash className="text-accent-foreground size-6" />

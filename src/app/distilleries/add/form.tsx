@@ -3,6 +3,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
+import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useS3Upload } from "next-s3-upload";
 import * as React from "react";
@@ -12,7 +13,7 @@ import { z } from "zod";
 
 import { AutoComplete } from "@/components/ui/autocomplete";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Uploader, { FilePreview } from "@/components/uploader";
 import data from "@/data/distillery-regions.json";
@@ -58,7 +59,7 @@ export default function DistilleryForm() {
     }
   );
 
-  const onSubmit = async(data: DistilleryFormValues) => {
+  const onSubmit = async() => {
 
     if(files.length === 0)
       return form.setError("images", { type: "min", message: "사진을 업로드해주세요." });
@@ -86,7 +87,6 @@ export default function DistilleryForm() {
               <FormItem>
                 <FormLabel className="flex justify-between">
                   사진
-                  <FormMessage />
                 </FormLabel>
                 <FormControl>
                   <Uploader onChange={(files) => setFiles(files)} />
@@ -99,9 +99,8 @@ export default function DistilleryForm() {
             name="name"
             render={({field}) => (
               <FormItem>
-                <FormLabel className="flex justify-between">
+                <FormLabel>
                     증류소 / 독립 병입자
-                  <FormMessage />
                 </FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="글렌알라키" />
@@ -114,9 +113,8 @@ export default function DistilleryForm() {
             name="region"
             render={() => (
               <FormItem>
-                <FormLabel className="flex justify-between">
+                <FormLabel>
                     지역
-                  <FormMessage />
                 </FormLabel>
                 <FormControl>
                   <AutoComplete
@@ -138,14 +136,17 @@ export default function DistilleryForm() {
           <Button
             variant="outline"
             disabled={form.formState.isSubmitting}
+            onClick={() => router.back()}
           >
-                취소
+            취소
           </Button>
           <Button
             type="submit"
             isLoading={form.formState.isSubmitting}
+            className="w-24"
           >
-              추가
+            <Check className="mr-2 size-4" />
+            추가
           </Button>
         </div>
       </form>

@@ -2,7 +2,7 @@ import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Mail } from "lucide-react";
 import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 
 export default function Footer() {
@@ -12,25 +12,23 @@ export default function Footer() {
         href={siteConfig.links.github}
         target="_blank"
         rel="noopener noreferrer"
+        className={buttonVariants({
+          size: "icon",
+          variant: "outline",
+        })}
       >
-        <Button
-          variant="outline"
-          size="icon"
-        >
-          <GitHubLogoIcon />
-          <span className="sr-only">Github</span>
-        </Button>
+        <GitHubLogoIcon />
+        <span className="sr-only">Github</span>
       </Link>
       <Link
         href={siteConfig.links.mailTo}
+        className={buttonVariants({
+          size: "icon",
+          variant: "outline",
+        })}
       >
-        <Button
-          variant="outline"
-          size="icon"
-        >
-          <Mail className="size-4" />
-          <span className="sr-only">Mail</span>
-        </Button>
+        <Mail className="size-4" />
+        <span className="sr-only">Mail</span>
       </Link>
       <p>© 2024 {siteConfig.name}</p>
     </footer>

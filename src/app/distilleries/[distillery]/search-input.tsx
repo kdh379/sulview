@@ -4,28 +4,31 @@ import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 
-import { SearchParams } from "@/app/distilleries/page";
-import { AutoComplete } from "@/components/ui/autocomplete";
+import { SearchParamsType } from "@/app/distilleries/[distillery]/page";
 import { Input } from "@/components/ui/input";
-import data from "@/data/distillery-regions.json";
 import debounce from "@/lib/debounce";
+
+interface SearchInputProps extends SearchParamsType {
+  distilleryName: string;
+}
 
 export default function SearchInput(
   {
-    region="",
+    distilleryName,
     q="",
-  }: SearchParams) {
+  }: SearchInputProps) {
 
   const router = useRouter();
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [searchParams, setSearchParams] = React.useState({region, q});
+  const [searchParams, setSearchParams] = React.useState({q});
 
   React.useEffect(() => {
+    
     const params = new URLSearchParams({...searchParams}).toString();
 
-    router.replace(`/distilleries?${params}`);
+    router.replace(`/distilleries/${distilleryName}?${params}`);
 
-  }, [router, searchParams]);
+  }, [router, searchParams, distilleryName]);
 
   React.useEffect(() => {
     if (!inputRef.current || document.activeElement === inputRef.current)
@@ -40,15 +43,6 @@ export default function SearchInput(
 
   return (
     <>
-      <AutoComplete
-        itemList={data.distilleryRegions.map((region) => ({
-          value: region,
-          label: region,
-        }))}
-        placeholder="지역"
-        value={searchParams.region}
-        onValueChange={(value) => setSearchParams({ ...searchParams, region: value })}
-      />
       <div className="relative">
         <Search className="text-muted-foreground absolute left-2.5 top-2.5 size-4" />
         <Input

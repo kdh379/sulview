@@ -69,9 +69,7 @@ async function SignButton() {
           href="/login"
           className={buttonVariants()}
         >
-          <Button>
-            로그인
-          </Button>
+          로그인
         </Link>
       )}
     </>
