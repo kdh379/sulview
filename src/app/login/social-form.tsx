@@ -1,6 +1,6 @@
-import { Button } from "../ui/button";
-import { CardDescription } from "../ui/card";
-import { Icons } from "../ui/icons";
+import { Button } from "../../components/ui/button";
+import { CardDescription } from "../../components/ui/card";
+import { Icons } from "../../components/ui/icons";
 
 export default function SocialForm() {
   return (
