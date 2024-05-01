@@ -14,6 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Nodemailer({
       server: process.env.EMAIL_SERVER,
       from: process.env.EMAIL_FROM,
+      name: siteConfig.name,
       async sendVerificationRequest(params) {
         const { identifier, url, provider } = params;
         const transport = createTransport(provider.server);
@@ -34,7 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, user }) {
       
       session.userId = user.id;
-      session.user.name = !user.name ? user.email.split("@")[0] : user.name;
+      session.user.name = user.name;
       return session;
     },
   },
