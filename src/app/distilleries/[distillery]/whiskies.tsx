@@ -67,8 +67,9 @@ export default async function Whiskies({ distilleryId, q }: WhiskiesProps) {
               <Image
                 src={whisky.images[0]}
                 alt={whisky.name}
-                width={100}
-                height={100}
+                width={30}
+                height={60}
+                className="rounded-md object-cover"
               />
             </TableCell>
             <TableCell>{whisky.name}</TableCell>

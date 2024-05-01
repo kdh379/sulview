@@ -37,15 +37,19 @@ export async function POST(request: Request) {
 
     const distilleryId = distilleries[0].id;
 
-    await db.insert(whiskyTable).values({
+    const whiskies = await db.insert(whiskyTable).values({
       ...restProps,
       distilleryId,
       caskTypes: caskTypes.map((caskType) => caskType.value),
       createdAt: new Date(),
       createdBy: user.id,
+    }).returning({
+      id: whiskyTable.id,
     });
     
-    return NextResponse.json({}, { status: 201 });
+    return NextResponse.json({
+      id: whiskies[0].id,
+    }, { status: 201 });
   }
   catch(error) {
     return NextResponse.json<ActionError>(

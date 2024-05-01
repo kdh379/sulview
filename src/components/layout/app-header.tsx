@@ -79,7 +79,7 @@ async function SignButton() {
 export default async function AppHeader() {
 
   return (
-    <header className="border-border bg-background supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 border-b backdrop-blur">
+    <header className="border-border bg-background supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40 border-b backdrop-blur">
       <div className="container flex h-14 items-center">
         <MobileNav />
         <MainNav />
