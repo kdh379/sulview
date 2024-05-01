@@ -2,7 +2,8 @@
 import dayjs from "dayjs";
 import Link from "next/link";
 
-import WhiskyImage from "@/app/whiskies/[whiskyId]/whisky-image";
+import WhiskyImage from "@/app/whiskies/[...whisky]/whisky-image";
+import { siteConfig } from "@/config/site";
 import { distilleryTable, whiskyTable } from "@/db/schema";
 
 interface WhiskyPageProps {
@@ -17,15 +18,15 @@ export default async function WhiskyInfo({ whisky, distillery, userName }: Whisk
 
   return (
     <div>
-      <h1 className="mb-4 text-3xl font-bold">{whisky.name}</h1>
-      <div className="grid justify-center gap-8 sm:grid-cols-[300px_1fr] sm:gap-12 md:justify-start">
+      <h1 className="mb-4 text-4xl font-bold">{whisky.name}</h1>
+      <div className="grid gap-8 sm:grid-cols-[300px_1fr] sm:gap-12">
         <WhiskyImage alt={whisky.name} images={whisky.images} />
         <div>
-          <div className="mb-4">
-            <h2 className="font-semibold">술뷰 점수</h2>
-            <strong className="text-3xl font-bold">85.00</strong>
-            <span className="ml-1 font-medium">/ 100</span>
-          </div>
+          <h2 className="mb-4">
+            <p className="text-lg font-bold">{siteConfig.name} RATING</p>
+            <strong className="text-4xl font-bold">85.00</strong>
+            <span className="ml-1 text-xl font-medium">/ 100</span>
+          </h2>
           <dl className="[&>dt]:text-muted-foreground grid auto-rows-min grid-cols-[150px_1fr] [&>dd]:font-bold [&>dt]:mb-2">
             {
               independent && (
@@ -49,6 +50,15 @@ export default async function WhiskyInfo({ whisky, distillery, userName }: Whisk
                 className="underline underline-offset-4"
               >
                 {whisky.independentDistillery || distillery.name}
+              </Link>
+            </dd>
+            <dt>지역</dt>
+            <dd>
+              <Link 
+                href={`/distilleries?region=${distillery.region}`}
+                className="underline"
+              >
+                {distillery.region}
               </Link>
             </dd>
             {

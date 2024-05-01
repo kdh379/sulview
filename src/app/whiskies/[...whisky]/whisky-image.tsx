@@ -13,7 +13,7 @@ export default function WhiskyImage({ alt, images }: WhiskyImageProps) {
   const [mainImage, setMainImage] = useState(images[0]);
 
   return (
-    <div>
+    <div className="mx-auto">
       <Image
         src={mainImage}
         width={300}
