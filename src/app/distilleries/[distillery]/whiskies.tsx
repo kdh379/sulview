@@ -24,7 +24,9 @@ const getWhiskies = async (distilleryId: number, q: string) => {
       bottled: whiskyTable.bottled,
       images: whiskyTable.images,
       score: sql<number>`avg(${reviewTable.score})`,
-      myScore: sql<number>`avg(CASE WHEN ${reviewTable.createdBy} = ${user?.id} THEN ${reviewTable.score} ELSE NULL END)`,
+      ...(user ? {
+        myScore: sql<number>`avg(CASE WHEN ${reviewTable.createdBy} = ${user?.id} THEN ${reviewTable.score} ELSE NULL END)`,
+      } : {}),
     })
     .from(whiskyTable)
     .groupBy(whiskyTable.id)
@@ -76,8 +78,8 @@ export default async function Whiskies({ distilleryId, q }: WhiskiesProps) {
             <TableCell>{whisky.aged}</TableCell>
             <TableCell>{whisky.abv}</TableCell>
             <TableCell>{whisky.bottled}</TableCell>
-            <TableCell>{whisky.score}</TableCell>
-            <TableCell>{whisky.myScore}</TableCell>
+            <TableCell>{whisky.score && Number(whisky.score).toFixed(1)}</TableCell>
+            <TableCell>{whisky.myScore && Number(whisky.myScore).toFixed(1)}</TableCell>
             <TableCell className="w-0 p-0">
               <Link
                 href={`/whiskies/${whisky.id}`}
