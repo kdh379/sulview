@@ -75,13 +75,13 @@ export default async function DistilleryPage({ params, ...searchParams }: Distil
 
   return (
     <main>
-      <div className="flex gap-x-4">
+      <div className="grid gap-4 sm:grid-cols-[300px_1fr]">
         <Image
           src={`${distillery.images[0]}`}
           width={300}
           height={300}
           alt={distillery.name}
-          className="border-border aspect-square rounded-lg border object-cover"
+          className="border-border mx-auto aspect-square rounded-lg border object-cover"
         />
         <div>
           <h1 className="text-primary mb-2 text-2xl font-bold">{distillery.name}</h1>

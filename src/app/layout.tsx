@@ -66,7 +66,7 @@ export default async function RootLayout({
         <Providers>
           <div className="border-border flex min-h-screen flex-col border-b">
             <AppHeader />
-            <div className="container my-6 flex-1">
+            <div className="container flex-1 py-6">
               {children}
             </div>
           </div>
