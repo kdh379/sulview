@@ -29,6 +29,13 @@
       "when": 1714482810077,
       "tag": "0003_nice_black_cat",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1714658471078,
+      "tag": "0004_medical_metal_master",
+      "breakpoints": true
     }
   ]
 }

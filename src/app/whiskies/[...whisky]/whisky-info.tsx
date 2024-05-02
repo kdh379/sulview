@@ -9,22 +9,23 @@ import { distilleryTable, whiskyTable } from "@/db/schema";
 interface WhiskyPageProps {
   whisky: typeof whiskyTable.$inferSelect;
   distillery: typeof distilleryTable.$inferSelect;
+  score: number | null;
   userName: string | null;
 }
 
-export default async function WhiskyInfo({ whisky, distillery, userName }: WhiskyPageProps) {
+export default async function WhiskyInfo({ whisky, distillery, userName, score }: WhiskyPageProps) {
 
   const independent = whisky.independentDistillery && distillery.name;
 
   return (
     <div>
       <h1 className="mb-4 text-4xl font-bold">{whisky.name}</h1>
-      <div className="grid gap-8 sm:grid-cols-[300px_1fr] sm:gap-12">
+      <div className="grid gap-8 md:grid-cols-[300px_1fr] md:gap-12">
         <WhiskyImage alt={whisky.name} images={whisky.images} />
         <div>
           <h2 className="mb-4">
             <p className="text-lg font-bold">{siteConfig.name} RATING</p>
-            <strong className="text-4xl font-bold">85.00</strong>
+            <strong className="text-4xl font-bold">{Number(score)?.toFixed(2)}</strong>
             <span className="ml-1 text-xl font-medium">/ 100</span>
           </h2>
           <dl className="[&>dt]:text-muted-foreground grid auto-rows-min grid-cols-[150px_1fr] [&>dd]:font-bold [&>dt]:mb-2">

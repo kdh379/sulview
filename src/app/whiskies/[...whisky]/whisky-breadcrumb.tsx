@@ -18,7 +18,7 @@ interface WhiskyBreadcrumbProps {
 export async function WhiskyBreadcrumb({ region, distillery, independentDistillery }: WhiskyBreadcrumbProps) {
 
   return (
-    <Breadcrumb>
+    <Breadcrumb className="mb-2">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>

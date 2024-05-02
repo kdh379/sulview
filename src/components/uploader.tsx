@@ -64,7 +64,7 @@ export default function Uploader({disabled, onChange}: UploaderProps) {
   });
 
   return (
-    <div className="grid grid-cols-3 gap-4 ">
+    <div className="grid auto-rows-min grid-cols-3 gap-4">
       <Button
         variant="dashed"
         className="text-muted-foreground col-span-3 h-32 w-full flex-col"
@@ -75,7 +75,7 @@ export default function Uploader({disabled, onChange}: UploaderProps) {
         <CloudUpload className="size-12" />
         <span className="sr-only">Upload</span>
         <p className="mt-2 text-sm">
-          파일을 여기에 끌어다 놓거나 클릭하여 업로드하세요.
+          사진을 이곳에 끌어다 놓거나 클릭하여 업로드하세요.
         </p>
       </Button>
       {files.map((file, index) => (

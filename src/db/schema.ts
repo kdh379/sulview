@@ -100,6 +100,7 @@ export const reviewTable = pgTable(
     createdBy: text("createdBy").notNull().references(() => users.id, { onDelete: "cascade" }),
     images: text("images").array().notNull(),
     score: integer("score").notNull(),
+    content: text("content").notNull(),
     nose: text("nose").notNull(),
     noseScore: integer("noseScore").notNull(),
     palate: text("palate").notNull(),
