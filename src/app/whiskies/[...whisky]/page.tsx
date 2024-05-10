@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import RouterRewrite from "@/app/whiskies/[...whisky]/router-rewrite";
-import { WhiskyBreadcrumb } from "@/app/whiskies/[...whisky]/whisky-breadcrumb";
 import WhiskyInfo from "@/app/whiskies/[...whisky]/whisky-info";
 import WhiskyReviews from "@/app/whiskies/[...whisky]/whisky-reviews";
 import { siteConfig } from "@/config/site";
@@ -81,12 +80,7 @@ export default async function WhiskyPage({ params }: WhiskyPageProps) {
   const { whisky, distillery, userName, score } = await getWhiskyAbout(whiskyId);
   
   return (
-    <div>
-      <WhiskyBreadcrumb
-        region={distillery.region}
-        distillery={distillery.name}
-        independentDistillery={whisky.independentDistillery}
-      />
+    <>
       <WhiskyInfo 
         whisky={whisky}
         distillery={distillery}
@@ -100,6 +94,6 @@ export default async function WhiskyPage({ params }: WhiskyPageProps) {
         whiskyId={whiskyId}
         whiskyName={whisky.name}
       />
-    </div>
+    </>
   );
 }

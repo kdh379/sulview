@@ -34,7 +34,7 @@ export default function DistilleriesPage({
     return <p>잘못된 요청입니다.</p>;
 
   return (
-    <main>
+    <>
       <div
         className="flex items-center justify-end gap-x-4"
       >
@@ -55,6 +55,6 @@ export default function DistilleriesPage({
       <Suspense fallback={null}>
         <Distilleries {...parse.data} />
       </Suspense>
-    </main>
+    </>
   );
 }

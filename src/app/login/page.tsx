@@ -17,7 +17,7 @@ export default async function Login () {
     redirect("/");
 
   return (
-    <main className="flex flex-1 items-center justify-center">
+    <div className="flex flex-1 items-center justify-center">
       <Card className="w-96">
         <CardHeader>
           <CardTitle>로그인</CardTitle>
@@ -28,6 +28,6 @@ export default async function Login () {
           <SocialForm />
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 };

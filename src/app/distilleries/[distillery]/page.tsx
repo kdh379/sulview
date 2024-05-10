@@ -74,8 +74,8 @@ export default async function DistilleryPage({ params, ...searchParams }: Distil
     return <p>잘못된 요청입니다.</p>;
 
   return (
-    <main>
-      <div className="grid gap-4 sm:grid-cols-[300px_1fr]">
+    <>
+      <section className="grid gap-4 sm:grid-cols-[300px_1fr]">
         <Image
           src={`${distillery.images[0]}`}
           width={300}
@@ -93,8 +93,8 @@ export default async function DistilleryPage({ params, ...searchParams }: Distil
             </Suspense>
           </div>
         </div>
-      </div>
-      <div className="mt-4">
+      </section>
+      <section className="mt-4">
         <div className="flex items-center justify-end gap-x-4">
           <SearchInput distilleryName={distillery.name} {...parse.data} />
           <Link
@@ -111,7 +111,7 @@ export default async function DistilleryPage({ params, ...searchParams }: Distil
           </Link>
         </div>
         <Whiskies distilleryId={distillery.id} {...parse.data} />
-      </div>
-    </main>
+      </section>
+    </>
   );
 }

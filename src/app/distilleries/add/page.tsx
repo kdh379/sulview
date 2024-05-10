@@ -15,7 +15,7 @@ export default async function DistilleryAddPage() {
   await getCurrentSessionRedirect();
 
   return (
-    <main className="flex items-center justify-center">
+    <div className="flex items-center justify-center">
       <Card className="w-full max-w-[500px]">
         <CardHeader>
           <h1 className="text-lg font-semibold leading-none tracking-tight">증류소 / 독립 병입자 추가</h1>
@@ -27,6 +27,6 @@ export default async function DistilleryAddPage() {
           <DistilleryForm />
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }
