@@ -206,10 +206,7 @@ const CarouselPrevious = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        "absolute size-8 rounded-full",
-        orientation === "horizontal"
-          ? "-left-12 top-1/2 -translate-y-1/2"
-          : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
+        "size-8 rounded-full",
         className
       )}
       disabled={!canScrollPrev}
@@ -235,10 +232,7 @@ const CarouselNext = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        "absolute size-8 rounded-full",
-        orientation === "horizontal"
-          ? "-right-12 top-1/2 -translate-y-1/2"
-          : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
+        "size-8 rounded-full",
         className
       )}
       disabled={!canScrollNext}
@@ -252,10 +246,64 @@ const CarouselNext = React.forwardRef<
 });
 CarouselNext.displayName = "CarouselNext";
 
+const CarouselDotButton = ({
+  className,
+}: {
+  className?: string;
+}) => {
+  const { api } = useCarousel();
+
+  const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
+  const [current, setCurrent] = React.useState(0);
+
+  const onButtonClick = React.useCallback((index: number) => {
+    if( !api ) return;
+    api.scrollTo(index);
+  }, [api]);
+
+  const onInit = React.useCallback((api: CarouselApi) => {
+    if (!api) return;
+    setScrollSnaps(api.scrollSnapList());
+  }, []);
+
+  const onSelect = React.useCallback((api: CarouselApi) => {
+    if( !api ) return;
+    setCurrent(api?.selectedScrollSnap());
+  }, []);
+
+  React.useEffect(() => {
+    if( !api ) return;
+
+    onInit(api);
+    onSelect(api);
+
+    api.on("select", onSelect);
+  }, [api, onInit, onSelect]);
+
+  return (
+    <ol className={cn("flex items-center gap-x-2", className)}>
+      {scrollSnaps.map((_, index) => (
+        <li key={index} className="size-5">
+          <Button
+            onClick={() => onButtonClick(index)}
+            variant={current === index ? "default" : "outline"}
+            className="size-full rounded-full p-0"
+            aria-label={`Scroll to ${index + 1}`}
+            aria-current={current === index ? "step" : undefined}
+          >
+            <span className="sr-only">{index + 1}</span>
+          </Button>
+        </li>
+      ))}
+    </ol>
+  );
+};
+
 export {
   Carousel,
   type CarouselApi,
   CarouselContent,
+  CarouselDotButton,
   CarouselItem,
   CarouselNext,
   CarouselPrevious
