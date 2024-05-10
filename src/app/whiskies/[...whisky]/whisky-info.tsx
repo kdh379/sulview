@@ -2,7 +2,9 @@
 import dayjs from "dayjs";
 import Link from "next/link";
 
+import { WhiskyBreadcrumb } from "@/app/whiskies/[...whisky]/whisky-breadcrumb";
 import WhiskyImage from "@/app/whiskies/[...whisky]/whisky-image";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { siteConfig } from "@/config/site";
 import { distilleryTable, whiskyTable } from "@/db/schema";
 
@@ -18,9 +20,16 @@ export default async function WhiskyInfo({ whisky, distillery, userName, score }
   const independent = whisky.independentDistillery && distillery.name;
 
   return (
-    <div>
-      <h1 className="mb-4 text-4xl font-bold">{whisky.name}</h1>
-      <div className="grid gap-8 md:grid-cols-[300px_1fr] md:gap-12">
+    <Card>
+      <CardHeader>
+        <WhiskyBreadcrumb
+          region={distillery.region}
+          distillery={distillery.name}
+          independentDistillery={whisky.independentDistillery}
+        />
+        <h1 className="mb-4 text-4xl font-bold">{whisky.name}</h1>
+      </CardHeader>
+      <CardContent className="grid gap-8 md:grid-cols-[300px_1fr] md:gap-12">
         <WhiskyImage alt={whisky.name} images={whisky.images} />
         <div>
           <h2 className="mb-4">
@@ -126,7 +135,7 @@ export default async function WhiskyInfo({ whisky, distillery, userName, score }
             }
           </dl>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

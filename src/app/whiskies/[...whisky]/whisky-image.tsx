@@ -19,7 +19,7 @@ export default function WhiskyImage({ alt, images }: WhiskyImageProps) {
         width={300}
         height={300}
         alt={alt}
-        className="aspect-auto max-h-[300px] rounded-lg object-contain"
+        className="max-h-[300px] object-contain"
       />
       <div className="mt-4 flex gap-x-4">
         {images.map((image) => (

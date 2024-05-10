@@ -11,7 +11,6 @@ import { useMutation } from "react-query";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, useFormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -198,103 +197,101 @@ export default function WhiskyReviewForm({ whiskyId }: WhiskyReviewFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card className="pt-6">
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <FormField
-                  control={form.control}
-                  name="score"
-                  render={({field}) => (
-                    <FormItem className="mb-8">
-                      <FormLabel className="text-xl font-bold">
-                        <span>RATING</span>
-                        <span className="ml-2 text-2xl font-bold">{field.value}</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Slider
-                          min={0}
-                          max={100}
-                          step={1}
-                          onValueChange={(value) => form.setValue("score", value[0])}
-                          name={field.name}
-                          defaultValue={[field.value ?? 0]}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <TasteInput className={cn(
-                  "hidden",
-                  tasteVisible && "block"
-                )} />
-                <Button
-                  variant={tasteVisible ? "destructive" : "outline"}
-                  size="sm"
-                  className="mb-4"
-                  onClick={() => setTasteVisible(!tasteVisible)}
-                >
-              테이스팅 노트 {tasteVisible ? "제거" : "추가"}
-                </Button>
-                <FormField
-                  control={form.control}
-                  name="content"
-                  render={({field}) => (
-                    <FormItem>
-                      <FormLabel>리뷰</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          {...field}
-                          className="min-h-24"
-                          placeholder="적극 추천하는 위스키. 재구매 의사 있음."
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <FormField
-                name="images"
-                control={form.control}
-                render={() => (
-                  <FormItem>
-                    <FormLabel className="flex items-center">
-                      사진
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <InfoIcon className="text-muted-foreground ml-2 size-4" />
-                        </TooltipTrigger>
-                        <TooltipContent side="right">
-                          webp 형식으로 변환되어 저장됩니다.
-                        </TooltipContent>
-                      </Tooltip>
-                    </FormLabel>
-                    <FormControl>
-                      <Uploader
-                        disabled={form.formState.isSubmitting}
-                        onChange={(files) => setFiles(files)}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      최대 5장까지 업로드 가능합니다.
-                    </FormDescription>
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-          <CardFooter>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div>
+            <FormField
+              control={form.control}
+              name="score"
+              render={({field}) => (
+                <FormItem className="mb-8">
+                  <FormLabel className="text-xl font-bold">
+                    <span>RATING</span>
+                    <span className="ml-2 text-2xl font-bold">{field.value}</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Slider
+                      min={0}
+                      max={100}
+                      step={1}
+                      onValueChange={(value) => form.setValue("score", value[0])}
+                      name={field.name}
+                      defaultValue={[field.value ?? 0]}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <TasteInput className={cn(
+              "hidden",
+              tasteVisible && "block"
+            )} />
             <Button
-              type="submit"
-              isLoading={isLoading}
-              className="ml-auto w-full sm:w-auto"
-              size="lg"
+              variant={tasteVisible ? "destructive" : "outline"}
+              size="sm"
+              className="mb-4"
+              onClick={() => setTasteVisible(!tasteVisible)}
             >
-              <NotebookPen className="mr-2 size-4" />
-              리뷰 작성
+              테이스팅 노트 {tasteVisible ? "제거" : "추가"}
             </Button>
-          </CardFooter>
-        </Card>
+            <FormField
+              control={form.control}
+              name="content"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>리뷰</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      className="min-h-24"
+                      placeholder="적극 추천하는 위스키. 재구매 의사 있음."
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormField
+            name="images"
+            control={form.control}
+            render={() => (
+              <FormItem>
+                <FormLabel className="flex items-center">
+                      사진
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <InfoIcon className="text-muted-foreground ml-2 size-4" />
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                          webp 형식으로 변환되어 저장됩니다.
+                    </TooltipContent>
+                  </Tooltip>
+                </FormLabel>
+                <FormControl>
+                  <Uploader
+                    disabled={form.formState.isSubmitting}
+                    onChange={(files) => setFiles(files)}
+                  />
+                </FormControl>
+                <FormDescription>
+                      최대 5장까지 업로드 가능합니다.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+        </div>
+        <div
+          className="flex justify-end border-b-2 py-4"
+        >
+          <Button
+            type="submit"
+            isLoading={isLoading}
+            className="w-full sm:w-auto"
+            size="lg"
+          >
+            <NotebookPen className="mr-2 size-4" />
+              리뷰 작성
+          </Button>
+        </div>
       </form>
     </Form>
   );
