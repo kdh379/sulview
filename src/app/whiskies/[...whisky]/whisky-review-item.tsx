@@ -19,9 +19,9 @@ function TasteItem({
   return (
     <div>
       <div className="flex items-center">
-        <b className="w-20">{label}</b>
+        <b className="w-12">{label}</b>
         { score && score > -1 && <>
-          <b className="ml-10 w-12">{score}</b>
+          <b className="ml-8 w-12">{score}</b>
           <Progress className="ml-2 max-w-[400px]" value={score} />
         </> }
       </div>
@@ -62,7 +62,7 @@ export default function WhiskyReviewItem({
         </header>
         <Carousel>
           <CarouselContent>
-            {review.images.length > 1 && review.images.map((image, index) => (
+            {review.images.length > 0 && review.images.map((image, index) => (
               <CarouselItem key={index}>
                 <Image
                   src={image}

@@ -287,7 +287,7 @@ const CarouselDotButton = ({
           <Button
             onClick={() => onButtonClick(index)}
             variant={current === index ? "default" : "outline"}
-            className="size-full rounded-full p-0"
+            className="size-full rounded-full border-4 p-0"
             aria-label={`Scroll to ${index + 1}`}
             aria-current={current === index ? "step" : undefined}
           >

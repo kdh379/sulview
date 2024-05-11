@@ -45,7 +45,7 @@ export default async function WhiskyInfo({ whisky, distillery, userName, score }
                   <dd>
                     <Link 
                       href={`/distilleries/${whisky.independentDistillery}`}
-                      className="underline"
+                      className="underline underline-offset-4"
                     >
                       {whisky.independentDistillery}
                     </Link>
@@ -56,17 +56,17 @@ export default async function WhiskyInfo({ whisky, distillery, userName, score }
             <dt>{independent ? "병입" : "증류소"}</dt>
             <dd>
               <Link 
-                href={`/distilleries/${whisky.independentDistillery || distillery.name}`}
+                href={`/distilleries/${independent || distillery.name}`}
                 className="underline underline-offset-4"
               >
-                {whisky.independentDistillery || distillery.name}
+                {independent || distillery.name}
               </Link>
             </dd>
             <dt>지역</dt>
             <dd>
               <Link 
                 href={`/distilleries?region=${distillery.region}`}
-                className="underline"
+                className="underline underline-offset-4"
               >
                 {distillery.region}
               </Link>
