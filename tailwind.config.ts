@@ -1,5 +1,9 @@
 import type { Config } from "tailwindcss";
 
+const customWidths = {
+  sidebar: "250px",
+};
+
 const config = {
   darkMode: ["class"],
   content: [
@@ -60,6 +64,9 @@ const config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      spacing: {
+        ...customWidths,
       },
       keyframes: {
         "accordion-down": {

@@ -1,18 +1,23 @@
 "use client";
 
 import {
+  Home,
   ListOrdered
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
 
-import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
 import { Icons } from "../ui/icons";
 
-export const NAV_ITEMS = [
+const NAV_ITEMS = [
+  {
+    icon: Home,
+    label: "홈",
+    pathname: "/",
+  },
   {
     icon: ListOrdered,
     label: "위스키",
@@ -35,33 +40,23 @@ const MainNav = () => {
   const pathname = usePathname();
 
   return (
-    <div className="hidden sm:flex">
-      <Link 
-        href="/"
-        className="mr-8 flex items-center gap-x-2"
-      >
-        <Icons.logo className="text-primary" />
-        <span className="font-bold">
-          {siteConfig.name}
-        </span>
-      </Link>
-      <nav className="flex items-center gap-x-8">
-        {
-          NAV_ITEMS.map((item) => (
-            <Link
-              key={item.pathname}
-              href={item.pathname}
-              className={cn(
-                "text-muted-foreground/75 hover:text-primary font-medium transition-colors",
-                pathname.startsWith(item.pathname) && "text-primary"
-              )}
-            >
-              <span>{item.label}</span>
-            </Link>
-          ))
-        }
-      </nav>
-    </div>
+    <nav className="px-4 text-sm font-medium">
+      {NAV_ITEMS.map((item, index) => (
+        <Link
+          key={item.pathname}
+          href={item.pathname}
+          className={cn(
+            "text-muted-foreground hover:text-primary flex items-center gap-3 rounded-lg px-3 py-4 transition-all",
+            index === 0
+              ? pathname === item.pathname && "text-primary"
+              : pathname.startsWith(item.pathname) && "text-primary"
+          )}
+        >
+          <item.icon className="size-4" />
+          <span>{item.label}</span>
+        </Link>
+      ))}
+    </nav>
   );
 };
 

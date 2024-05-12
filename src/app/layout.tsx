@@ -4,8 +4,8 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 
 import AppHeader from "@/components/layout/app-header";
-import Footer from "@/components/layout/footer";
 import NicknameFormDialog from "@/components/layout/nickname-form-dialog";
+import Sidebar from "@/components/layout/sidebar";
 import Providers from "@/components/providers";
 import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/config/site";
@@ -64,13 +64,15 @@ export default async function RootLayout({
     <html lang="ko" suppressHydrationWarning>
       <body className={cn(pretendard.className, "antialiased transition ease-in-out")}>
         <Providers>
-          <div className="border-border flex min-h-screen flex-col border-b">
-            <AppHeader />
-            <main className="container flex-1 py-6">
-              {children}
-            </main>
+          <div className="min-h-screen border-b">
+            <Sidebar />
+            <div className="md:pl-sidebar">
+              <AppHeader />
+              <main className="container flex-1 py-6">
+                {children}
+              </main>
+            </div>
           </div>
-          <Footer />
           <Toaster />
           <NicknameFormDialog open={user && user.name === null ? true : false} />
         </Providers>
