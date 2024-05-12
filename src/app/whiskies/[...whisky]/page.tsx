@@ -3,7 +3,6 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-import RouterRewrite from "@/app/whiskies/[...whisky]/router-rewrite";
 import WhiskyInfo from "@/app/whiskies/[...whisky]/whisky-info";
 import WhiskyReviews from "@/app/whiskies/[...whisky]/whisky-reviews";
 import { siteConfig } from "@/config/site";
@@ -80,7 +79,7 @@ export default async function WhiskyPage({ params }: WhiskyPageProps) {
   const { whisky, distillery, userName, score } = await getWhiskyAbout(whiskyId);
   
   return (
-    <>
+    <div>
       <WhiskyInfo 
         whisky={whisky}
         distillery={distillery}
@@ -90,10 +89,6 @@ export default async function WhiskyPage({ params }: WhiskyPageProps) {
       <Suspense fallback={null}>
         <WhiskyReviews whiskyId={whiskyId} />
       </Suspense>
-      <RouterRewrite 
-        whiskyId={whiskyId}
-        whiskyName={whisky.name}
-      />
-    </>
+    </div>
   );
 }
