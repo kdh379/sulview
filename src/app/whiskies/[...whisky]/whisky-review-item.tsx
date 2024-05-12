@@ -48,7 +48,16 @@ export default function WhiskyReviewItem({
         <header className="flex items-center">
           <Avatar>
             <AvatarImage src={userAvatar ?? undefined} />
-            <AvatarFallback>SV</AvatarFallback>
+            <AvatarFallback>
+              <Image
+                src="/user-placeholder.jpg"
+                width={36}
+                height={36}
+                alt="Avatar"
+                className="overflow-hidden rounded-full"
+                priority
+              />
+            </AvatarFallback>
           </Avatar>
           <div className="ml-3">
             <Link
