@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import Link from "next/link";
 
 import { WhiskyBreadcrumb } from "@/app/whiskies/[...whisky]/whisky-breadcrumb";
-import WhiskyImage from "@/app/whiskies/[...whisky]/whisky-image";
+import WhiskyImages from "@/app/whiskies/[...whisky]/whisky-images";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { siteConfig } from "@/config/site";
 import { distilleryTable, whiskyTable } from "@/db/schema";
@@ -30,7 +30,7 @@ export default async function WhiskyInfo({ whisky, distillery, userName, score }
         <h1 className="mb-4 text-4xl font-bold">{whisky.name}</h1>
       </CardHeader>
       <CardContent className="grid gap-8 md:grid-cols-[300px_1fr] md:gap-12">
-        <WhiskyImage alt={whisky.name} images={whisky.images} />
+        <WhiskyImages alt={whisky.name} images={whisky.images} />
         <div>
           <h2 className="mb-4">
             <p className="text-lg font-bold">{siteConfig.name} RATING</p>

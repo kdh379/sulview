@@ -11,6 +11,7 @@ import PopularWhisky from "@/app/distilleries/[distillery]/popular-whisky";
 import SearchInput from "@/app/distilleries/[distillery]/search-input";
 import Whiskies from "@/app/distilleries/[distillery]/whiskies";
 import { buttonVariants } from "@/components/ui/button";
+import { Carousel, CarouselContent, CarouselDotButton, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { siteConfig } from "@/config/site";
 import { db } from "@/db/drizzle";
 import { distilleryTable } from "@/db/schema";
@@ -76,13 +77,26 @@ export default async function DistilleryPage({ params, ...searchParams }: Distil
   return (
     <>
       <section className="grid gap-4 sm:grid-cols-[300px_1fr]">
-        <Image
-          src={`${distillery.images[0]}`}
-          width={300}
-          height={300}
-          alt={distillery.name}
-          className="border-border mx-auto aspect-square rounded-lg border object-cover"
-        />
+        <Carousel>
+          <CarouselContent>
+            {distillery.images.map((image, index) => (
+              <CarouselItem key={index}>
+                <Image
+                  src={image}
+                  width={300}
+                  height={300}
+                  alt={`${distillery.name}-image-${index}`}
+                  className="mx-auto aspect-square rounded-lg border object-cover"
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="mt-1 flex gap-x-2">
+            <CarouselPrevious />
+            <CarouselNext />
+            <CarouselDotButton className="ml-auto" />
+          </div>
+        </Carousel>
         <div>
           <h1 className="text-primary mb-2 text-2xl font-bold">{distillery.name}</h1>
           <p className="text-muted-foreground font-medium">{distillery.region}</p>
@@ -94,7 +108,7 @@ export default async function DistilleryPage({ params, ...searchParams }: Distil
           </div>
         </div>
       </section>
-      <section className="mt-4">
+      <section className="mt-4 lg:-mt-8">
         <div className="flex items-center justify-end gap-x-4">
           <SearchInput distilleryName={distillery.name} {...parse.data} />
           <Link

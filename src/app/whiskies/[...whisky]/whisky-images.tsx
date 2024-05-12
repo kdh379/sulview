@@ -3,19 +3,22 @@
 import Image from "next/image";
 import { useState } from "react";
 
+import ImageWithFallback from "@/components/ui/image-with-fallback";
+
 interface WhiskyImageProps {
   alt: string;
   images: string[];
 }
 
-export default function WhiskyImage({ alt, images }: WhiskyImageProps) {
+export default function WhiskyImages({ alt, images }: WhiskyImageProps) {
 
   const [mainImage, setMainImage] = useState(images[0]);
 
   return (
-    <div className="mx-auto">
-      <Image
-        src={mainImage}
+    <div className="mx-auto mt-auto">
+      <ImageWithFallback
+        src={mainImage || "/whisky-placeholder.png"}
+        fallbackSrc="/whisky-placeholder.png"
         width={300}
         height={300}
         alt={alt}
