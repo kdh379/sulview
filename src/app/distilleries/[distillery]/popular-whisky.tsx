@@ -8,6 +8,7 @@ import { distilleryTable, reviewTable, whiskyTable } from "@/db/schema";
 const getPopularWhiskies = async (distilleryId: number) => {
   return await db
     .select({
+      id: whiskyTable.id,
       whiskyName: whiskyTable.name,
       reviewCount: sql<number>`COUNT(${reviewTable.id})`,
     })
@@ -55,15 +56,15 @@ export default async function PopularWhisky({
     ? whiskies.slice(0, 5).map((whisky) => (
       <ul key={whisky.whiskyName} className="mt-4 space-y-2">
         <PopularWhiskeyItem
-          href={`/distilleries/${distillery.name}/whiskies`}
+          href={`/whiskies/${whisky.id}/${whisky.whiskyName}`}
           whiskyName={whisky.whiskyName}
           reviewCount={whisky.reviewCount}
         />
       </ul>
     ))
     : (
-      <div className="text-muted-foreground mt-4">
-        <Inbox className="mx-auto size-12" />
+      <div className="text-muted-foreground mt-4 flex max-w-40 flex-col items-center">
+        <Inbox className="size-12" />
         <p>작성된 리뷰가 없습니다.</p>
       </div>
     );

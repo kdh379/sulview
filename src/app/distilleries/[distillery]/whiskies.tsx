@@ -1,8 +1,8 @@
 import { and, eq, ilike, sql } from "drizzle-orm";
-import Image from "next/image";
 import Link from "next/link";
 
 import { SearchParamsType } from "@/app/distilleries/[distillery]/page";
+import ImageWithFallback from "@/components/ui/image-with-fallback";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { db } from "@/db/drizzle";
 import { reviewTable, whiskyTable } from "@/db/schema";
@@ -66,8 +66,9 @@ export default async function Whiskies({ distilleryId, q }: WhiskiesProps) {
             className="relative"
           >
             <TableCell className="hidden w-[100px] sm:table-cell">
-              <Image
-                src={whisky.images[0]}
+              <ImageWithFallback
+                src={whisky.images[0] || "/whisky-placeholder.png"}
+                fallbackSrc="/whisky-placeholder.png"
                 alt={whisky.name}
                 width={30}
                 height={60}
@@ -82,7 +83,7 @@ export default async function Whiskies({ distilleryId, q }: WhiskiesProps) {
             <TableCell>{whisky.myScore && Number(whisky.myScore).toFixed(1)}</TableCell>
             <TableCell className="w-0 p-0">
               <Link
-                href={`/whiskies/${whisky.id}`}
+                href={`/whiskies/${whisky.id}/${whisky.name}`}
                 className="absolute inset-0"
               >
                 <span className="sr-only">{whisky.name}</span>
