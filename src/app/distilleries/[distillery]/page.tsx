@@ -98,7 +98,7 @@ export default async function DistilleryPage({ params, ...searchParams }: Distil
           </div>
         </Carousel>
         <div>
-          <h1 className="text-primary mb-2 text-2xl font-bold">{distillery.name}</h1>
+          <h1 className="mb-2 text-2xl font-bold">{distillery.name}</h1>
           <p className="text-muted-foreground font-medium">{distillery.region}</p>
           <div className="mt-8">
             <strong>인기 위스키</strong>

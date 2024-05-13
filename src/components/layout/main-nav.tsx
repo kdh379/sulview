@@ -40,7 +40,7 @@ const MainNav = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="px-4 text-sm font-medium">
+    <nav className="text-sm font-medium md:px-4">
       {NAV_ITEMS.map((item, index) => (
         <Link
           key={item.pathname}
