@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { ListFilter, MessageSquareText } from "lucide-react";
 
-import WhiskyReviewForm from "@/app/whiskies/[...whisky]/whisky-review-form";
+import { WhiskyReviewAddForm } from "@/app/whiskies/[...whisky]/whisky-review-form";
 import WhiskyReviewItem from "@/app/whiskies/[...whisky]/whisky-review-item";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -66,7 +66,7 @@ export default async function WhiskyReviews({ whiskyId }: WhiskyReviewsProps) {
           "my-4 hidden",
           user && !reviews.find((review) => review.createdBy === user?.id) && "block"
         )}>
-          <WhiskyReviewForm
+          <WhiskyReviewAddForm
             whiskyId={whiskyId}
           />
         </div>

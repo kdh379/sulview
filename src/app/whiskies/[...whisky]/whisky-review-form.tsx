@@ -6,7 +6,7 @@ import { InfoIcon, Minus, NotebookPen, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useS3Upload } from "next-s3-upload";
 import { useState } from "react";
-import { useForm, useFormContext } from "react-hook-form";
+import { useForm, useFormContext, UseFormReturn } from "react-hook-form";
 import { useMutation } from "react-query";
 import { z } from "zod";
 
@@ -17,6 +17,7 @@ import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import Uploader from "@/components/uploader";
+import { reviewTable } from "@/db/schema";
 import { handleApiError } from "@/lib/api";
 import { convertImageToWebP } from "@/lib/upload";
 import { cn } from "@/lib/utils";
@@ -127,7 +128,7 @@ function FieldSet({ name, legend }: FieldSetProps) {
 function TasteInput({className} : {className?: string}) {
 
   return (
-    <ul className={cn("mb-4 space-y-8", className)}>
+    <ul className={cn("mt-8 space-y-8", className)}>
       <FieldSet name="nose" legend="Nose" />
       <FieldSet name="palate" legend="Palate" />
       <FieldSet name="finish" legend="Finish" />
@@ -135,35 +136,37 @@ function TasteInput({className} : {className?: string}) {
   );
 }
 
-interface WhiskyReviewFormProps {
-  whiskyId: number;
+function hasTaste(form: UseFormReturn<ReviewFormSchemaType>) {
+  const tasteFields: (keyof ReviewFormSchemaType)[]
+    = ["nose", "noseScore", "palate", "palateScore", "finish", "finishScore"];
+    
+  return tasteFields.every((field) => form.getValues(field) !== "" || form.getValues(field) !== -1);
 }
 
-export default function WhiskyReviewForm({ whiskyId }: WhiskyReviewFormProps) {
-  const [tasteVisible, setTasteVisible] = useState(false);
+interface WhiskyReviewFormProps extends ReviewFormSchemaType {
+  onSubmitted?: () => void;
+};
+
+function WhiskyReviewForm({ onSubmitted, ...props } : WhiskyReviewFormProps) {
+  
   const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const {uploadToS3} = useS3Upload();
   const form = useForm<ReviewFormSchemaType>({
     resolver: zodResolver(ReviewFormSchema),
-    defaultValues: {
-      whiskyId,
-      score: 0,
-      content: "",
-      nose: "",
-      palate: "",
-      finish: "",
-      images: [],
-    },
+    defaultValues: props,
   });
+  const [tasteVisible, setTasteVisible] = useState(hasTaste(form));
+
   const {
     isLoading,
-    mutate: handleAddReview,
+    mutate: handleReviewSubmit,
   } = useMutation(
-    (data: ReviewFormSchemaType) => axios.post("/api/review", data),
+    (data: ReviewFormSchemaType) => axios.put("/api/review", data),
     {
       onSuccess: () => {
         router.refresh();
+        onSubmitted?.();
       },
       onError: (err: AxiosError<ActionError>) => {
         if(err.response?.data)
@@ -191,94 +194,93 @@ export default function WhiskyReviewForm({ whiskyId }: WhiskyReviewFormProps) {
       form.setValue("finishScore", -1);
     }
 
-    handleAddReview(form.getValues());
+    handleReviewSubmit(form.getValues());
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div>
-            <FormField
-              control={form.control}
-              name="score"
-              render={({field}) => (
-                <FormItem className="mb-8">
-                  <FormLabel className="text-xl font-bold">
-                    <span>RATING</span>
-                    <span className="ml-2 text-2xl font-bold">{field.value}</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Slider
-                      min={0}
-                      max={100}
-                      step={1}
-                      onValueChange={(value) => form.setValue("score", value[0])}
-                      name={field.name}
-                      defaultValue={[field.value ?? 0]}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <TasteInput className={cn(
-              "hidden",
-              tasteVisible && "block"
-            )} />
-            <Button
-              variant={tasteVisible ? "destructive" : "outline"}
-              size="sm"
-              className="mb-4"
-              onClick={() => setTasteVisible(!tasteVisible)}
-            >
-              테이스팅 노트 {tasteVisible ? "제거" : "추가"}
-            </Button>
-            <FormField
-              control={form.control}
-              name="content"
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>리뷰</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      className="min-h-24"
-                      placeholder="적극 추천하는 위스키. 재구매 의사 있음."
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-          <FormField
-            name="images"
-            control={form.control}
-            render={() => (
-              <FormItem>
-                <FormLabel className="flex items-center">
+      <form 
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-y-4"
+      >
+        <FormField
+          name="images"
+          control={form.control}
+          render={() => (
+            <FormItem>
+              <FormLabel className="flex items-center">
                       사진
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <InfoIcon className="text-muted-foreground ml-2 size-4" />
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
+                <Tooltip>
+                  <TooltipTrigger>
+                    <InfoIcon className="text-muted-foreground ml-2 size-4" />
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
                           webp 형식으로 변환되어 저장됩니다.
-                    </TooltipContent>
-                  </Tooltip>
-                </FormLabel>
-                <FormControl>
-                  <Uploader
-                    disabled={form.formState.isSubmitting}
-                    onChange={(files) => setFiles(files)}
-                  />
-                </FormControl>
-                <FormDescription>
+                  </TooltipContent>
+                </Tooltip>
+              </FormLabel>
+              <FormControl>
+                <Uploader
+                  disabled={form.formState.isSubmitting}
+                  onChange={(files) => setFiles(files)}
+                />
+              </FormControl>
+              <FormDescription>
                       최대 5장까지 업로드 가능합니다.
-                </FormDescription>
-              </FormItem>
-            )}
-          />
-        </div>
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="score"
+          render={({field}) => (
+            <FormItem>
+              <FormLabel className="text-xl font-bold">
+                <span>RATING</span>
+                <span className="ml-2 text-2xl font-bold">{field.value}</span>
+              </FormLabel>
+              <FormControl>
+                <Slider
+                  min={0}
+                  max={100}
+                  step={1}
+                  onValueChange={(value) => form.setValue("score", value[0])}
+                  name={field.name}
+                  defaultValue={[field.value ?? 0]}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <TasteInput className={cn(
+          "hidden",
+          tasteVisible && "block"
+        )} />
+        <Button
+          variant={tasteVisible ? "destructive" : "outline"}
+          size="sm"
+          className="mb-4"
+          onClick={() => setTasteVisible(!tasteVisible)}
+        >
+              테이스팅 노트 {tasteVisible ? "제거" : "추가"}
+        </Button>
+        <FormField
+          control={form.control}
+          name="content"
+          render={({field}) => (
+            <FormItem>
+              <FormLabel>리뷰</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  className="min-h-24"
+                  placeholder="적극 추천하는 위스키. 재구매 의사 있음."
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
         <div
           className="flex justify-end border-b-2 py-4"
         >
@@ -294,5 +296,46 @@ export default function WhiskyReviewForm({ whiskyId }: WhiskyReviewFormProps) {
         </div>
       </form>
     </Form>
+  );
+}
+
+export function WhiskyReviewAddForm({ whiskyId } : { whiskyId: number }) {
+  return (
+    <WhiskyReviewForm
+      whiskyId={whiskyId}
+      score={0}
+      content=""
+      nose=""
+      noseScore={0}
+      palate=""
+      palateScore={0}
+      finish=""
+      finishScore={0}
+      images={[]}
+    />
+  );
+}
+
+type Review = typeof reviewTable.$inferSelect;
+
+export function WhiskyReviewEditForm({ review, onSubmitted } 
+  : { 
+    review: Review,
+    onSubmitted?: () => void})
+{
+  return (
+    <WhiskyReviewForm
+      whiskyId={review.whiskyId}
+      score={review.score}
+      content={review.content}
+      nose={review.nose}
+      noseScore={review.noseScore}
+      palate={review.palate}
+      palateScore={review.palateScore}
+      finish={review.finish}
+      finishScore={review.finishScore}
+      images={review.images}
+      onSubmitted={onSubmitted}
+    />
   );
 }

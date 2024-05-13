@@ -22,7 +22,7 @@ export default function WhiskyFields() {
         control={form.control}
         render={({field}) => (
           <FormItem className="flex-1">
-            <FormLabel>위스키</FormLabel>
+            <FormLabel required>위스키</FormLabel>
             <FormControl>
               <Input
                 {...field}
@@ -39,7 +39,7 @@ export default function WhiskyFields() {
         render={
           ({field}) => (
             <FormItem>
-              <FormLabel>병입</FormLabel>
+              <FormLabel required>병입</FormLabel>
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
@@ -94,7 +94,7 @@ export default function WhiskyFields() {
         render={
           ({field}) => (
             <FormItem>
-              <FormLabel>ABV</FormLabel>
+              <FormLabel required>ABV</FormLabel>
               <FormControl>
                 <Input
                   {...field}

@@ -1,8 +1,13 @@
+"use client";
+
 import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
+import { WhiskyReviewEditForm } from "@/app/whiskies/[...whisky]/whisky-review-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselDotButton, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Progress } from "@/components/ui/progress";
 import { reviewTable, users } from "@/db/schema";
@@ -42,6 +47,9 @@ export default function WhiskyReviewItem({
   userName,
   ...review
 }: WhiskyReviewItemProps) {
+
+  const [isEditing, setIsEditing] = useState(false);
+
   return (
     <li>
       <article className="space-y-8">
@@ -68,33 +76,51 @@ export default function WhiskyReviewItem({
             </Link>
             <time className="text-muted-foreground block text-sm">{dayjs(review.createdAt).format("YYYY-MM-DD HH:mm:ss")}</time>
           </div>
-        </header>
-        <Carousel>
-          <CarouselContent>
-            {review.images.length > 0 && review.images.map((image, index) => (
-              <CarouselItem key={index}>
-                <Image
-                  src={image}
-                  width={300}
-                  height={300}
-                  alt={review.content}
-                  className="max-h-[400px] w-full rounded-md object-contain md:max-h-[600px]"
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="mt-6 flex items-center gap-x-4">
-            <CarouselPrevious />
-            <CarouselNext />
-            <CarouselDotButton className="ml-auto" />
+          <div className="ml-auto flex">
+            <Button
+              variant="link"
+              onClick={() => setIsEditing(!isEditing)}
+            >
+              수정
+            </Button>
           </div>
-        </Carousel>
-        <div className="mt-4 space-y-4">
-          <TasteItem label="Nose" score={review.noseScore} content={review.nose} />
-          <TasteItem label="Palate" score={review.palateScore} content={review.palate} />
-          <TasteItem label="Finish" score={review.finishScore} content={review.finish} />
-          <TasteItem label="총평" score={review.score} content={review.content} />
-        </div>
+        </header>
+        {isEditing ? (
+          <WhiskyReviewEditForm
+            review={review}
+            onSubmitted={() => setIsEditing(false)}
+          />
+        ) 
+          : (
+            <>
+              <Carousel>
+                <CarouselContent>
+                  {review.images.length > 0 && review.images.map((image, index) => (
+                    <CarouselItem key={index}>
+                      <Image
+                        src={image}
+                        width={300}
+                        height={300}
+                        alt={review.content}
+                        className="max-h-[400px] w-full rounded-md object-contain md:max-h-[600px]"
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <div className="mt-6 flex items-center gap-x-4">
+                  <CarouselPrevious />
+                  <CarouselNext />
+                  <CarouselDotButton className="ml-auto" />
+                </div>
+              </Carousel>
+              <div className="mt-4 space-y-4">
+                <TasteItem label="Nose" score={review.noseScore} content={review.nose} />
+                <TasteItem label="Palate" score={review.palateScore} content={review.palate} />
+                <TasteItem label="Finish" score={review.finishScore} content={review.finish} />
+                <TasteItem label="총평" score={review.score} content={review.content} />
+              </div>
+            </>
+          )}
       </article>
     </li>
   );
