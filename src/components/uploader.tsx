@@ -1,3 +1,4 @@
+"use client";
 
 import { CloudUpload, Eye, Trash } from "lucide-react";
 import Image from "next/image";
@@ -6,7 +7,7 @@ import { useDropzone } from "react-dropzone";
 
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import { createPreviewMedia } from "@/lib/upload";
+import { convertURLtoImage, createPreviewMedia } from "@/lib/upload";
 
 export type FilePreview = File & { preview: string };
 
@@ -20,13 +21,17 @@ const DROPZONE_MSG_BOX: {[key: string]: string} = {
 };
 
 interface UploaderProps {
+  defaultImages?: string[];
   disabled?: boolean;
   onChange?: (files: FilePreview[]) => void;
 }
 
-export default function Uploader({disabled, onChange}: UploaderProps) {
+export default function Uploader({
+  defaultImages = [],
+  disabled,
+  onChange,
+}: UploaderProps) {
   const [files, setFiles] = React.useState<FilePreview[]>([]);
-
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [".png", ".jpg", ".jpeg", ".webp"],
@@ -62,6 +67,19 @@ export default function Uploader({disabled, onChange}: UploaderProps) {
       ]);
     },
   });
+
+  const initFiles = React.useCallback(async ( urls: string[] ) => {
+    const files = await Promise.all(urls.map(convertURLtoImage));
+
+    setFiles(files);
+    onChange?.(files);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    if(defaultImages.length > 0) 
+      initFiles(defaultImages);
+  }, [defaultImages, initFiles]);
 
   return (
     <div className="grid auto-rows-min grid-cols-3 gap-4">
