@@ -9,7 +9,10 @@ export const hasError = (state: ActionError | unknown): state is ActionError => 
   return "error" in state;
 };
 
-export const handleApiError = <TFieldValues extends FieldValues>(err: ActionError, form: UseFormReturn<TFieldValues>) => {
+export const handleApiError = <TFieldValues extends FieldValues>(
+  err: ActionError,
+  form: UseFormReturn<TFieldValues> | null
+) => {
 
   const { error } = err;
 
@@ -23,10 +26,10 @@ export const handleApiError = <TFieldValues extends FieldValues>(err: ActionErro
       variant: "destructive",
       duration: 5000,
     });
-    form.setError("root", { message: error.message, type: error.code });
+    form && form.setError("root", { message: error.message, type: error.code });
     break;
   case "EXISTS_ERROR":
-    form.setError(error.key as any, { message: error.message });
+    form && form.setError(error.key as any, { message: error.message });
     break;
   case "AUTH_ERROR":
     toast({
@@ -38,7 +41,7 @@ export const handleApiError = <TFieldValues extends FieldValues>(err: ActionErro
     break;
   case "VALIDATION_ERROR":
     const { fieldErrors } = error;
-    Object.keys(fieldErrors).forEach((key) => {
+    form && Object.keys(fieldErrors).forEach((key) => {
       form.setError(key as any, { message: fieldErrors[key].flat().join(" ") });
     });
     break;

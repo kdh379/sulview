@@ -58,7 +58,7 @@ export default async function WhiskyReviews({ whiskyId }: WhiskyReviewsProps) {
           className="ml-2"
         >
           <ListFilter className="mr-2" />
-            정렬 기준
+          정렬 기준
         </Button>
       </div>
       <CardContent>
@@ -74,6 +74,8 @@ export default async function WhiskyReviews({ whiskyId }: WhiskyReviewsProps) {
           {reviews ? reviews.map((review) => (
             <WhiskyReviewItem
               key={review.id}
+              isAuthor={review.createdBy === user?.id}
+              isAdmin={user?.role === "admin"}
               {...review}
             />
           )) 

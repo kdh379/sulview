@@ -1,5 +1,7 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import NextAuth from "next-auth";
+import NextAuth, { type DefaultSession } from "next-auth";
+import Google from "next-auth/providers/google";
+import Naver from "next-auth/providers/naver";
 import Nodemailer from "next-auth/providers/nodemailer";
 import { createTransport } from "nodemailer";
 
@@ -7,6 +9,14 @@ import { html } from "@/components/template/nodemailer";
 import { db } from "@/db/drizzle";
 
 import { siteConfig } from "./config/site";
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      role: string;
+    } & DefaultSession["user"];
+  }
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db),
@@ -30,13 +40,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       },
     }),
+    Google({
+      profile(profile) {
+        return { role: profile.role ?? "user", ...profile };
+      },
+    }),
+    Naver({
+      profile(profile) {
+        return { role: profile.role ?? "user", ...profile };
+      },
+    }),
   ],
   callbacks: {
     async session({ session, user }) {
-      
-      session.userId = user.id;
-      session.user.name = user.name;
-      return session;
+      return {
+        ...session,
+        user: {
+          ...session.user,
+        },
+      };
     },
   },
   pages: {

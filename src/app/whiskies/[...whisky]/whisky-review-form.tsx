@@ -143,14 +143,19 @@ function hasTaste(form: UseFormReturn<ReviewFormSchemaType>) {
   return tasteFields.every((field) => form.getValues(field) !== "" || form.getValues(field) !== -1);
 }
 
+function includesSubString(arr: string[], str: string) {
+  return arr.some(item => item.includes(str));
+}
+
 interface WhiskyReviewFormProps extends ReviewFormSchemaType {
   onSubmitted?: () => void;
 };
 
-function WhiskyReviewForm({ onSubmitted, ...props } : WhiskyReviewFormProps) {
+export function WhiskyReviewForm({ onSubmitted, ...props } : WhiskyReviewFormProps) {
   
   const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const {uploadToS3} = useS3Upload();
   const form = useForm<ReviewFormSchemaType>({
     resolver: zodResolver(ReviewFormSchema),
@@ -159,7 +164,6 @@ function WhiskyReviewForm({ onSubmitted, ...props } : WhiskyReviewFormProps) {
   const [tasteVisible, setTasteVisible] = useState(hasTaste(form));
 
   const {
-    isLoading,
     mutate: handleReviewSubmit,
   } = useMutation(
     (data: ReviewFormSchemaType) => axios.put("/api/review", data),
@@ -176,7 +180,15 @@ function WhiskyReviewForm({ onSubmitted, ...props } : WhiskyReviewFormProps) {
   );
 
   const onSubmit = async() => {
+    setIsLoading(true);
+    const images = props.images.filter((image) => 
+      files.some((file) => image.includes(file.name))
+    );
+    form.setValue("images", images);
+    
     for(const file of files) {
+      if( includesSubString(props.images, file.name) ) continue;
+
       const webP = await convertImageToWebP(file);
       
       const { url } = await uploadToS3(webP);
@@ -195,6 +207,7 @@ function WhiskyReviewForm({ onSubmitted, ...props } : WhiskyReviewFormProps) {
     }
 
     handleReviewSubmit(form.getValues());
+    setIsLoading(false);
   };
 
   return (
@@ -221,6 +234,7 @@ function WhiskyReviewForm({ onSubmitted, ...props } : WhiskyReviewFormProps) {
               </FormLabel>
               <FormControl>
                 <Uploader
+                  defaultImages={props.images}
                   disabled={form.formState.isSubmitting}
                   onChange={(files) => setFiles(files)}
                 />
@@ -329,11 +343,11 @@ export function WhiskyReviewEditForm({ review, onSubmitted }
       score={review.score}
       content={review.content}
       nose={review.nose}
-      noseScore={review.noseScore}
+      noseScore={review.noseScore ?? null}
       palate={review.palate}
-      palateScore={review.palateScore}
+      palateScore={review.palateScore ?? null}
       finish={review.finish}
-      finishScore={review.finishScore}
+      finishScore={review.finishScore ?? null}
       images={review.images}
       onSubmitted={onSubmitted}
     />

@@ -23,6 +23,7 @@ export default function WhiskyImages({ alt, images }: WhiskyImageProps) {
         height={300}
         alt={alt}
         className="max-h-[300px] object-contain"
+        priority
       />
       <div className="mt-4 flex gap-x-4">
         {images.map((image) => (

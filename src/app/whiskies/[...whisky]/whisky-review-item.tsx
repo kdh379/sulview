@@ -1,14 +1,18 @@
 "use client";
 
 import dayjs from "dayjs";
+import { EllipsisVertical } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import WhiskyReviewDeleteAlert from "@/app/whiskies/[...whisky]/whisky-review-delete-alert";
 import { WhiskyReviewEditForm } from "@/app/whiskies/[...whisky]/whisky-review-form";
+import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselDotButton, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
 import { reviewTable, users } from "@/db/schema";
 
@@ -40,11 +44,15 @@ type Review = typeof reviewTable.$inferSelect;
 interface WhiskyReviewItemProps extends Review {
   userName: typeof users.$inferSelect.name;
   userAvatar: typeof users.$inferSelect.image;
+  isAuthor: boolean;
+  isAdmin: boolean;
 }
 
 export default function WhiskyReviewItem({
   userAvatar,
   userName,
+  isAuthor,
+  isAdmin,
   ...review
 }: WhiskyReviewItemProps) {
 
@@ -77,12 +85,38 @@ export default function WhiskyReviewItem({
             <time className="text-muted-foreground block text-sm">{dayjs(review.createdAt).format("YYYY-MM-DD HH:mm:ss")}</time>
           </div>
           <div className="ml-auto flex">
-            <Button
-              variant="link"
-              onClick={() => setIsEditing(!isEditing)}
-            >
-              수정
-            </Button>
+            <AlertDialog>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                  >
+                    <EllipsisVertical />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {(isAuthor) && (
+                    <DropdownMenuItem
+                      onClick={() => setIsEditing(!isEditing)}
+                    >
+                    수정
+                    </DropdownMenuItem>
+                  )}
+                  {(isAuthor || isAdmin) && (
+                    <DropdownMenuItem
+                      onSelect={(e) => e.preventDefault()}
+                      asChild
+                    >
+                      <AlertDialogTrigger className="w-full text-start">삭제</AlertDialogTrigger>
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <WhiskyReviewDeleteAlert
+                reviewId={review.id}
+              />
+            </AlertDialog>
           </div>
         </header>
         {isEditing ? (
