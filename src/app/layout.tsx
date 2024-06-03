@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import NextTopLoader from "nextjs-toploader";
 
 import AppHeader from "@/components/layout/app-header";
 import NicknameFormDialog from "@/components/layout/nickname-form-dialog";
@@ -62,16 +63,15 @@ export default async function RootLayout({
 
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body className={cn(pretendard.className, "antialiased transition ease-in-out")}>
+      <body className={cn(pretendard.className, "min-h-screen antialiased transition ease-in-out")}>
+        <NextTopLoader color="hsla(221.2 83.2% 53.3%)" />
         <Providers>
-          <div className="min-h-screen border-b">
-            <Sidebar />
-            <div className="md:pl-sidebar">
-              <AppHeader />
-              <main className="container flex-1 py-6 pl-[calc(100vw-100%)]">
-                {children}
-              </main>
-            </div>
+          <Sidebar />
+          <div className="md:pl-sidebar">
+            <AppHeader />
+            <main className="container py-6">
+              {children}
+            </main>
           </div>
           <Toaster />
           <NicknameFormDialog open={user && user.name === null ? true : false} />
