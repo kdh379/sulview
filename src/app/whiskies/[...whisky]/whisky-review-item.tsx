@@ -99,8 +99,9 @@ export default function WhiskyReviewItem({
                   {(isAuthor) && (
                     <DropdownMenuItem
                       onClick={() => setIsEditing(!isEditing)}
+                      role="menuitem"
                     >
-                    수정
+                      수정
                     </DropdownMenuItem>
                   )}
                   {(isAuthor || isAdmin) && (

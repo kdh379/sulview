@@ -140,7 +140,7 @@ function hasTaste(form: UseFormReturn<ReviewFormSchemaType>) {
   const tasteFields: (keyof ReviewFormSchemaType)[]
     = ["nose", "noseScore", "palate", "palateScore", "finish", "finishScore"];
     
-  return tasteFields.every((field) => form.getValues(field) !== "" || form.getValues(field) !== -1);
+  return tasteFields.every((field) => form.getValues(field) !== "" && form.getValues(field) !== -1);
 }
 
 function includesSubString(arr: string[], str: string) {
