@@ -61,15 +61,16 @@ export default async function Distilleries({ q, region }: SearchParams) {
         {distilleries.map((distillery) => (
           <TableRow 
             key={distillery.id}
-            className="relative"
+            className="group relative"
           >
             <TableCell className="hidden w-[100px] sm:table-cell">
               <Image
                 src={distillery.images[0]}
-                width={64}
-                height={64}
+                width={100}
+                height={100}
                 alt={distillery.name}
-                className="aspect-square rounded-md object-cover"
+                quality={100}
+                className="aspect-square w-16 rounded-md object-cover transition-transform group-hover:scale-110"
               />
             </TableCell>
             <TableCell>{distillery.name}</TableCell>
