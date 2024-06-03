@@ -20,6 +20,12 @@ jobs:
       with:
         run_install: false
 
+    - name: Create .env file
+      run: |
+        jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > .env
+      env:
+        SECRETS_CONTEXT: ${{ toJson(secrets) }}
+
     - name: Get pnpm store directory
       shell: bash
       run: |
