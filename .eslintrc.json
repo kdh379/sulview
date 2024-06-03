@@ -32,7 +32,9 @@
       "functions": "never"
     }],
     "comma-spacing": ["error", { "before": false, "after": true }],
-    "no-console": "warn",
+    "no-console": ["warn", {
+      "allow": ["warn", "error"]
+    }],
     "tailwindcss/no-custom-classname": "off",
 
     // import / export

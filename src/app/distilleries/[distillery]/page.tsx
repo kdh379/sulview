@@ -23,10 +23,11 @@ const SearchParamsSchema = z.object({
 
 export type SearchParamsType = z.infer<typeof SearchParamsSchema>;
 
-interface DistilleryPageProps extends SearchParamsType {
+interface DistilleryPageProps {
   params: {
     distillery: string;
   };
+  searchParams: SearchParamsType;
 }
 
 export async function generateMetadata({ params }: DistilleryPageProps): Promise<Metadata> {
@@ -65,7 +66,7 @@ const getDistillery = async (name: string) => {
   return distilleries[0];
 };
 
-export default async function DistilleryPage({ params, ...searchParams }: DistilleryPageProps ) {
+export default async function DistilleryPage({ params, searchParams }: DistilleryPageProps ) {
 
   const distillery = await getDistillery(decodeURIComponent(params.distillery));
 
