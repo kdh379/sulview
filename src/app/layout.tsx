@@ -68,7 +68,7 @@ export default async function RootLayout({
             <Sidebar />
             <div className="md:pl-sidebar">
               <AppHeader />
-              <main className="container flex-1 py-6">
+              <main className="container flex-1 py-6 pl-[calc(100vw-100%)]">
                 {children}
               </main>
             </div>
