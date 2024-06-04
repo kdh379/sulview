@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 
 import WhiskyAddForm from "@/app/distilleries/[distillery]/add/form";
+import { getCurrentSessionRedirect } from "@/lib/session";
 
 export const metadata: Metadata = {
   title: "위스키 추가",
@@ -12,8 +13,9 @@ interface WhiskyAddPageProps {
   };
 }
 
-export default function WhiskyAddPage({ params }: WhiskyAddPageProps) {
+export default async function WhiskyAddPage({ params }: WhiskyAddPageProps) {
 
+  await getCurrentSessionRedirect();
   const distilleryName = decodeURIComponent(params.distillery);
 
   return (

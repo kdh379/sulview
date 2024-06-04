@@ -65,14 +65,14 @@ export default async function Whiskies({ distilleryId, q }: WhiskiesProps) {
             key={whisky.id}
             className="relative"
           >
-            <TableCell className="hidden w-[100px] sm:table-cell">
+            <TableCell className="hidden sm:table-cell">
               <ImageWithFallback
                 src={whisky.images[0] || "/whisky-placeholder.png"}
                 fallbackSrc="/whisky-placeholder.png"
                 alt={whisky.name}
-                width={30}
-                height={60}
-                className="rounded-md object-cover"
+                width={64}
+                height={64}
+                className="h-16 w-8 rounded-md object-cover"
               />
             </TableCell>
             <TableCell>{whisky.name}</TableCell>
