@@ -13,7 +13,7 @@ export default function ThemeToggle() {
   const { setTheme, theme } = useTheme();
 
   const mounted = useMounted();
-  
+
   return (
     <Button
       variant="ghost"
@@ -21,12 +21,9 @@ export default function ThemeToggle() {
       className="hidden sm:inline-flex"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
-      {mounted && (<>
-        { theme === "dark" 
-          ? <Icons.moon className={cn("size-5")} />
-          : <Icons.sun className={cn("size-5")} />
-        }
-      </>)}
+      {mounted && (
+        <>{theme === "dark" ? <Icons.moon className={cn("size-5")} /> : <Icons.sun className={cn("size-5")} />}</>
+      )}
       <span className="sr-only">Toggle theme</span>
     </Button>
   );

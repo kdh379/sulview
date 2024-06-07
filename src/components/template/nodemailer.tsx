@@ -1,7 +1,6 @@
 import { siteConfig } from "@/config/site";
 
-export function html({url, name}: { url: string; name: string; }) {
-
+export function html({ url, name }: { url: string; name: string }) {
   // Node.js 환경에서 tailwind
   const brandColor = "hsl(222.2 47.4% 11.2%)";
   const buttonText = "hsl(210 40% 98%)";
@@ -58,6 +57,6 @@ export function html({url, name}: { url: string; name: string; }) {
 `;
 }
 
-export function text({ url, host}: { url: string, host: string }) {
+export function text({ url, host }: { url: string; host: string }) {
   return `${siteConfig.name} 로그인`;
-};
+}

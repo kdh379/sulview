@@ -2,7 +2,7 @@
 
 위스키를 좋아하는 사람들을 위한 위스키 리뷰 웹사이트입니다.
 
-아직 개발 중인 프로젝트입니다.  
+1인 개발로, 아직 개발 중인 프로젝트입니다.  
 [개발 배포 페이지](https://sulview.vercel.app/)
 
 ## 디자인 노트
@@ -21,7 +21,7 @@
 - pnpm 설치
 
 ```bash
-npm install -g pnpm
+npm install -g pnpm@9.1.3
 pnpm i
 pnpm dev
 ```
@@ -41,7 +41,7 @@ S3_UPLOAD_SECRET=AWS S3 SECRET KEY
 S3_UPLOAD_BUCKET=AWS S3 BUCKET
 S3_UPLOAD_REGION=AWS S3 REGION
 
-CLOUDFRONT_URL=AWS CLOUDFRONT URL
+NEXT_PUBLIC_CLOUDFRONT=AWS CLOUDFRONT URL
 ```
 
 - 데이터베이스 마이그레이션

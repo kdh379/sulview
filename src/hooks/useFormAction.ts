@@ -3,11 +3,14 @@ import { FieldValues, useForm, UseFormProps } from "react-hook-form";
 
 import { handleApiError, hasError } from "@/lib/api";
 
-type UseFormActionProps<TFieldValues extends FieldValues = FieldValues, TContext = any> = UseFormProps<TFieldValues, TContext> & {
+type UseFormActionProps<TFieldValues extends FieldValues = FieldValues, TContext = unknown> = UseFormProps<
+  TFieldValues,
+  TContext
+> & {
   state?: ActionError | unknown;
-}
+};
 
-export function useFormAction<TFieldValues extends FieldValues = FieldValues, TContext = any>({
+export function useFormAction<TFieldValues extends FieldValues = FieldValues, TContext = unknown>({
   state,
   ...props
 }: UseFormActionProps<TFieldValues, TContext>) {
@@ -19,11 +22,9 @@ export function useFormAction<TFieldValues extends FieldValues = FieldValues, TC
     form.clearErrors();
     if (hasError(state) && state.error) {
       handleApiError(state, form);
-    }
-    else
-      form.reset();
+    } else form.reset();
   }, [state, form]);
-	
+
   return {
     ...form,
   };

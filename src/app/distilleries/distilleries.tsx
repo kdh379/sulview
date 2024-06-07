@@ -7,7 +7,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { db } from "@/db/drizzle";
 import { distilleryTable, reviewTable, whiskyTable } from "@/db/schema";
 
-const getDistilleries = async({ q, region }: SearchParams) => {
+const getDistilleries = async ({ q, region }: SearchParams) => {
   return await db
     .select({
       id: distilleryTable.id,
@@ -23,7 +23,7 @@ const getDistilleries = async({ q, region }: SearchParams) => {
       distilleryWhere({
         q,
         region,
-      })
+      }),
     )
     .leftJoin(whiskyTable, eq(whiskyTable.distilleryId, distilleryTable.id))
     .leftJoin(reviewTable, eq(reviewTable.whiskyId, whiskyTable.id));
@@ -32,12 +32,11 @@ const getDistilleries = async({ q, region }: SearchParams) => {
 const distilleryWhere = ({ q, region }: SearchParams) => {
   return and(
     region != null && region.length ? eq(distilleryTable.region, region) : undefined,
-    q != null && q.length ? ilike(distilleryTable.name, `%${q}%`) : undefined
+    q != null && q.length ? ilike(distilleryTable.name, `%${q}%`) : undefined,
   );
 };
 
 export default async function Distilleries({ q, region }: SearchParams) {
-
   const distilleries = await getDistilleries({ q, region });
 
   return (
@@ -59,10 +58,7 @@ export default async function Distilleries({ q, region }: SearchParams) {
       </TableHeader>
       <TableBody>
         {distilleries.map((distillery) => (
-          <TableRow 
-            key={distillery.id}
-            className="group relative"
-          >
+          <TableRow key={distillery.id} className="group relative">
             <TableCell className="hidden w-[100px] sm:table-cell">
               <Image
                 src={distillery.images[0]}
@@ -78,10 +74,7 @@ export default async function Distilleries({ q, region }: SearchParams) {
             <TableCell>{distillery.whiskyCount}</TableCell>
             <TableCell>{distillery.reviewCount}</TableCell>
             <TableCell className="w-0 p-0">
-              <Link 
-                href={`/distilleries/${distillery.name}`}
-                className="absolute inset-0"
-              >
+              <Link href={`/distilleries/${distillery.name}`} className="absolute inset-0">
                 <span className="sr-only">Link</span>
               </Link>
             </TableCell>

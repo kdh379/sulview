@@ -1,4 +1,3 @@
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,7 +30,6 @@ z.setErrorMap(customErrorMap);
 type DistilleryFormValues = z.infer<typeof distilleryFormSchema>;
 
 export default function DistilleryForm() {
-
   const { uploadToS3 } = useS3Upload();
   const router = useRouter();
   const [files, setFiles] = React.useState<FilePreview[]>([]);
@@ -44,34 +42,30 @@ export default function DistilleryForm() {
     },
   });
 
-  const {
-    isLoading,
-    mutate: handleAddDistillery,
-  } = useMutation(
+  const { isLoading, mutate: handleAddDistillery } = useMutation(
     (data: DistilleryFormValues) => axios.post("/api/distillery", data),
     {
       onSuccess: () => {
         router.push(`/distilleries/${form.getValues("name")}`);
       },
       onError: (err: AxiosError<ActionError>) => {
-        if(err.response?.data)
-          handleApiError(err.response.data, form);
+        if (err.response?.data) handleApiError(err.response.data, form);
       },
-    }
+    },
   );
 
-  const onSubmit = async() => {
+  const onSubmit = async () => {
+    if (files.length === 0) return form.setError("images", { type: "min", message: "사진을 업로드해주세요." });
 
-    if(files.length === 0)
-      return form.setError("images", { type: "min", message: "사진을 업로드해주세요." });
-
-    for(const file of files) {
+    for (const file of files) {
       const webP = await convertImageToWebP(file);
-      
+
       const { url } = await uploadToS3(webP);
 
-      form.setValue("images", 
-        [...form.getValues("images"), `${process.env.NEXT_PUBLIC_CLOUDFRONT}${new URL(url).pathname}`]);
+      form.setValue("images", [
+        ...form.getValues("images"),
+        `${process.env.NEXT_PUBLIC_CLOUDFRONT}${new URL(url).pathname}`,
+      ]);
     }
 
     handleAddDistillery(form.getValues());
@@ -86,9 +80,7 @@ export default function DistilleryForm() {
             name="images"
             render={() => (
               <FormItem>
-                <FormLabel className="flex justify-between">
-                  사진
-                </FormLabel>
+                <FormLabel className="flex justify-between">사진</FormLabel>
                 <FormControl>
                   <Uploader onChange={(files) => setFiles(files)} />
                 </FormControl>
@@ -98,11 +90,9 @@ export default function DistilleryForm() {
           <FormField
             control={form.control}
             name="name"
-            render={({field}) => (
+            render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                    증류소 / 독립 병입자
-                </FormLabel>
+                <FormLabel>증류소 / 독립 병입자</FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="글렌알라키" />
                 </FormControl>
@@ -114,9 +104,7 @@ export default function DistilleryForm() {
             name="region"
             render={() => (
               <FormItem>
-                <FormLabel>
-                    지역
-                </FormLabel>
+                <FormLabel>지역</FormLabel>
                 <FormControl>
                   <AutoComplete
                     itemList={data.distilleryRegions.map((region) => ({
@@ -131,21 +119,11 @@ export default function DistilleryForm() {
             )}
           />
         </div>
-        <div
-          className="flex items-center justify-end gap-2"
-        >
-          <Button
-            variant="outline"
-            disabled={isLoading}
-            onClick={() => router.back()}
-          >
+        <div className="flex items-center justify-end gap-2">
+          <Button variant="outline" disabled={isLoading} onClick={() => router.back()}>
             취소
           </Button>
-          <Button
-            type="submit"
-            isLoading={isLoading}
-            className="w-24"
-          >
+          <Button type="submit" isLoading={isLoading} className="w-24">
             <Check className="mr-2 size-4" />
             추가
           </Button>

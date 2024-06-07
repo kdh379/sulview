@@ -51,6 +51,7 @@ const pretendard = localFont({
       style: "normal",
     },
   ],
+  display: "swap",
 });
 
 export default async function RootLayout({
@@ -58,7 +59,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const user = await getCurrentUser();
 
   return (
@@ -69,9 +69,7 @@ export default async function RootLayout({
           <Sidebar />
           <div className="md:pl-sidebar">
             <AppHeader />
-            <main className="container py-6">
-              {children}
-            </main>
+            <main className="container py-6">{children}</main>
           </div>
           <Toaster />
           <NicknameFormDialog open={user && user.name === null ? true : false} />

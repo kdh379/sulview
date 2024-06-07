@@ -11,7 +11,14 @@ import PopularWhisky from "@/app/distilleries/[distillery]/popular-whisky";
 import SearchInput from "@/app/distilleries/[distillery]/search-input";
 import Whiskies from "@/app/distilleries/[distillery]/whiskies";
 import { buttonVariants } from "@/components/ui/button";
-import { Carousel, CarouselContent, CarouselDotButton, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselDotButton,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { siteConfig } from "@/config/site";
 import { db } from "@/db/drizzle";
 import { distilleryTable } from "@/db/schema";
@@ -33,7 +40,7 @@ interface DistilleryPageProps {
 export async function generateMetadata({ params }: DistilleryPageProps): Promise<Metadata> {
   const distillery = await getDistillery(decodeURIComponent(params.distillery));
 
-  if(!distillery) return notFound();
+  if (!distillery) return notFound();
 
   return {
     title: distillery.name,
@@ -54,26 +61,19 @@ export async function generateMetadata({ params }: DistilleryPageProps): Promise
 }
 
 const getDistillery = async (name: string) => {
-  const distilleries = await db
-    .select()
-    .from(distilleryTable)
-    .where(eq(distilleryTable.name, name))
-    .limit(1);
+  const distilleries = await db.select().from(distilleryTable).where(eq(distilleryTable.name, name)).limit(1);
 
-  if(distilleries.length === 0)
-    notFound();
+  if (distilleries.length === 0) notFound();
 
   return distilleries[0];
 };
 
-export default async function DistilleryPage({ params, searchParams }: DistilleryPageProps ) {
-
+export default async function DistilleryPage({ params, searchParams }: DistilleryPageProps) {
   const distillery = await getDistillery(decodeURIComponent(params.distillery));
 
   const parse = SearchParamsSchema.safeParse(searchParams);
 
-  if (!parse.success)
-    return <p>잘못된 요청입니다.</p>;
+  if (!parse.success) return <p>잘못된 요청입니다.</p>;
 
   return (
     <>
@@ -114,15 +114,10 @@ export default async function DistilleryPage({ params, searchParams }: Distiller
           <SearchInput distilleryName={distillery.name} {...parse.data} />
           <Link
             href={`/distilleries/${encodeURIComponent(distillery.name)}/add`}
-            className={cn(
-              buttonVariants(),
-              "size-9 shrink-0 p-0 sm:w-auto sm:px-4 sm:py-2"
-            )}
+            className={cn(buttonVariants(), "size-9 shrink-0 p-0 sm:w-auto sm:px-4 sm:py-2")}
           >
             <PlusCircledIcon className="size-4 sm:mr-2" />
-            <span className="sr-only inline-block sm:not-sr-only">
-              위스키 추가
-            </span>
+            <span className="sr-only inline-block sm:not-sr-only">위스키 추가</span>
           </Link>
         </div>
         <Whiskies distilleryId={distillery.id} {...parse.data} />

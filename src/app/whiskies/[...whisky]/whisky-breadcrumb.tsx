@@ -6,7 +6,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbSeparator
+  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
 interface WhiskyBreadcrumbProps {
@@ -16,27 +16,18 @@ interface WhiskyBreadcrumbProps {
 }
 
 export async function WhiskyBreadcrumb({ region, distillery, independentDistillery }: WhiskyBreadcrumbProps) {
-
   return (
     <Breadcrumb className="mb-2">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link 
-              href={`/distilleries?region=${region}`}
-            >
-              {region}
-            </Link>
+            <Link href={`/distilleries?region=${region}`}>{region}</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link 
-              href={`/distilleries/${distillery}`}
-            >
-              {distillery}
-            </Link>
+            <Link href={`/distilleries/${distillery}`}>{distillery}</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         {independentDistillery && (
@@ -44,11 +35,7 @@ export async function WhiskyBreadcrumb({ region, distillery, independentDistille
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link 
-                  href={`/distilleries/${independentDistillery}`}
-                >
-                  {independentDistillery}
-                </Link>
+                <Link href={`/distilleries/${independentDistillery}`}>{independentDistillery}</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
           </>

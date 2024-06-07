@@ -33,10 +33,7 @@ function PopularWhiskeyItem({
         <NotebookPen className="text-muted-foreground size-4" />
         <span className="font-bold">{reviewCount}</span>
         <p className="text-muted-foreground">리뷰</p>
-        <Link
-          href={href}
-          className="text-primary hover:underline"
-        >
+        <Link href={href} className="text-primary hover:underline">
           {whiskyName}
         </Link>
       </div>
@@ -44,16 +41,11 @@ function PopularWhiskeyItem({
   );
 }
 
-export default async function PopularWhisky({
-  distillery,
-}: {
-  distillery: typeof distilleryTable.$inferSelect;
-}) {
-
+export default async function PopularWhisky({ distillery }: { distillery: typeof distilleryTable.$inferSelect }) {
   const whiskies = await getPopularWhiskies(distillery.id);
 
-  return whiskies !== null && whiskies.length > 0 
-    ? whiskies.slice(0, 5).map((whisky) => (
+  return whiskies !== null && whiskies.length > 0 ? (
+    whiskies.slice(0, 5).map((whisky) => (
       <ul key={whisky.whiskyName} className="mt-4 space-y-2">
         <PopularWhiskeyItem
           href={`/whiskies/${whisky.id}/${whisky.whiskyName}`}
@@ -62,10 +54,10 @@ export default async function PopularWhisky({
         />
       </ul>
     ))
-    : (
-      <div className="text-muted-foreground mt-4 flex max-w-40 flex-col items-center">
-        <Inbox className="size-12" />
-        <p>작성된 리뷰가 없습니다.</p>
-      </div>
-    );
-};
+  ) : (
+    <div className="text-muted-foreground mt-4 flex max-w-40 flex-col items-center">
+      <Inbox className="size-12" />
+      <p>작성된 리뷰가 없습니다.</p>
+    </div>
+  );
+}

@@ -14,9 +14,9 @@ type ActionError = {
         message: string;
       }
     | {
-      code: "VALIDATION_ERROR";
-      fieldErrors: {
-        [field: string]: string[];
+        code: "VALIDATION_ERROR";
+        fieldErrors: {
+          [field: string]: string[];
+        };
       };
-    };
-}
+};

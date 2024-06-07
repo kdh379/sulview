@@ -10,11 +10,10 @@ export const metadata: Metadata = {
   title: "로그인",
 };
 
-export default async function Login () {
+export default async function Login() {
   const user = await getCurrentUser();
 
-  if (user)
-    redirect("/");
+  if (user) redirect("/");
 
   return (
     <div className="flex flex-1 items-center justify-center">
@@ -30,4 +29,4 @@ export default async function Login () {
       </Card>
     </div>
   );
-};
+}

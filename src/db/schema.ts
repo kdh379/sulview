@@ -1,12 +1,4 @@
-import {
-  index,
-  integer,
-  pgTable,
-  primaryKey,
-  serial,
-  text,
-  timestamp
-} from "drizzle-orm/pg-core";
+import { index, integer, pgTable, primaryKey, serial, text, timestamp } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "next-auth/adapters";
 
 export const users = pgTable("user", {
@@ -39,7 +31,7 @@ export const accounts = pgTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  })
+  }),
 );
 
 export const sessions = pgTable("session", {
@@ -59,7 +51,7 @@ export const verificationTokens = pgTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );
 
 export const distilleryTable = pgTable("distillery", {
@@ -68,15 +60,21 @@ export const distilleryTable = pgTable("distillery", {
   region: text("region").notNull(),
   images: text("images").array().notNull(),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
-  createdBy: text("createdBy").notNull().references(() => users.id, { onDelete: "cascade" }),
+  createdBy: text("createdBy")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
 });
 
 export const whiskyTable = pgTable(
   "whisky",
   {
     id: serial("id").primaryKey(),
-    distilleryId: integer("distilleryId").notNull().references(() => distilleryTable.id, { onDelete: "cascade" }),
-    createdBy: text("createdBy").notNull().references(() => users.id, { onDelete: "cascade" }),
+    distilleryId: integer("distilleryId")
+      .notNull()
+      .references(() => distilleryTable.id, { onDelete: "cascade" }),
+    createdBy: text("createdBy")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
     name: text("name").notNull(),
     bottler: text("bottler").notNull(),
     abv: text("abv").notNull(),
@@ -90,15 +88,19 @@ export const whiskyTable = pgTable(
   },
   (whisky) => ({
     distilleryIdx: index("distillery_idx").on(whisky.distilleryId),
-  })
+  }),
 );
 
 export const reviewTable = pgTable(
   "review",
   {
     id: serial("id"),
-    whiskyId: integer("whiskyId").notNull().references(() => whiskyTable.id, { onDelete: "cascade" }),
-    createdBy: text("createdBy").notNull().references(() => users.id, { onDelete: "cascade" }),
+    whiskyId: integer("whiskyId")
+      .notNull()
+      .references(() => whiskyTable.id, { onDelete: "cascade" }),
+    createdBy: text("createdBy")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
     images: text("images").array().notNull(),
     score: integer("score").notNull(),
     content: text("content").notNull(),
@@ -114,5 +116,5 @@ export const reviewTable = pgTable(
     compoundKey: primaryKey({ columns: [review.id, review.whiskyId, review.createdBy] }),
     whiskyIdx: index("whisky_idx").on(review.whiskyId),
     createdByIdx: index("user_idx").on(review.createdBy),
-  })
+  }),
 );

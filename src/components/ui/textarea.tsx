@@ -9,36 +9,29 @@ interface UseAutoSizeTextAreaProps {
   triggerAutoSize: string;
 }
 
-const useAutoSizeTextArea = ({
-  textAreaRef,
-  triggerAutoSize,
-}: UseAutoSizeTextAreaProps) => {
+const useAutoSizeTextArea = ({ textAreaRef, triggerAutoSize }: UseAutoSizeTextAreaProps) => {
   React.useEffect(() => {
-    
-    if( !textAreaRef ) return;
-    
-    const borderWidth = parseFloat(getComputedStyle(textAreaRef).borderTopWidth) + parseFloat(getComputedStyle(textAreaRef).borderBottomWidth);
-    
+    if (!textAreaRef) return;
+
+    const borderWidth =
+      parseFloat(getComputedStyle(textAreaRef).borderTopWidth) +
+      parseFloat(getComputedStyle(textAreaRef).borderBottomWidth);
+
     textAreaRef.style.height = `${borderWidth}px`;
     const scrollHeight = textAreaRef.scrollHeight;
 
     const maxHeight = parseInt(textAreaRef.style.maxHeight);
-    
-    const newHeight = maxHeight ? Math.min(scrollHeight, maxHeight) : scrollHeight;
-    
-    textAreaRef.style.height = `${newHeight + borderWidth}px`;
-    
 
+    const newHeight = maxHeight ? Math.min(scrollHeight, maxHeight) : scrollHeight;
+
+    textAreaRef.style.height = `${newHeight + borderWidth}px`;
   }, [textAreaRef, triggerAutoSize]);
 };
 
-
-export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, onChange, value, ...props }, ref) => {
-
     const textAreaRef = React.useRef<HTMLTextAreaElement | null>(null);
     const [triggerAutoSize, setTriggerAutoSize] = React.useState("");
 
@@ -48,7 +41,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     });
 
     React.useImperativeHandle(ref, () => ({
-      ...textAreaRef.current as HTMLTextAreaElement,
+      ...(textAreaRef.current as HTMLTextAreaElement),
     }));
 
     React.useEffect(() => {
@@ -62,7 +55,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         ref={textAreaRef}
         className={cn(
           "border-input placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[98px] w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50",
-          className
+          className,
         )}
         value={value}
         onChange={(e) => {
@@ -72,7 +65,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {...props}
       />
     );
-  }
+  },
 );
 Textarea.displayName = "Textarea";
 

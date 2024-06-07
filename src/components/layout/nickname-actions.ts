@@ -10,7 +10,10 @@ import { getCurrentUser } from "@/lib/session";
 import { customErrorMap } from "@/lib/zod";
 
 const NicknameActionSchema = z.object({
-  nickname: z.string().min(2).max(20)
+  nickname: z
+    .string()
+    .min(2)
+    .max(20)
     .refine((value) => !value.includes(" "), "닉네임에 공백을 포함할 수 없습니다."),
 });
 
@@ -18,17 +21,14 @@ z.setErrorMap(customErrorMap);
 
 export type NicknameActionSchemaType = z.infer<typeof NicknameActionSchema>;
 
-export async function changeNicknameAction(
-  _prevState: any,
-  formData: FormData
-): Promise<ActionError | void> {
+export async function changeNicknameAction(_prevState: unknown, formData: FormData): Promise<ActionError | void> {
   const input = NicknameActionSchema.safeParse({
     nickname: formData.get("nickname"),
   });
 
   if (!input.success) {
     const { fieldErrors } = input.error.flatten();
-    
+
     return {
       error: {
         code: "VALIDATION_ERROR",
@@ -47,12 +47,8 @@ export async function changeNicknameAction(
     };
   }
 
-
   try {
-    const exist = await db
-      .select()
-      .from(users)
-      .where(eq(users.name, input.data.nickname));
+    const exist = await db.select().from(users).where(eq(users.name, input.data.nickname));
 
     if (exist.length)
       return {
@@ -71,8 +67,7 @@ export async function changeNicknameAction(
       .where(eq(users.id, user.id));
 
     revalidatePath("/", "layout");
-  }
-  catch (error) {
+  } catch (error) {
     return {
       error: {
         code: "INTERNAL_ERROR",

@@ -11,9 +11,5 @@ export function Logout() {
 }
 
 function LogoutButton() {
-  return (
-    <button type="submit">
-      로그아웃
-    </button>
-  );
+  return <button type="submit">로그아웃</button>;
 }

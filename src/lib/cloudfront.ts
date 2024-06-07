@@ -13,7 +13,7 @@ export default function cloudfrontLoader({ src, width, quality }: CloudfrontLoad
   // const sizeSuffix = width <= 300 ? "small" : width <= 600 ? "medium" : "large";
   // const pathname = src.replace(".webp", `-${sizeSuffix}.webp`);
   // const url = new URL(`${cloudfront}${pathname}`);
-  
+
   const url = new URL(`${cloudfront}${src}`);
   url.searchParams.set("format", "auto");
   url.searchParams.set("width", width.toString());

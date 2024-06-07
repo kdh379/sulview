@@ -10,7 +10,7 @@ import { reviewTable, users } from "@/db/schema";
 import { getCurrentUser } from "@/lib/session";
 import { cn } from "@/lib/utils";
 
-const getWhiskyReviews = async (whiskyId: number) => (
+const getWhiskyReviews = async (whiskyId: number) =>
   db
     .select({
       id: reviewTable.id,
@@ -31,16 +31,13 @@ const getWhiskyReviews = async (whiskyId: number) => (
     })
     .from(reviewTable)
     .where(eq(reviewTable.whiskyId, whiskyId))
-    .leftJoin(users, eq(users.id, reviewTable.createdBy))
-);
-
+    .leftJoin(users, eq(users.id, reviewTable.createdBy));
 
 interface WhiskyReviewsProps {
   whiskyId: number;
 }
 
 export default async function WhiskyReviews({ whiskyId }: WhiskyReviewsProps) {
-
   const reviews = await getWhiskyReviews(whiskyId);
   const user = await getCurrentUser();
 
@@ -52,39 +49,28 @@ export default async function WhiskyReviews({ whiskyId }: WhiskyReviewsProps) {
           <span className="ml-2">리뷰</span>
           <span className="text-muted-foreground ml-2">({reviews.length})</span>
         </h2>
-        <Button
-          variant="outline"
-          size="sm"
-          className="ml-2"
-        >
+        <Button variant="outline" size="sm" className="ml-2">
           <ListFilter className="mr-2" />
           정렬 기준
         </Button>
       </div>
       <CardContent>
-        <div className={cn(
-          "my-4 hidden",
-          user && !reviews.find((review) => review.createdBy === user?.id) && "block"
-        )}>
-          <WhiskyReviewAddForm
-            whiskyId={whiskyId}
-          />
+        <div className={cn("my-4 hidden", user && !reviews.find((review) => review.createdBy === user?.id) && "block")}>
+          <WhiskyReviewAddForm whiskyId={whiskyId} />
         </div>
         <ol>
-          {reviews ? reviews.map((review) => (
-            <WhiskyReviewItem
-              key={review.id}
-              isAuthor={review.createdBy === user?.id}
-              isAdmin={user?.role === "admin"}
-              {...review}
-            />
-          )) 
-            : (
-              <li className="text-muted-foreground mt-4">
-                리뷰가 없습니다.
-              </li>
-      
-            )}
+          {reviews ? (
+            reviews.map((review) => (
+              <WhiskyReviewItem
+                key={review.id}
+                isAuthor={review.createdBy === user?.id}
+                isAdmin={user?.role === "admin"}
+                {...review}
+              />
+            ))
+          ) : (
+            <li className="text-muted-foreground mt-4">리뷰가 없습니다.</li>
+          )}
         </ol>
       </CardContent>
     </Card>

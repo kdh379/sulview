@@ -1,4 +1,4 @@
-import {expect, test} from "vitest";
+import { expect, test } from "vitest";
 
 import { calculateAspectRatioFit } from "@/lib/upload";
 
@@ -23,15 +23,12 @@ test.each([
     { originWidth: 200, originHeight: 200, maxWidthOrHeight: 1280 },
     { width: 200, height: 200 },
   ],
-])(
-  "calculateAspectRatioFit(%o) returns %o",
-  ({ originWidth, originHeight, maxWidthOrHeight }, expected) => {
-    const result = calculateAspectRatioFit({
-      width: originWidth,
-      height: originHeight,
-      maxLength: maxWidthOrHeight,
-    });
+])("calculateAspectRatioFit(%o) returns %o", ({ originWidth, originHeight, maxWidthOrHeight }, expected) => {
+  const result = calculateAspectRatioFit({
+    width: originWidth,
+    height: originHeight,
+    maxLength: maxWidthOrHeight,
+  });
 
-    expect(result).toEqual(expected);
-  }
-);
+  expect(result).toEqual(expected);
+});

@@ -11,7 +11,6 @@ interface WhiskyImageProps {
 }
 
 export default function WhiskyImages({ alt, images }: WhiskyImageProps) {
-
   const [mainImage, setMainImage] = useState(images[0]);
 
   return (
@@ -40,4 +39,4 @@ export default function WhiskyImages({ alt, images }: WhiskyImageProps) {
       </div>
     </div>
   );
-};
+}

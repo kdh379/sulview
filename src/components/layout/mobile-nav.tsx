@@ -1,6 +1,4 @@
-import {
-  PanelLeft
-} from "lucide-react";
+import { PanelLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -20,10 +18,7 @@ export default function MobileNav() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="sm:max-w-xs">
-        <Link
-          href="/"
-          className="group flex items-center gap-2 px-3 py-4 text-lg font-semibold"
-        >
+        <Link href="/" className="group flex items-center gap-2 px-3 py-4 text-lg font-semibold">
           <Icons.logo className="text-primary transition-all group-hover:scale-110" />
           <span>{siteConfig.name}</span>
         </Link>

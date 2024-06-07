@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { Session } from "next-auth";
+import { type Session } from "next-auth";
 
 import { auth } from "@/auth";
 
@@ -12,8 +12,7 @@ export async function getCurrentUser() {
 export async function getCurrentSessionRedirect(): Promise<Session> {
   const session = await auth();
 
-  if(!session?.user)
-    return redirect("/login");
+  if (!session?.user) return redirect("/login");
 
   return session;
 }

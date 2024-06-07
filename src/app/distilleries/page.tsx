@@ -21,35 +21,23 @@ export const metadata: Metadata = {
   title: "증류소",
 };
 
-export default function DistilleriesPage({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) {
+export default function DistilleriesPage({ searchParams }: { searchParams: SearchParams }) {
   dynamic();
 
   const parse = SearchParamsSchema.safeParse(searchParams);
 
-  if (!parse.success)
-    return <p>잘못된 요청입니다.</p>;
+  if (!parse.success) return <p>잘못된 요청입니다.</p>;
 
   return (
     <>
-      <div
-        className="flex items-center justify-end gap-x-4"
-      >
+      <div className="flex items-center justify-end gap-x-4">
         <SearchInput {...parse.data} />
-        <Link 
+        <Link
           href="/distilleries/add"
-          className={cn(
-            buttonVariants(),
-            "size-9 shrink-0 p-0 sm:w-auto sm:px-4 sm:py-2"
-          )}
+          className={cn(buttonVariants(), "size-9 shrink-0 p-0 sm:w-auto sm:px-4 sm:py-2")}
         >
           <PlusCircledIcon className="size-4 sm:mr-2" />
-          <span className="sr-only inline-block sm:not-sr-only">
-            추가
-          </span>
+          <span className="sr-only inline-block sm:not-sr-only">추가</span>
         </Link>
       </div>
       <Suspense fallback={null}>

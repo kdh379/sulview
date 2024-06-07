@@ -12,33 +12,22 @@ interface SearchInputProps extends SearchParamsType {
   distilleryName: string;
 }
 
-export default function SearchInput(
-  {
-    distilleryName,
-    q="",
-  }: SearchInputProps) {
-
+export default function SearchInput({ distilleryName, q = "" }: SearchInputProps) {
   const router = useRouter();
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [searchParams, setSearchParams] = React.useState({q});
+  const [searchParams, setSearchParams] = React.useState({ q });
 
   React.useEffect(() => {
-    
-    const params = new URLSearchParams({...searchParams}).toString();
+    const params = new URLSearchParams({ ...searchParams }).toString();
 
     router.replace(`/distilleries/${distilleryName}?${params}`);
-
   }, [router, searchParams, distilleryName]);
 
   React.useEffect(() => {
-    if (!inputRef.current || document.activeElement === inputRef.current)
-      return;
+    if (!inputRef.current || document.activeElement === inputRef.current) return;
 
     inputRef.current.focus();
-    inputRef.current.setSelectionRange(
-      inputRef.current.value.length,
-      inputRef.current.value.length
-    );
+    inputRef.current.setSelectionRange(inputRef.current.value.length, inputRef.current.value.length);
   }, []);
 
   return (
@@ -50,11 +39,9 @@ export default function SearchInput(
           defaultValue={searchParams.q}
           placeholder="증류소 검색"
           className="w-full pl-8"
-          onInput={debounce(
-            (e) => {
-              setSearchParams({ ...searchParams, q: e.target.value });
-            }, 
-            300)}
+          onInput={debounce((e) => {
+            setSearchParams({ ...searchParams, q: e.target.value });
+          }, 300)}
         />
       </div>
     </>

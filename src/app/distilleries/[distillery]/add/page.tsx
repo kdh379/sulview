@@ -14,7 +14,6 @@ interface WhiskyAddPageProps {
 }
 
 export default async function WhiskyAddPage({ params }: WhiskyAddPageProps) {
-
   await getCurrentSessionRedirect();
   const distilleryName = decodeURIComponent(params.distillery);
 
@@ -23,8 +22,7 @@ export default async function WhiskyAddPage({ params }: WhiskyAddPageProps) {
       <div>
         <h1 className="mb-2 text-2xl font-bold">위스키 추가</h1>
         <p className="text-muted-foreground">
-          <b className="text-primary">{distilleryName}</b>
-          에 추가할 위스키의 정보를 입력해주세요.
+          <b className="text-primary">{distilleryName}</b>에 추가할 위스키의 정보를 입력해주세요.
         </p>
       </div>
       <WhiskyAddForm distilleryName={distilleryName} />

@@ -5,18 +5,20 @@ import { useFormContext } from "react-hook-form";
 
 import { changeNicknameAction, NicknameActionSchemaType } from "@/components/layout/nickname-actions";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useFormAction } from "@/hooks/useFormAction";
 import { useMounted } from "@/hooks/useMounted";
 
-export default function NicknameFormDialog({
-  open,
-}: {
-  open: boolean;
-}) {
-
+export default function NicknameFormDialog({ open }: { open: boolean }) {
   const [state, formAction] = useFormState(changeNicknameAction, {});
   const mounted = useMounted();
   const form = useFormAction<NicknameActionSchemaType>({
@@ -24,9 +26,9 @@ export default function NicknameFormDialog({
     defaultValues: {
       nickname: "",
     },
-  });  
+  });
 
-  if(!mounted) return null;
+  if (!mounted) return null;
 
   return (
     <Dialog open={open}>
@@ -42,7 +44,6 @@ export default function NicknameFormDialog({
 }
 
 function NicknameFormFields() {
-
   const form = useFormContext();
   const { pending } = useFormStatus();
 
@@ -55,24 +56,19 @@ function NicknameFormFields() {
       <FormField
         name="nickname"
         control={form.control}
-        render={({field}) => (
+        render={({ field }) => (
           <FormItem>
             <FormLabel>닉네임</FormLabel>
             <FormControl>
-              <Input
-                {...field}
-                className="text-xl font-semibold"
-                placeholder="닉네임을 입력해주세요"
-              />
+              <Input {...field} className="text-xl font-semibold" placeholder="닉네임을 입력해주세요" />
             </FormControl>
           </FormItem>
         )}
       />
       <DialogFooter className="mt-4">
-        <Button 
-          type="submit"
-          isLoading={pending}
-        >저장</Button>
+        <Button type="submit" isLoading={pending}>
+          저장
+        </Button>
       </DialogFooter>
     </>
   );

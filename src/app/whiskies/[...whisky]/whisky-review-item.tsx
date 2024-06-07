@@ -11,28 +11,34 @@ import { WhiskyReviewEditForm } from "@/app/whiskies/[...whisky]/whisky-review-f
 import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Carousel, CarouselContent, CarouselDotButton, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselDotButton,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
 import { reviewTable, users } from "@/db/schema";
 
-function TasteItem({ 
-  label,
-  score,
-  content,
-} : { 
-    label: string,
-    content: string
-    score?: number,
-  }) {
+function TasteItem({ label, score, content }: { label: string; content: string; score?: number }) {
   return (
     <div>
       <div className="flex items-center">
         <b className="w-12">{label}</b>
-        { score && score > -1 && <>
-          <b className="ml-8 w-12">{score}</b>
-          <Progress className="ml-2 max-w-[400px]" value={score} />
-        </> }
+        {score && score > -1 && (
+          <>
+            <b className="ml-8 w-12">{score}</b>
+            <Progress className="ml-2 max-w-[400px]" value={score} />
+          </>
+        )}
       </div>
       <p className="mt-2 whitespace-pre-wrap">{content}</p>
     </div>
@@ -55,7 +61,6 @@ export default function WhiskyReviewItem({
   isAdmin,
   ...review
 }: WhiskyReviewItemProps) {
-
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -76,61 +81,46 @@ export default function WhiskyReviewItem({
             </AvatarFallback>
           </Avatar>
           <div className="ml-3">
-            <Link
-              href={`/users/${userName}`}
-              className="font-bold underline-offset-4 hover:underline"
-            >
+            <Link href={`/users/${userName}`} className="font-bold underline-offset-4 hover:underline">
               {userName}
             </Link>
-            <time className="text-muted-foreground block text-sm">{dayjs(review.createdAt).format("YYYY-MM-DD HH:mm:ss")}</time>
+            <time className="text-muted-foreground block text-sm">
+              {dayjs(review.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+            </time>
           </div>
           <div className="ml-auto flex">
             <AlertDialog>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                  >
+                  <Button variant="ghost" size="icon">
                     <EllipsisVertical />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  {(isAuthor) && (
-                    <DropdownMenuItem
-                      onClick={() => setIsEditing(!isEditing)}
-                      role="menuitem"
-                    >
+                  {isAuthor && (
+                    <DropdownMenuItem onClick={() => setIsEditing(!isEditing)} role="menuitem">
                       수정
                     </DropdownMenuItem>
                   )}
                   {(isAuthor || isAdmin) && (
-                    <DropdownMenuItem
-                      onSelect={(e) => e.preventDefault()}
-                      asChild
-                    >
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()} asChild>
                       <AlertDialogTrigger className="w-full text-start">삭제</AlertDialogTrigger>
                     </DropdownMenuItem>
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
-              <WhiskyReviewDeleteAlert
-                reviewId={review.id}
-              />
+              <WhiskyReviewDeleteAlert reviewId={review.id} />
             </AlertDialog>
           </div>
         </header>
         {isEditing ? (
-          <WhiskyReviewEditForm
-            review={review}
-            onSubmitted={() => setIsEditing(false)}
-          />
-        ) 
-          : (
-            <>
-              <Carousel>
-                <CarouselContent>
-                  {review.images.length > 0 && review.images.map((image, index) => (
+          <WhiskyReviewEditForm review={review} onSubmitted={() => setIsEditing(false)} />
+        ) : (
+          <>
+            <Carousel>
+              <CarouselContent>
+                {review.images.length > 0 &&
+                  review.images.map((image, index) => (
                     <CarouselItem key={index}>
                       <Image
                         src={image}
@@ -141,21 +131,21 @@ export default function WhiskyReviewItem({
                       />
                     </CarouselItem>
                   ))}
-                </CarouselContent>
-                <div className="mt-6 flex items-center gap-x-4">
-                  <CarouselPrevious />
-                  <CarouselNext />
-                  <CarouselDotButton className="ml-auto" />
-                </div>
-              </Carousel>
-              <div className="mt-4 space-y-4">
-                <TasteItem label="Nose" score={review.noseScore} content={review.nose} />
-                <TasteItem label="Palate" score={review.palateScore} content={review.palate} />
-                <TasteItem label="Finish" score={review.finishScore} content={review.finish} />
-                <TasteItem label="총평" score={review.score} content={review.content} />
+              </CarouselContent>
+              <div className="mt-6 flex items-center gap-x-4">
+                <CarouselPrevious />
+                <CarouselNext />
+                <CarouselDotButton className="ml-auto" />
               </div>
-            </>
-          )}
+            </Carousel>
+            <div className="mt-4 space-y-4">
+              <TasteItem label="Nose" score={review.noseScore} content={review.nose} />
+              <TasteItem label="Palate" score={review.palateScore} content={review.palate} />
+              <TasteItem label="Finish" score={review.finishScore} content={review.finish} />
+              <TasteItem label="총평" score={review.score} content={review.content} />
+            </div>
+          </>
+        )}
       </article>
     </li>
   );

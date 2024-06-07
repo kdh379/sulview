@@ -11,14 +11,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          "bg-primary text-primary-foreground shadow hover:bg-primary/90 active:bg-primary/80",
+        default: "bg-primary text-primary-foreground shadow hover:bg-primary/90 active:bg-primary/80",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 active:bg-destructive/80",
-        outline:
-          "border border-input bg-background shadow-sm hover:bg-accent active:bg-accent/60",
-        secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 active:bg-secondary/60",
+        outline: "border border-input bg-background shadow-sm hover:bg-accent active:bg-accent/60",
+        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 active:bg-secondary/60",
         ghost: "hover:bg-accent",
         link: "text-primary underline-offset-4 hover:underline",
         dashed: "border-dashed border-2 hover:border-muted-foreground/50",
@@ -34,14 +31,14 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean
-  isLoading?: boolean
+  asChild?: boolean;
+  isLoading?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -58,7 +55,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {isLoading ? <Icons.spinner className="size-4" /> : children}
       </Comp>
     );
-  }
+  },
 );
 Button.displayName = "Button";
 

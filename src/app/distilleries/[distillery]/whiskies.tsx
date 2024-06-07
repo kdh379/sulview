@@ -14,7 +14,7 @@ interface WhiskiesProps extends SearchParamsType {
 
 const getWhiskies = async (distilleryId: number, q: string) => {
   const user = await getCurrentUser();
-  
+
   return db
     .select({
       id: whiskyTable.id,
@@ -24,21 +24,19 @@ const getWhiskies = async (distilleryId: number, q: string) => {
       bottled: whiskyTable.bottled,
       images: whiskyTable.images,
       score: sql<number>`avg(${reviewTable.score})`,
-      ...(user ? {
-        myScore: sql<number>`avg(CASE WHEN ${reviewTable.createdBy} = ${user?.id} THEN ${reviewTable.score} ELSE NULL END)`,
-      } : {}),
+      ...(user
+        ? {
+          myScore: sql<number>`avg(CASE WHEN ${reviewTable.createdBy} = ${user?.id} THEN ${reviewTable.score} ELSE NULL END)`,
+        }
+        : {}),
     })
     .from(whiskyTable)
     .groupBy(whiskyTable.id)
-    .where(and(
-      eq(whiskyTable.distilleryId, distilleryId),
-      q.length ? ilike(whiskyTable.name, `%${q}%`) : undefined
-    ))
+    .where(and(eq(whiskyTable.distilleryId, distilleryId), q.length ? ilike(whiskyTable.name, `%${q}%`) : undefined))
     .leftJoin(reviewTable, eq(reviewTable.whiskyId, whiskyTable.id));
 };
 
 export default async function Whiskies({ distilleryId, q }: WhiskiesProps) {
-
   const whiskies = await getWhiskies(distilleryId, q);
 
   return (
@@ -61,10 +59,7 @@ export default async function Whiskies({ distilleryId, q }: WhiskiesProps) {
       </TableHeader>
       <TableBody>
         {whiskies.map((whisky) => (
-          <TableRow 
-            key={whisky.id}
-            className="relative"
-          >
+          <TableRow key={whisky.id} className="relative">
             <TableCell className="hidden sm:table-cell">
               <ImageWithFallback
                 src={whisky.images[0] || "/whisky-placeholder.png"}
@@ -82,10 +77,7 @@ export default async function Whiskies({ distilleryId, q }: WhiskiesProps) {
             <TableCell>{whisky.score && Number(whisky.score).toFixed(1)}</TableCell>
             <TableCell>{whisky.myScore && Number(whisky.myScore).toFixed(1)}</TableCell>
             <TableCell className="w-0 p-0">
-              <Link
-                href={`/whiskies/${whisky.id}/${whisky.name}`}
-                className="absolute inset-0"
-              >
+              <Link href={`/whiskies/${whisky.id}/${whisky.name}`} className="absolute inset-0">
                 <span className="sr-only">{whisky.name}</span>
               </Link>
             </TableCell>

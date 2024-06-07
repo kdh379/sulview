@@ -6,9 +6,9 @@ import { InfoIcon, Minus, NotebookPen, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useS3Upload } from "next-s3-upload";
 import { useState } from "react";
-import { useForm, useFormContext, UseFormReturn } from "react-hook-form";
 import { useMutation } from "react-query";
 import { z } from "zod";
+import { useForm, useFormContext, UseFormReturn } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, useFormField } from "@/components/ui/form";
@@ -42,91 +42,75 @@ type ReviewFormSchemaType = z.infer<typeof ReviewFormSchema>;
 interface FieldSetProps {
   name: string;
   legend: string;
-};
+}
 
 function FieldSet({ name, legend }: FieldSetProps) {
-
   const form = useFormContext();
   const { error } = useFormField();
 
   return (
     <li>
       <fieldset>
-        <legend className={cn(
-          "text-sm font-medium leading-none",
-          error && "text-destructive"
-        )}
-        >
-          {legend}
-        </legend>
+        <legend className={cn("text-sm font-medium leading-none", error && "text-destructive")}>{legend}</legend>
         <FormField
           name={`${name}Score`}
           control={form.control}
-          render={
-            ({field}) => (
-              <FormItem className="-mt-8 ml-8 flex items-center">
-                <FormLabel className="sr-only">{name} 점수</FormLabel>
-                <div className="ml-8 flex gap-x-2">
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    onClick={() => {
-                      const { value } = field;
-                      form.setValue(`${name}Score`, value > 0 ? value - 1 : 0);
-                    }}
-                  >
-                    <Minus className="size-4" />
-                  </Button>
-                  <FormControl>
-                    <Input 
-                      {...field}
-                      className="w-12 text-center"
-                      value={field.value ?? ""}
-                      onFocus={(e) => e.target.select()}
-                    />
-                  </FormControl>
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    onClick={() => {
-                      const { value } = field;
-                      form.setValue(`${name}Score`, value < 100 ? value + 1 : 100);
-                    }}
-                  >
-                    <Plus className="size-4" />
-                  </Button>
-                </div>
-              </FormItem>
-            )
-          }
+          render={({ field }) => (
+            <FormItem className="-mt-8 ml-8 flex items-center">
+              <FormLabel className="sr-only">{name} 점수</FormLabel>
+              <div className="ml-8 flex gap-x-2">
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  onClick={() => {
+                    const { value } = field;
+                    form.setValue(`${name}Score`, value > 0 ? value - 1 : 0);
+                  }}
+                >
+                  <Minus className="size-4" />
+                </Button>
+                <FormControl>
+                  <Input
+                    {...field}
+                    className="w-12 text-center"
+                    value={field.value ?? ""}
+                    onFocus={(e) => e.target.select()}
+                  />
+                </FormControl>
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  onClick={() => {
+                    const { value } = field;
+                    form.setValue(`${name}Score`, value < 100 ? value + 1 : 100);
+                  }}
+                >
+                  <Plus className="size-4" />
+                </Button>
+              </div>
+            </FormItem>
+          )}
         />
         <FormField
           name={name}
           control={form.control}
-          render={
-            ({field}) => (
-              <FormItem className="mt-2">
-                <FormLabel>
-                  <span className="sr-only">Nose</span>
-                </FormLabel>
-                <FormControl>
-                  <Textarea
-                    {...field}
-                    className="min-h-[90px]"
-                    placeholder="과일, 견과류, 다크초콜릿, 오크"
-                  />
-                </FormControl>
-              </FormItem>
-            )
-          }
+          render={({ field }) => (
+            <FormItem className="mt-2">
+              <FormLabel>
+                <span className="sr-only">Nose</span>
+              </FormLabel>
+              <FormControl>
+                <Textarea {...field} className="min-h-[90px]" placeholder="과일, 견과류, 다크초콜릿, 오크" />
+              </FormControl>
+            </FormItem>
+          )}
         />
       </fieldset>
     </li>
   );
 }
 
-function TasteInput({className} : {className?: string}) {
-
+function TasteInput({ className }: { className?: string }) {
   return (
     <ul className={cn("mt-8 space-y-8", className)}>
       <FieldSet name="nose" legend="Nose" />
@@ -137,67 +121,66 @@ function TasteInput({className} : {className?: string}) {
 }
 
 function hasTaste(form: UseFormReturn<ReviewFormSchemaType>) {
-  const tasteFields: (keyof ReviewFormSchemaType)[]
-    = ["nose", "noseScore", "palate", "palateScore", "finish", "finishScore"];
-    
+  const tasteFields: (keyof ReviewFormSchemaType)[] = [
+    "nose",
+    "noseScore",
+    "palate",
+    "palateScore",
+    "finish",
+    "finishScore",
+  ];
+
   return tasteFields.every((field) => form.getValues(field) !== "" && form.getValues(field) !== -1);
 }
 
 function includesSubString(arr: string[], str: string) {
-  return arr.some(item => item.includes(str));
+  return arr.some((item) => item.includes(str));
 }
 
 interface WhiskyReviewFormProps extends ReviewFormSchemaType {
   onSubmitted?: () => void;
-};
+}
 
-export function WhiskyReviewForm({ onSubmitted, ...props } : WhiskyReviewFormProps) {
-  
+export function WhiskyReviewForm({ onSubmitted, ...props }: WhiskyReviewFormProps) {
   const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const {uploadToS3} = useS3Upload();
+  const { uploadToS3 } = useS3Upload();
   const form = useForm<ReviewFormSchemaType>({
     resolver: zodResolver(ReviewFormSchema),
     defaultValues: props,
   });
   const [tasteVisible, setTasteVisible] = useState(hasTaste(form));
 
-  const {
-    mutate: handleReviewSubmit,
-  } = useMutation(
-    (data: ReviewFormSchemaType) => axios.put("/api/review", data),
-    {
-      onSuccess: () => {
-        router.refresh();
-        onSubmitted?.();
-      },
-      onError: (err: AxiosError<ActionError>) => {
-        if(err.response?.data)
-          handleApiError(err.response.data, form);
-      },
-    }
-  );
+  const { mutate: handleReviewSubmit } = useMutation((data: ReviewFormSchemaType) => axios.put("/api/review", data), {
+    onSuccess: () => {
+      router.refresh();
+      onSubmitted?.();
+    },
+    onError: (err: AxiosError<ActionError>) => {
+      if (err.response?.data) handleApiError(err.response.data, form);
+    },
+  });
 
-  const onSubmit = async() => {
+  const onSubmit = async () => {
     setIsLoading(true);
-    const images = props.images.filter((image) => 
-      files.some((file) => image.includes(file.name))
-    );
+    const images = props.images.filter((image) => files.some((file) => image.includes(file.name)));
     form.setValue("images", images);
-    
-    for(const file of files) {
-      if( includesSubString(props.images, file.name) ) continue;
+
+    for (const file of files) {
+      if (includesSubString(props.images, file.name)) continue;
 
       const webP = await convertImageToWebP(file);
-      
+
       const { url } = await uploadToS3(webP);
 
-      form.setValue("images", 
-        [...form.getValues("images"), `${process.env.NEXT_PUBLIC_CLOUDFRONT}${new URL(url).pathname}`]);
+      form.setValue("images", [
+        ...form.getValues("images"),
+        `${process.env.NEXT_PUBLIC_CLOUDFRONT}${new URL(url).pathname}`,
+      ]);
     }
 
-    if(!tasteVisible) {
+    if (!tasteVisible) {
       form.setValue("nose", "");
       form.setValue("noseScore", -1);
       form.setValue("palate", "");
@@ -212,24 +195,19 @@ export function WhiskyReviewForm({ onSubmitted, ...props } : WhiskyReviewFormPro
 
   return (
     <Form {...form}>
-      <form 
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-y-4"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
         <FormField
           name="images"
           control={form.control}
           render={() => (
             <FormItem>
               <FormLabel className="flex items-center">
-                      사진
+                사진
                 <Tooltip>
                   <TooltipTrigger>
                     <InfoIcon className="text-muted-foreground ml-2 size-4" />
                   </TooltipTrigger>
-                  <TooltipContent side="right">
-                          webp 형식으로 변환되어 저장됩니다.
-                  </TooltipContent>
+                  <TooltipContent side="right">webp 형식으로 변환되어 저장됩니다.</TooltipContent>
                 </Tooltip>
               </FormLabel>
               <FormControl>
@@ -239,16 +217,14 @@ export function WhiskyReviewForm({ onSubmitted, ...props } : WhiskyReviewFormPro
                   onChange={(files) => setFiles(files)}
                 />
               </FormControl>
-              <FormDescription>
-                      최대 5장까지 업로드 가능합니다.
-              </FormDescription>
+              <FormDescription>최대 5장까지 업로드 가능합니다.</FormDescription>
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
           name="score"
-          render={({field}) => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel className="text-xl font-bold">
                 <span>RATING</span>
@@ -267,45 +243,31 @@ export function WhiskyReviewForm({ onSubmitted, ...props } : WhiskyReviewFormPro
             </FormItem>
           )}
         />
-        <TasteInput className={cn(
-          "hidden",
-          tasteVisible && "block"
-        )} />
+        <TasteInput className={cn("hidden", tasteVisible && "block")} />
         <Button
           variant={tasteVisible ? "destructive" : "outline"}
           size="sm"
           className="mb-4"
           onClick={() => setTasteVisible(!tasteVisible)}
         >
-              테이스팅 노트 {tasteVisible ? "제거" : "추가"}
+          테이스팅 노트 {tasteVisible ? "제거" : "추가"}
         </Button>
         <FormField
           control={form.control}
           name="content"
-          render={({field}) => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>리뷰</FormLabel>
               <FormControl>
-                <Textarea
-                  {...field}
-                  className="min-h-24"
-                  placeholder="적극 추천하는 위스키. 재구매 의사 있음."
-                />
+                <Textarea {...field} className="min-h-24" placeholder="적극 추천하는 위스키. 재구매 의사 있음." />
               </FormControl>
             </FormItem>
           )}
         />
-        <div
-          className="flex justify-end border-b-2 py-4"
-        >
-          <Button
-            type="submit"
-            isLoading={isLoading}
-            className="w-full sm:w-auto"
-            size="lg"
-          >
+        <div className="flex justify-end border-b-2 py-4">
+          <Button type="submit" isLoading={isLoading} className="w-full sm:w-auto" size="lg">
             <NotebookPen className="mr-2 size-4" />
-              리뷰 작성
+            리뷰 작성
           </Button>
         </div>
       </form>
@@ -313,7 +275,7 @@ export function WhiskyReviewForm({ onSubmitted, ...props } : WhiskyReviewFormPro
   );
 }
 
-export function WhiskyReviewAddForm({ whiskyId } : { whiskyId: number }) {
+export function WhiskyReviewAddForm({ whiskyId }: { whiskyId: number }) {
   return (
     <WhiskyReviewForm
       whiskyId={whiskyId}
@@ -332,11 +294,7 @@ export function WhiskyReviewAddForm({ whiskyId } : { whiskyId: number }) {
 
 type Review = typeof reviewTable.$inferSelect;
 
-export function WhiskyReviewEditForm({ review, onSubmitted } 
-  : { 
-    review: Review,
-    onSubmitted?: () => void})
-{
+export function WhiskyReviewEditForm({ review, onSubmitted }: { review: Review; onSubmitted?: () => void }) {
   return (
     <WhiskyReviewForm
       whiskyId={review.whiskyId}

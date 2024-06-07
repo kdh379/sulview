@@ -10,7 +10,6 @@ import { db } from "@/db/drizzle";
 import { distilleryTable, reviewTable, users, whiskyTable } from "@/db/schema";
 
 const getWhiskyAbout = async (whiskyId: number) => {
-
   const avgReviewSq = db
     .select({
       whiskyId: reviewTable.whiskyId,
@@ -35,21 +34,20 @@ const getWhiskyAbout = async (whiskyId: number) => {
 
   const { whisky, distillery, userName, score } = result[0];
 
-  if(!whisky || !distillery) return notFound();
+  if (!whisky || !distillery) return notFound();
 
   return { whisky, distillery, userName, score };
 };
 
 interface WhiskyPageProps {
   params: {
-    whisky: string[]
+    whisky: string[];
   };
 }
 
 export async function generateMetadata({ params }: WhiskyPageProps): Promise<Metadata> {
-  
   const [whiskyId] = params.whisky.map(Number);
-  if(isNaN(Number(whiskyId))) return {};
+  if (isNaN(Number(whiskyId))) return {};
   const { whisky, distillery } = await getWhiskyAbout(whiskyId);
 
   return {
@@ -72,20 +70,14 @@ export async function generateMetadata({ params }: WhiskyPageProps): Promise<Met
 }
 
 export default async function WhiskyPage({ params }: WhiskyPageProps) {
-
   const [whiskyId] = params.whisky.map(Number);
-  if(isNaN(Number(whiskyId))) return notFound();
+  if (isNaN(Number(whiskyId))) return notFound();
 
   const { whisky, distillery, userName, score } = await getWhiskyAbout(whiskyId);
-  
+
   return (
     <div>
-      <WhiskyInfo 
-        whisky={whisky}
-        distillery={distillery}
-        userName={userName}
-        score={score}
-      />
+      <WhiskyInfo whisky={whisky} distillery={distillery} userName={userName} score={score} />
       <Suspense fallback={null}>
         <WhiskyReviews whiskyId={whiskyId} />
       </Suspense>

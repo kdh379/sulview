@@ -13,8 +13,8 @@ export type FilePreview = File & { preview: string };
 
 const MAX_FILES = 5;
 
-const DROPZONE_MSG_BOX: {[key: string]: string} = {
-  "title": "파일을 가져오는 중 오류가 발생했습니다.",
+const DROPZONE_MSG_BOX: { [key: string]: string } = {
+  title: "파일을 가져오는 중 오류가 발생했습니다.",
   "file-invalid-type": "png, jpg, jpeg, webP 형식의 이미지 파일만 업로드할 수 있습니다.",
   "file-too-large": "파일 크기가 너무 큽니다.",
   "too-many-files": `최대 ${MAX_FILES}개의 파일까지 업로드할 수 있습니다.`,
@@ -26,11 +26,7 @@ interface UploaderProps {
   onChange?: (files: FilePreview[]) => void;
 }
 
-export default function Uploader({
-  defaultImages = [],
-  disabled,
-  onChange,
-}: UploaderProps) {
+export default function Uploader({ defaultImages = [], disabled, onChange }: UploaderProps) {
   const [files, setFiles] = React.useState<FilePreview[]>([]);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -40,12 +36,14 @@ export default function Uploader({
       toast({
         variant: "destructive",
         title: DROPZONE_MSG_BOX["title"],
-        description: events.map((event) => event.errors.map((error) => DROPZONE_MSG_BOX[error.code] || error.message)).join("\n"),
+        description: events
+          .map((event) => event.errors.map((error) => DROPZONE_MSG_BOX[error.code] || error.message))
+          .join("\n"),
         duration: 3000,
       });
     },
     onDrop: (acceptedFiles) => {
-      if(files.length + acceptedFiles.length > MAX_FILES) {
+      if (files.length + acceptedFiles.length > MAX_FILES) {
         toast({
           variant: "destructive",
           title: DROPZONE_MSG_BOX["title"],
@@ -56,29 +54,22 @@ export default function Uploader({
         return;
       }
 
-      setFiles([
-        ...files,
-        ...acceptedFiles.map((file) => createPreviewMedia(file)),
-      ]);
+      setFiles([...files, ...acceptedFiles.map((file) => createPreviewMedia(file))]);
 
-      onChange?.([
-        ...files,
-        ...acceptedFiles.map((file) => createPreviewMedia(file)),
-      ]);
+      onChange?.([...files, ...acceptedFiles.map((file) => createPreviewMedia(file))]);
     },
   });
 
-  const initFiles = React.useCallback(async ( urls: string[] ) => {
+  const initFiles = React.useCallback(async (urls: string[]) => {
     const files = await Promise.all(urls.map(convertURLtoImage));
 
     setFiles(files);
     onChange?.(files);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
-    if(defaultImages.length > 0) 
-      initFiles(defaultImages);
+    if (defaultImages.length > 0) initFiles(defaultImages);
   }, [defaultImages, initFiles]);
 
   return (
@@ -92,12 +83,10 @@ export default function Uploader({
         <input {...getInputProps()} />
         <CloudUpload className="size-12" />
         <span className="sr-only">Upload</span>
-        <p className="mt-2 text-sm">
-          사진을 이곳에 끌어다 놓거나 클릭하여 업로드하세요.
-        </p>
+        <p className="mt-2 text-sm">사진을 이곳에 끌어다 놓거나 클릭하여 업로드하세요.</p>
       </Button>
       {files.map((file, index) => (
-        <div 
+        <div
           key={file.name}
           className="border-border before:bg-accent relative rounded-md border p-4 before:absolute before:size-[calc(100%-2rem)] before:rounded-md before:opacity-0 before:transition-opacity before:hover:opacity-50"
         >
@@ -109,11 +98,7 @@ export default function Uploader({
             height={112}
           />
           <div className="absolute left-0 top-0 z-10 flex size-full items-center justify-center whitespace-nowrap text-center opacity-0 transition-opacity hover:opacity-100">
-            <Button
-              size="icon"
-              variant="link"
-              disabled={disabled}
-            >
+            <Button size="icon" variant="link" disabled={disabled}>
               <Eye className="text-accent-foreground size-6" />
             </Button>
             <Button

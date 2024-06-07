@@ -7,8 +7,5 @@ export const siteConfig = {
     github: "https://github.com/kdh379/sulview",
     mailTo: "mailto:ehgus37625@naver.com",
   },
-  keywords: [
-    "위스키",
-    "리뷰",
-  ],
+  keywords: ["위스키", "리뷰"],
 };

@@ -25,9 +25,11 @@ const WhiskyFormSchema = z.object({
     required_error: "병입 방식을 선택해주세요.",
   }),
   abv: z.string().min(1),
-  caskTypes: z.array(z.object({
-    value: z.string(),
-  })),
+  caskTypes: z.array(
+    z.object({
+      value: z.string(),
+    }),
+  ),
   independentDistillery: z.string(),
   aged: z.string(),
   images: z.array(z.string()),
@@ -44,7 +46,6 @@ interface WhiskyAddFormProps {
 }
 
 export default function WhiskyAddForm({ distilleryName }: WhiskyAddFormProps) {
-
   const { uploadToS3 } = useS3Upload();
   const router = useRouter();
   const [files, setFiles] = React.useState<FilePreview[]>([]);
@@ -55,9 +56,11 @@ export default function WhiskyAddForm({ distilleryName }: WhiskyAddFormProps) {
       abv: "",
       independentDistillery: "",
       aged: "",
-      caskTypes: [{
-        value: "",
-      }],
+      caskTypes: [
+        {
+          value: "",
+        },
+      ],
       caskNumber: "",
       bottled: "",
       images: [],
@@ -65,36 +68,33 @@ export default function WhiskyAddForm({ distilleryName }: WhiskyAddFormProps) {
     },
   });
 
-  const {
-    isLoading,
-    mutate: handleAddWhisky,
-  } = useMutation(
+  const { isLoading, mutate: handleAddWhisky } = useMutation(
     (data: WhiskyFormSchemaType) => axios.post("/api/whisky", data),
     {
       onSuccess: () => {
         router.push(`/whiskies/${form.getValues("name")}`);
       },
       onError: (err: AxiosError<ActionError>) => {
-        if(err.response?.data)
-          handleApiError(err.response.data, form);
+        if (err.response?.data) handleApiError(err.response.data, form);
       },
-    }
+    },
   );
 
   const onSubmit = async () => {
-
     const bottler = form.getValues("bottler");
 
-    if(bottler === "independent" && form.getValues("independentDistillery") === "")
+    if (bottler === "independent" && form.getValues("independentDistillery") === "")
       return form.setError("independentDistillery", { type: "required" });
 
-    for(const file of files) {
+    for (const file of files) {
       const webP = await convertImageToWebP(file);
-      
+
       const { url } = await uploadToS3(webP);
 
-      form.setValue("images", 
-        [...form.getValues("images"), `${process.env.NEXT_PUBLIC_CLOUDFRONT}${new URL(url).pathname}`]);
+      form.setValue("images", [
+        ...form.getValues("images"),
+        `${process.env.NEXT_PUBLIC_CLOUDFRONT}${new URL(url).pathname}`,
+      ]);
     }
 
     handleAddWhisky(form.getValues());
@@ -102,10 +102,7 @@ export default function WhiskyAddForm({ distilleryName }: WhiskyAddFormProps) {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="mt-8 grid auto-rows-max grid-cols-2 gap-8"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 grid auto-rows-max grid-cols-2 gap-8">
         <WhiskyFields />
         <FormField
           name="images"
@@ -118,36 +115,21 @@ export default function WhiskyAddForm({ distilleryName }: WhiskyAddFormProps) {
                   <TooltipTrigger>
                     <InfoIcon className="text-muted-foreground ml-2 size-4" />
                   </TooltipTrigger>
-                  <TooltipContent side="right">
-                    webp 형식으로 변환되어 저장됩니다.
-                  </TooltipContent>
+                  <TooltipContent side="right">webp 형식으로 변환되어 저장됩니다.</TooltipContent>
                 </Tooltip>
               </FormLabel>
               <FormControl>
-                <Uploader
-                  disabled={form.formState.isSubmitting}
-                  onChange={(files) => setFiles(files)}
-                />
+                <Uploader disabled={form.formState.isSubmitting} onChange={(files) => setFiles(files)} />
               </FormControl>
-              <FormDescription>
-                최대 5장까지 업로드 가능합니다.
-              </FormDescription>
+              <FormDescription>최대 5장까지 업로드 가능합니다.</FormDescription>
             </FormItem>
           )}
         />
         <div className="col-span-2 flex items-center justify-end gap-2">
-          <Button
-            variant="outline"
-            disabled={isLoading}
-            onClick={() => router.back()}
-          >
+          <Button variant="outline" disabled={isLoading} onClick={() => router.back()}>
             취소
           </Button>
-          <Button
-            type="submit"
-            isLoading={isLoading}
-            className="w-24"
-          >
+          <Button type="submit" isLoading={isLoading} className="w-24">
             <Check className="mr-2 size-4" />
             추가
           </Button>

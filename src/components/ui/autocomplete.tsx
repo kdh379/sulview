@@ -4,26 +4,21 @@ import { type KeyboardEvent, useCallback, useRef, useState } from "react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-  CommandList
-} from "@/components/ui/command";
+import { CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-export type Item = Record<"value" | "label", string> & Record<string, string>
+export type Item = Record<"value" | "label", string> & Record<string, string>;
 
-interface AutoCompleteProps extends React.ComponentProps<typeof CommandPrimitive.Input>{
-  itemList: Item[]
-  
+interface AutoCompleteProps extends React.ComponentProps<typeof CommandPrimitive.Input> {
+  itemList: Item[];
+
   value?: string;
-  emptyMessage?: string
-  onValueChange?: (value: string) => void
-  isLoading?: boolean
-  allowDirectInput?: boolean
+  emptyMessage?: string;
+  onValueChange?: (value: string) => void;
+  isLoading?: boolean;
+  allowDirectInput?: boolean;
 }
 
 export const AutoComplete = ({
@@ -50,9 +45,7 @@ export const AutoComplete = ({
       if (!isOpen) setOpen(true);
 
       if (event.key === "Enter" && input.value !== "") {
-        const selectedItem = itemList.find(
-          (option) => option.label === input.value
-        );
+        const selectedItem = itemList.find((option) => option.label === input.value);
         if (selectedItem) {
           setSelected(selectedItem.value);
           onValueChange?.(selectedItem.value);
@@ -63,13 +56,13 @@ export const AutoComplete = ({
         input.blur();
       }
     },
-    [isOpen, itemList, onValueChange]
+    [isOpen, itemList, onValueChange],
   );
 
   const handleBlur = useCallback(() => {
     const value = inputRef.current?.value || "";
     setOpen(false);
-    if(allowDirectInput) {
+    if (allowDirectInput) {
       setInputValue(value);
       onValueChange?.(value);
     } else {
@@ -88,7 +81,7 @@ export const AutoComplete = ({
         inputRef?.current?.blur();
       }, 0);
     },
-    [onValueChange]
+    [onValueChange],
   );
 
   return (
@@ -102,17 +95,14 @@ export const AutoComplete = ({
           onFocus={() => setOpen(true)}
           className={cn(
             "border-input placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50",
-            className
+            className,
           )}
           {...restProps}
         />
         <Button
           variant="ghost"
           size="icon"
-          className={cn(
-            "invisible absolute right-0 top-0",
-            inputValue && "visible"
-          )}
+          className={cn("invisible absolute right-0 top-0", inputValue && "visible")}
           onClick={() => {
             setInputValue("");
             setSelected("");
@@ -150,10 +140,7 @@ export const AutoComplete = ({
                           onSelect={() => handleSelectOption(option)}
                         >
                           {option.label}
-                          <Check className={cn(
-                            "invisible ml-auto w-4",
-                            isSelected && "visible"
-                          )} />
+                          <Check className={cn("invisible ml-auto w-4", isSelected && "visible")} />
                         </CommandItem>
                       );
                     })}

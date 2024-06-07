@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  Home,
-  ListOrdered
-} from "lucide-react";
+import { Home, ListOrdered } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
@@ -36,7 +33,6 @@ const NAV_ITEMS = [
 ];
 
 const MainNav = () => {
-
   const pathname = usePathname();
 
   return (
@@ -49,7 +45,7 @@ const MainNav = () => {
             "text-muted-foreground hover:text-primary flex items-center gap-3 rounded-lg px-3 py-4 transition-all",
             index === 0
               ? pathname === item.pathname && "text-primary"
-              : pathname.startsWith(item.pathname) && "text-primary"
+              : pathname.startsWith(item.pathname) && "text-primary",
           )}
         >
           <item.icon className="size-4" />

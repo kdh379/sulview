@@ -7,14 +7,7 @@ import { useMutation } from "react-query";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
 import { Icons } from "../../components/ui/icons";
@@ -34,11 +27,12 @@ export default function EmailForm() {
     mutate: login,
     isLoading,
     isSuccess,
-  } = useMutation("login", () => 
+  } = useMutation("login", () =>
     signIn("nodemailer", {
       email: form.getValues("email"),
       redirect: false,
-    }));
+    }),
+  );
 
   if (isSuccess) {
     return (
@@ -64,7 +58,6 @@ export default function EmailForm() {
                 <Input
                   type="email"
                   autoComplete="email"
-                  autoFocus
                   disabled={isLoading}
                   placeholder="sulview@naver.com"
                   {...field}
@@ -74,11 +67,7 @@ export default function EmailForm() {
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          className="w-full"
-          isLoading={isLoading}
-        >
+        <Button type="submit" className="w-full" isLoading={isLoading}>
           이메일로 로그인
         </Button>
       </form>
