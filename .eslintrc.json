@@ -82,8 +82,7 @@
 
     // import React from 'react'; 를 사용하지 않아도 되도록 설정
     "react/react-in-jsx-scope": 0,
-    // JSX에서 prop의 첫 번째 줄에 새 줄을 요구
-    "react/jsx-first-prop-new-line": "error",
+    // children이 없는 경우 self-closing 태그로 설정
     "react/self-closing-comp": ["error", {
       "component": true,
       "html": true
