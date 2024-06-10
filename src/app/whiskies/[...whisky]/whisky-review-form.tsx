@@ -9,8 +9,9 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 import { z } from "zod";
 import { useForm, useFormContext, UseFormReturn } from "react-hook-form";
+import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, useFormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -138,13 +139,13 @@ function includesSubString(arr: string[], str: string) {
 }
 
 interface WhiskyReviewFormProps extends ReviewFormSchemaType {
+  isLogged?: boolean;
   onSubmitted?: () => void;
 }
 
-export function WhiskyReviewForm({ onSubmitted, ...props }: WhiskyReviewFormProps) {
+export function WhiskyReviewForm({ isLogged, onSubmitted, ...props }: WhiskyReviewFormProps) {
   const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const { uploadToS3 } = useS3Upload();
   const form = useForm<ReviewFormSchemaType>({
     resolver: zodResolver(ReviewFormSchema),
@@ -152,7 +153,11 @@ export function WhiskyReviewForm({ onSubmitted, ...props }: WhiskyReviewFormProp
   });
   const [tasteVisible, setTasteVisible] = useState(hasTaste(form));
 
-  const { mutate: handleReviewSubmit } = useMutation((data: ReviewFormSchemaType) => axios.put("/api/review", data), {
+  const {
+    mutate: handleReviewSubmit,
+    isLoading,
+  } = useMutation((data: ReviewFormSchemaType) =>
+    axios.put("/api/review", data), {
     onSuccess: () => {
       router.refresh();
       onSubmitted?.();
@@ -163,7 +168,6 @@ export function WhiskyReviewForm({ onSubmitted, ...props }: WhiskyReviewFormProp
   });
 
   const onSubmit = async () => {
-    setIsLoading(true);
     const images = props.images.filter((image) => files.some((file) => image.includes(file.name)));
     form.setValue("images", images);
 
@@ -190,12 +194,11 @@ export function WhiskyReviewForm({ onSubmitted, ...props }: WhiskyReviewFormProp
     }
 
     handleReviewSubmit(form.getValues());
-    setIsLoading(false);
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="relative flex flex-col gap-y-4">
         <FormField
           name="images"
           control={form.control}
@@ -265,17 +268,29 @@ export function WhiskyReviewForm({ onSubmitted, ...props }: WhiskyReviewFormProp
           )}
         />
         <div className="flex justify-end border-b-2 py-4">
-          <Button type="submit" isLoading={isLoading} className="w-full sm:w-auto" size="lg">
+          <Button
+            type="submit"
+            isLoading={form.formState.isSubmitting || isLoading}
+            disabled={!isLogged}
+            className="w-full sm:w-auto"
+            size="lg"
+          >
             <NotebookPen className="mr-2 size-4" />
             리뷰 작성
           </Button>
+        </div>
+        <div className="supports-[backdrop-filter]:bg-background/60 bg-background absolute inset-0 flex flex-col items-center justify-center gap-4 backdrop-blur-sm">
+          <p className="text-xl font-bold">로그인 후 리뷰를 작성해보세요.</p>
+          <Link href="/login" className={buttonVariants()}>
+            로그인 페이지로 이동
+          </Link>
         </div>
       </form>
     </Form>
   );
 }
 
-export function WhiskyReviewAddForm({ whiskyId }: { whiskyId: number }) {
+function WhiskyReviewAddForm({ whiskyId, isLogged }: { whiskyId: number; isLogged: boolean }) {
   return (
     <WhiskyReviewForm
       whiskyId={whiskyId}
@@ -288,13 +303,13 @@ export function WhiskyReviewAddForm({ whiskyId }: { whiskyId: number }) {
       finish=""
       finishScore={0}
       images={[]}
+      isLogged={isLogged}
     />
   );
 }
 
 type Review = typeof reviewTable.$inferSelect;
-
-export function WhiskyReviewEditForm({ review, onSubmitted }: { review: Review; onSubmitted?: () => void }) {
+function WhiskyReviewEditForm({ review, onSubmitted }: { review: Review; onSubmitted?: () => void }) {
   return (
     <WhiskyReviewForm
       whiskyId={review.whiskyId}
@@ -308,6 +323,9 @@ export function WhiskyReviewEditForm({ review, onSubmitted }: { review: Review; 
       finishScore={review.finishScore ?? null}
       images={review.images}
       onSubmitted={onSubmitted}
+      isLogged
     />
   );
 }
+
+export { WhiskyReviewAddForm, WhiskyReviewEditForm };

@@ -55,8 +55,12 @@ export default async function WhiskyReviews({ whiskyId }: WhiskyReviewsProps) {
         </Button>
       </div>
       <CardContent>
-        <div className={cn("my-4 hidden", user && !reviews.find((review) => review.createdBy === user?.id) && "block")}>
-          <WhiskyReviewAddForm whiskyId={whiskyId} />
+        <div
+          className={cn(
+            "my-4",
+            reviews.find((review) => review.createdBy === user?.id) && "hidden")}
+        >
+          <WhiskyReviewAddForm whiskyId={whiskyId} isLogged={!!user} />
         </div>
         <ol>
           {reviews ? (
