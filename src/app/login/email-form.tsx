@@ -68,7 +68,7 @@ export default function EmailForm() {
           )}
         />
         <Button type="submit" className="w-full" isLoading={isLoading}>
-          이메일로 로그인
+          이메일로 시작하기
         </Button>
       </form>
     </Form>
