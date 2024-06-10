@@ -89,28 +89,26 @@ export default function WhiskyReviewItem({
             </time>
           </div>
           <div className="ml-auto flex">
-            <AlertDialog>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <EllipsisVertical />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {isAuthor && (
+            {(isAuthor || isAdmin) && (
+              <AlertDialog>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <EllipsisVertical />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => setIsEditing(!isEditing)} role="menuitem">
                       수정
                     </DropdownMenuItem>
-                  )}
-                  {(isAuthor || isAdmin) && (
                     <DropdownMenuItem onSelect={(e) => e.preventDefault()} asChild>
                       <AlertDialogTrigger className="w-full text-start">삭제</AlertDialogTrigger>
                     </DropdownMenuItem>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <WhiskyReviewDeleteAlert reviewId={review.id} />
-            </AlertDialog>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <WhiskyReviewDeleteAlert reviewId={review.id} />
+              </AlertDialog>
+            )}
           </div>
         </header>
         {isEditing ? (
