@@ -11,5 +11,12 @@ interface ImageWithFallbackProps extends ImageProps {
 export default function ImageWithFallback({ src, alt, fallbackSrc, ...props }: ImageWithFallbackProps) {
   const [error, setError] = useState<React.SyntheticEvent<HTMLImageElement, Event> | null>(null);
 
-  return <Image alt={alt} src={error ? fallbackSrc : src} {...props} onError={setError} />;
+  return (
+    <Image
+      {...props}
+      alt={alt}
+      src={error ? fallbackSrc : src}
+      onError={setError}
+    />
+  );
 }
