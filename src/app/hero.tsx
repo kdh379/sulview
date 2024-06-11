@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import heroImage from "../../public/hero.webp";
+
 export default function Hero() {
   return (
     <section>
@@ -18,11 +20,12 @@ export default function Hero() {
           </p>
         </div>
         <Image
-          src="/hero.webp"
-          width={800}
-          height={600}
+          src={heroImage}
+          width={400}
+          height={400}
           alt="Hero Image"
           className="order-first rounded-md object-cover md:order-last"
+          priority
         />
       </div>
     </section>
