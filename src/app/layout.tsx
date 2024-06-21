@@ -68,7 +68,7 @@ export default async function RootLayout({
         <Providers>
           <MobileHeader />
           <Sidebar />
-          <main className="md:pl-sidebar container py-6">{children}</main>
+          <main className="md:ml-sidebar px-2 py-6 md:px-4">{children}</main>
           <Toaster />
           <NicknameFormDialog open={user && user.name === null ? true : false} />
         </Providers>

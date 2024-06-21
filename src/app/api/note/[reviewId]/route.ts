@@ -2,7 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 import { db } from "@/db/drizzle";
-import { reviewTable } from "@/db/schema";
+import { noteTable } from "@/db/schema";
 import { getCurrentUser } from "@/lib/session";
 
 export async function DELETE(_req: Request, { params }: { params: { reviewId: string } }) {
@@ -22,10 +22,15 @@ export async function DELETE(_req: Request, { params }: { params: { reviewId: st
 
   try {
     const deleteReview = await db
-      .delete(reviewTable)
-      .where(and(eq(reviewTable.id, reviewId), user.role !== "admin" ? eq(reviewTable.createdBy, user.id) : undefined))
+      .delete(noteTable)
+      .where(
+        and(
+          eq(noteTable.id, reviewId),
+          user.role !== "admin" ? eq(noteTable.createdBy, user.id) : undefined
+        )
+      )
       .returning({
-        deletedId: reviewTable.id,
+        deletedId: noteTable.id,
       });
 
     if (!deleteReview.length)
@@ -40,6 +45,36 @@ export async function DELETE(_req: Request, { params }: { params: { reviewId: st
       );
 
     return NextResponse.json({}, { status: 200 });
+  } catch (error) {
+    return NextResponse.json<ActionError>(
+      {
+        error: {
+          code: "INTERNAL_ERROR",
+          message: "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.",
+        },
+      },
+      { status: 500 },
+    );
+  }
+}
+
+export async function PATCH(request: Request) {
+  const user = await getCurrentUser();
+  if (!user?.id)
+    return NextResponse.json<ActionError>(
+      {
+        error: {
+          code: "AUTH_ERROR",
+          message: "로그인 정보를 찾을 수 없습니다.",
+        },
+      },
+      { status: 401 },
+    );
+
+  try {
+    // TODO: DB Update
+
+    return NextResponse.json({}, { status: 201 });
   } catch (error) {
     return NextResponse.json<ActionError>(
       {

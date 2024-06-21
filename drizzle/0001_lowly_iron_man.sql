@@ -1,0 +1,1 @@
+ALTER TABLE "note" RENAME COLUMN "content" TO "review";

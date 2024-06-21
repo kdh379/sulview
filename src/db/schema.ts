@@ -127,7 +127,7 @@ export const noteTable = pgTable(
     aged: text("age").notNull(),
     images: text("images").array().notNull(),
     score: integer("score").notNull(),
-    content: text("content").notNull(),
+    review: text("review").notNull(),
     nose: text("nose").notNull(),
     noseScore: integer("noseScore").notNull(),
     palate: text("palate").notNull(),
