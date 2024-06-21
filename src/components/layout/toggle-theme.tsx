@@ -1,30 +1,36 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import * as React from "react";
+import { useTheme } from "next-themes";
 
-import { Button } from "@/components/ui/button";
 import { useMounted } from "@/hooks/useMounted";
-import { cn } from "@/lib/utils";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 import { Icons } from "../ui/icons";
 
-export default function ThemeToggle() {
-  const { setTheme, theme } = useTheme();
+export default function ToggleTheme() {
+  const { theme, setTheme } = useTheme();
 
   const mounted = useMounted();
 
+  if (!mounted) return null;
+
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      className="hidden sm:inline-flex"
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-    >
-      {mounted && (
-        <>{theme === "dark" ? <Icons.moon className={cn("size-5")} /> : <Icons.sun className={cn("size-5")} />}</>
-      )}
-      <span className="sr-only">Toggle theme</span>
-    </Button>
+    <div className="flex gap-x-2 p-2">
+      <Label htmlFor="theme-toggle">
+        <Icons.sun className="size-5" />
+        <span className="sr-only">라이트 모드</span>
+      </Label>
+      <Switch
+        id="theme-toggle"
+        checked={theme === "dark"}
+        onCheckedChange={() => setTheme(theme === "dark" ? "light" : "dark")}
+      />
+      <Label htmlFor="theme-toggle">
+        <Icons.moon className="size-5" />
+        <span className="sr-only">다크 모드</span>
+      </Label>
+    </div>
   );
 }

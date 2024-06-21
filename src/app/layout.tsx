@@ -4,7 +4,6 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import NextTopLoader from "nextjs-toploader";
 
-import AppHeader from "@/components/layout/app-header";
 import NicknameFormDialog from "@/components/layout/nickname-form-dialog";
 import Sidebar from "@/components/layout/sidebar";
 import Providers from "@/components/providers";
@@ -12,6 +11,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/config/site";
 import { getCurrentUser } from "@/lib/session";
 import { cn } from "@/lib/utils";
+import MobileHeader from "@/components/layout/mobile-header";
 
 export const metadata: Metadata = {
   title: {
@@ -66,11 +66,9 @@ export default async function RootLayout({
       <body className={cn(pretendard.className, "min-h-screen antialiased transition ease-in-out")}>
         <NextTopLoader color="hsla(221.2 83.2% 53.3%)" />
         <Providers>
+          <MobileHeader />
           <Sidebar />
-          <div className="md:pl-sidebar">
-            <AppHeader />
-            <main className="container py-6">{children}</main>
-          </div>
+          <main className="md:pl-sidebar container py-6">{children}</main>
           <Toaster />
           <NicknameFormDialog open={user && user.name === null ? true : false} />
         </Providers>

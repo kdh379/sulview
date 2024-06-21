@@ -5,7 +5,6 @@ import React from "react";
 
 import { Logout } from "@/components/layout/logout";
 import MobileNav from "@/components/layout/mobile-nav";
-import ToggleTheme from "@/components/layout/toggle-theme";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -60,9 +59,9 @@ async function SignButton() {
   );
 }
 
-export default async function AppHeader() {
+export default async function MobileHeader() {
   return (
-    <header className="border-border bg-background supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40 flex h-14 items-center border-b px-4 backdrop-blur md:px-8">
+    <header className="border-border bg-background supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40 flex h-14 items-center border-b px-4 backdrop-blur md:hidden md:px-8">
       <div className="flex flex-1 items-center gap-x-4">
         <MobileNav />
         <div className="relative w-full md:w-2/3 lg:w-1/3">
@@ -70,7 +69,6 @@ export default async function AppHeader() {
           <Input type="search" placeholder="위스키 검색" className="pl-8" />
         </div>
         <div className="ml-auto flex items-center gap-x-4">
-          <ToggleTheme />
           <SignButton />
         </div>
       </div>

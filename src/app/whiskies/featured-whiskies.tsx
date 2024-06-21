@@ -56,14 +56,15 @@ async function FeaturedWhiskies() {
         {whiskys.map((whisky) => (
           <li key={whisky.id} className="hover:bg-muted group float-left mb-6 h-[300px] w-[200px] rounded-md p-2 transition-colors duration-200 hover:shadow-md">
             <Link href={`/whiskies/${whisky.id}`}>
-              <div className="overflow-hidden rounded-md bg-white">
+              <div className="h-[200px] overflow-hidden rounded-md bg-white">
                 <ImageWithFallback
-                  src={whisky.images[0]}
+                  src={whisky.images[0] ?? "/whisky-placeholder.png"}
                   fallbackSrc="/whisky-placeholder.png"
                   width={200}
                   height={200}
                   alt={whisky.name}
-                  className="mx-auto h-[200px] w-auto rounded-md object-cover transition-transform duration-200 group-hover:scale-105"
+                  className="mx-auto max-h-[200px] rounded-md object-contain transition-transform group-hover:scale-105"
+                  priority
                 />
               </div>
               <div className="mt-2">
