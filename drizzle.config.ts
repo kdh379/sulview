@@ -6,10 +6,10 @@ if (!connectionString)
   throw new Error("Please define the DATABASE_URL environment variable inside .env");
 
 export default {
+  dialect: "postgresql",
   schema: "./src/db/schema.ts",
   out: "./drizzle",
-  driver: "pg",
   dbCredentials: {
-    connectionString,
+    url: connectionString,
   },
 } satisfies Config;

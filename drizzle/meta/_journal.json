@@ -4,44 +4,9 @@
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1713636166430,
-      "tag": "0000_noisy_dracula",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1713638817611,
-      "tag": "0001_light_blur",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1714316864778,
-      "tag": "0002_gorgeous_maverick",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1714482810077,
-      "tag": "0003_nice_black_cat",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1714658471078,
-      "tag": "0004_medical_metal_master",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1715779004948,
-      "tag": "0005_rapid_warbound",
+      "version": "7",
+      "when": 1718967740286,
+      "tag": "0000_exotic_mathemanic",
       "breakpoints": true
     }
   ]

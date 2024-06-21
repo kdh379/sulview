@@ -1,4 +1,4 @@
-import { index, integer, pgTable, primaryKey, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { index, integer, pgTable, primaryKey, serial, text, timestamp, vector } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "next-auth/adapters";
 
 export const users = pgTable("user", {
@@ -114,7 +114,34 @@ export const reviewTable = pgTable(
   },
   (review) => ({
     compoundKey: primaryKey({ columns: [review.id, review.whiskyId, review.createdBy] }),
-    whiskyIdx: index("whisky_idx").on(review.whiskyId),
-    createdByIdx: index("user_idx").on(review.createdBy),
+  }),
+);
+
+export const noteTable = pgTable(
+  "note",
+  {
+    id: serial("id"),
+    whiskyName: text("whiskyName").notNull(),
+    abv: text("abv").notNull(),
+    caskTypes: text("caskTypes").array().notNull(),
+    aged: text("age").notNull(),
+    images: text("images").array().notNull(),
+    score: integer("score").notNull(),
+    content: text("content").notNull(),
+    nose: text("nose").notNull(),
+    noseScore: integer("noseScore").notNull(),
+    palate: text("palate").notNull(),
+    palateScore: integer("palateScore").notNull(),
+    finish: text("finish").notNull(),
+    finishScore: integer("finishScore").notNull(),
+    embedding: vector("embedding", { dimensions: 1536 }).notNull(),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
+    createdBy: text("createdBy")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+  },
+  (note) => ({
+    createdByIdx: index("user_idx").on(note.createdBy),
+    embeddingIdx: index("embedding_idx").using("hnsw", note.embedding.op("vector_cosine_ops")),
   }),
 );

@@ -1,10 +1,10 @@
 {
-  "id": "f6d4af7f-6d05-4820-8c13-0c0e20846cec",
+  "id": "699552e2-5edf-4cde-b8d2-622b0f5a3450",
   "prevId": "00000000-0000-0000-0000-000000000000",
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "account": {
+    "public.account": {
       "name": "account",
       "schema": "",
       "columns": {
@@ -102,7 +102,7 @@
       },
       "uniqueConstraints": {}
     },
-    "distillery": {
+    "public.distillery": {
       "name": "distillery",
       "schema": "",
       "columns": {
@@ -124,6 +124,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "images": {
+          "name": "images",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
         "createdAt": {
           "name": "createdAt",
           "type": "timestamp",
@@ -138,11 +144,191 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "distillery_createdBy_user_id_fk": {
+          "name": "distillery_createdBy_user_id_fk",
+          "tableFrom": "distillery",
+          "tableTo": "user",
+          "columnsFrom": [
+            "createdBy"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "distillery_name_unique": {
+          "name": "distillery_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      }
+    },
+    "public.note": {
+      "name": "note",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "whiskyName": {
+          "name": "whiskyName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "abv": {
+          "name": "abv",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "caskTypes": {
+          "name": "caskTypes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "age": {
+          "name": "age",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "images": {
+          "name": "images",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "score": {
+          "name": "score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nose": {
+          "name": "nose",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "noseScore": {
+          "name": "noseScore",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "palate": {
+          "name": "palate",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "palateScore": {
+          "name": "palateScore",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "finish": {
+          "name": "finish",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "finishScore": {
+          "name": "finishScore",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(1536)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "user_idx": {
+          "name": "user_idx",
+          "columns": [
+            {
+              "expression": "createdBy",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "embedding_idx": {
+          "name": "embedding_idx",
+          "columns": [
+            {
+              "expression": "embedding",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last",
+              "opclass": "vector_cosine_ops"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "hnsw",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "note_createdBy_user_id_fk": {
+          "name": "note_createdBy_user_id_fk",
+          "tableFrom": "note",
+          "tableTo": "user",
+          "columnsFrom": [
+            "createdBy"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "review": {
+    "public.review": {
       "name": "review",
       "schema": "",
       "columns": {
@@ -158,20 +344,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "userId": {
-          "name": "userId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "userName": {
-          "name": "userName",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "password": {
-          "name": "password",
+        "createdBy": {
+          "name": "createdBy",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -185,6 +359,12 @@
         "score": {
           "name": "score",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -229,30 +409,9 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
-        },
-        "createdBy": {
-          "name": "createdBy",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
         }
       },
-      "indexes": {
-        "whisky_idx": {
-          "name": "whisky_idx",
-          "columns": [
-            "whiskyId"
-          ],
-          "isUnique": false
-        },
-        "user_idx": {
-          "name": "user_idx",
-          "columns": [
-            "userId"
-          ],
-          "isUnique": false
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "review_whiskyId_whisky_id_fk": {
           "name": "review_whiskyId_whisky_id_fk",
@@ -267,12 +426,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "review_userId_user_id_fk": {
-          "name": "review_userId_user_id_fk",
+        "review_createdBy_user_id_fk": {
+          "name": "review_createdBy_user_id_fk",
           "tableFrom": "review",
           "tableTo": "user",
           "columnsFrom": [
-            "userId"
+            "createdBy"
           ],
           "columnsTo": [
             "id"
@@ -282,18 +441,18 @@
         }
       },
       "compositePrimaryKeys": {
-        "review_id_whiskyId_userId_pk": {
-          "name": "review_id_whiskyId_userId_pk",
+        "review_id_whiskyId_createdBy_pk": {
+          "name": "review_id_whiskyId_createdBy_pk",
           "columns": [
             "id",
             "whiskyId",
-            "userId"
+            "createdBy"
           ]
         }
       },
       "uniqueConstraints": {}
     },
-    "session": {
+    "public.session": {
       "name": "session",
       "schema": "",
       "columns": {
@@ -335,7 +494,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "user": {
+    "public.user": {
       "name": "user",
       "schema": "",
       "columns": {
@@ -363,6 +522,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'user'"
+        },
         "image": {
           "name": "image",
           "type": "text",
@@ -373,9 +539,24 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "user_name_unique": {
+          "name": "user_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        },
+        "user_email_unique": {
+          "name": "user_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      }
     },
-    "verificationToken": {
+    "public.verificationToken": {
       "name": "verificationToken",
       "schema": "",
       "columns": {
@@ -411,7 +592,7 @@
       },
       "uniqueConstraints": {}
     },
-    "whisky": {
+    "public.whisky": {
       "name": "whisky",
       "schema": "",
       "columns": {
@@ -424,6 +605,12 @@
         "distilleryId": {
           "name": "distilleryId",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -445,14 +632,20 @@
           "primaryKey": false,
           "notNull": true
         },
+        "independentDistillery": {
+          "name": "independentDistillery",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "age": {
           "name": "age",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "caskType": {
-          "name": "caskType",
+        "caskTypes": {
+          "name": "caskTypes",
           "type": "text[]",
           "primaryKey": false,
           "notNull": true
@@ -463,9 +656,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "image": {
-          "name": "image",
+        "bottled": {
+          "name": "bottled",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "images": {
+          "name": "images",
+          "type": "text[]",
           "primaryKey": false,
           "notNull": true
         },
@@ -474,28 +673,23 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
-        },
-        "createdBy": {
-          "name": "createdBy",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
         }
       },
       "indexes": {
         "distillery_idx": {
           "name": "distillery_idx",
           "columns": [
-            "distilleryId"
+            {
+              "expression": "distilleryId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
-        },
-        "name_idx": {
-          "name": "name_idx",
-          "columns": [
-            "name"
-          ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -505,6 +699,19 @@
           "tableTo": "distillery",
           "columnsFrom": [
             "distilleryId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "whisky_createdBy_user_id_fk": {
+          "name": "whisky_createdBy_user_id_fk",
+          "tableFrom": "whisky",
+          "tableTo": "user",
+          "columnsFrom": [
+            "createdBy"
           ],
           "columnsTo": [
             "id"
