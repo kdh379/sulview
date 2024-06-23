@@ -14,11 +14,24 @@
     "uniqid",
     "lucide",
     "clsx",
+    "shadcn",
+    "openai",
+    "tanstack",
+    "nextjs",
+    "zustand",
+    "toploader",
+    "embla",
 
     // font
     "pretendard",
 
     // etc
-    "sulview"
+    "sulview",
+  ],
+  "cSpell.ignorePaths": [
+    "package-lock.json",
+    "package.json",
+    "node_modules",
+    ".vscode"
   ]
 }
