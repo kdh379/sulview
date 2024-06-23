@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { NotebookPen } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useS3Upload } from "next-s3-upload";
@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { noteTable } from "@/db/schema";
-import { handleApiError } from "@/lib/api";
+import api, { handleApiError } from "@/lib/api";
 import { convertImageToWebP } from "@/lib/upload";
 import { customErrorMap } from "@/lib/zod";
 import NoteFormFields from "@/components/write/form-field/note-form-fields";
@@ -67,7 +67,7 @@ function NoteForm({ onSubmitted, ...props }: NoteFormProps) {
     isPending,
     isSuccess,
   } = useMutation({
-    mutationFn: (data: NoteFormSchemaType) => axios.post("/api/note", data),
+    mutationFn: (data: NoteFormSchemaType) => api.post("/api/note", data),
     onSuccess: (res) => {
       const { data } = res;
       router.push(`/note/${data.id}`);

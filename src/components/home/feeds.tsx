@@ -2,11 +2,11 @@
 
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { useCallback, useMemo, useRef } from "react";
-import axios from "axios";
 
 import { GetNotesRes } from "@/types/entity/note";
 import FeedCard from "@/components/home/feed-card";
 import { Icons } from "@/components/ui/icons";
+import api from "@/lib/api";
 
 const LIMIT_REQUEST_FEEDS = 10;
 
@@ -20,7 +20,7 @@ function Feeds() {
   } = useSuspenseInfiniteQuery({
     queryKey: ["feeds"],
     queryFn: ({ pageParam }) =>
-      axios.get<GetNotesRes[]>("/api/note", {
+      api.get<GetNotesRes[]>("/api/note", {
         params: {
           limit: LIMIT_REQUEST_FEEDS,
           page: pageParam,
@@ -28,7 +28,7 @@ function Feeds() {
         },
       })
         .then((res) => res.data),
-    initialPageParam: 0,
+    initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length ? allPages.length + 1 : undefined;
     },
@@ -43,6 +43,7 @@ function Feeds() {
       if(observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
+        // 마지막 요소가 화면에 보일 때 fetchNextPage 호출
         if(entries[0].isIntersecting && hasNextPage && !isFetchingNextPage)
           fetchNextPage();
       });

@@ -71,7 +71,7 @@ const FeedCard = forwardRef<HTMLDivElement, FeedCardProps>(({
       )}
       <CardContent>
         <div className="before:to-background relative mb-1 before:absolute before:size-full before:max-h-[100px] before:bg-gradient-to-b before:from-transparent">
-          <p className="line-clamp-5 whitespace-pre-wrap">
+          <p className="line-clamp-4 whitespace-pre-wrap">
             {review}
           </p>
         </div>

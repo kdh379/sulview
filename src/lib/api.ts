@@ -1,6 +1,20 @@
 import { FieldValues, UseFormReturn } from "react-hook-form";
+import axios from "axios";
 
 import { toast } from "@/components/ui/use-toast";
+
+const api = (function () {
+  const instance = axios.create({
+    baseURL: typeof window === "undefined" ? process.env.NEXT_PUBLIC_API_URL : "",
+    timeout: 10000,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return instance;
+})();
+
+export default api;
 
 export const hasError = (state: ActionError | unknown): state is ActionError => {
   if (!state || typeof state !== "object") return false;

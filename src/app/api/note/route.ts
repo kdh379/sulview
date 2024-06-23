@@ -10,8 +10,8 @@ import type { NoteFormSchemaType } from "@/components/write/note-form";
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const [page, limit, _search] = [
-    searchParams.get("page"),
-    searchParams.get("limit"),
+    Number(searchParams.get("page")) ?? 0,
+    Number(searchParams.get("limit")) ?? 10,
     searchParams.get("search"),
   ];
 
@@ -29,11 +29,12 @@ export async function GET(request: NextRequest) {
       .from(noteTable)
       .leftJoin(users, eq(users.id, noteTable.createdBy))
       .orderBy(desc(noteTable.createdAt))
-      .limit(Number(limit) || 10)
-      .offset(Number(page) || 0);
+      .limit(limit)
+      .offset((page - 1) * limit);
 
     return NextResponse.json(result);
   } catch (error) {
+    console.error(error);
     return NextResponse.json<ActionError>(
       {
         error: {
@@ -115,6 +116,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(result[0], { status: 201 });
   } catch (error) {
+    console.error(error);
     return NextResponse.json<ActionError>(
       {
         error: {
