@@ -1,10 +1,49 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { desc, eq } from "drizzle-orm";
 
 import { db } from "@/db/drizzle";
-import { noteTable } from "@/db/schema";
+import { noteTable, users } from "@/db/schema";
 import { getCurrentUser } from "@/lib/session";
 import type { NoteFormSchemaType } from "@/components/write/note-form";
+
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+  const [page, limit, _search] = [
+    searchParams.get("page"),
+    searchParams.get("limit"),
+    searchParams.get("search"),
+  ];
+
+  // TODO: Embedding을 활용한 검색 기능 구현
+
+  try {
+    const result = await db
+      .select({
+        whiskyName: noteTable.whiskyName,
+        images: noteTable.images,
+        review: noteTable.review,
+        userName: users.name,
+      })
+      .from(noteTable)
+      .leftJoin(users, eq(users.id, noteTable.createdBy))
+      .orderBy(desc(noteTable.createdAt))
+      .limit(Number(limit) || 10)
+      .offset(Number(page) || 0);
+
+    return NextResponse.json(result);
+  } catch (error) {
+    return NextResponse.json<ActionError>(
+      {
+        error: {
+          code: "INTERNAL_ERROR",
+          message: "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.",
+        },
+      },
+      { status: 500 },
+    );
+  }
+}
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,

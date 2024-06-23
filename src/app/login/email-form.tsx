@@ -25,14 +25,15 @@ export default function EmailForm() {
   });
   const {
     mutate: login,
-    isLoading,
+    isPending,
     isSuccess,
-  } = useMutation("login", () =>
-    signIn("nodemailer", {
-      email: form.getValues("email"),
-      redirect: false,
-    }),
-  );
+  } = useMutation({
+    mutationFn: () =>
+      signIn("nodemailer", {
+        email: form.getValues("email"),
+        redirect: false,
+      }),
+  });
 
   if (isSuccess) {
     return (
@@ -58,7 +59,7 @@ export default function EmailForm() {
                 <Input
                   type="email"
                   autoComplete="email"
-                  disabled={isLoading}
+                  disabled={isPending}
                   placeholder="sulview@naver.com"
                   {...field}
                 />
@@ -67,7 +68,7 @@ export default function EmailForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" isLoading={isLoading}>
+        <Button type="submit" className="w-full" isLoading={isPending}>
           이메일로 시작하기
         </Button>
       </form>

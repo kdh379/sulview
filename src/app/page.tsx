@@ -1,7 +1,7 @@
-import Hero from "@/app/hero";
+import HomePage from "@/components/home/home-page";
 
-export default async function HomePage() {
+export default async function Home() {
   return (
-    <Hero />
+    <HomePage />
   );
 }
