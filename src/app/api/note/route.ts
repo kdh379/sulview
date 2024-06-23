@@ -20,6 +20,7 @@ export async function GET(request: NextRequest) {
   try {
     const result = await db
       .select({
+        id: noteTable.id,
         whiskyName: noteTable.whiskyName,
         images: noteTable.images,
         review: noteTable.review,

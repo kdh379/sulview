@@ -1,11 +1,12 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { useCallback, useMemo, useRef } from "react";
 import axios from "axios";
 
 import { GetNotesRes } from "@/types/entity/note";
 import FeedCard from "@/components/home/feed-card";
+import { Icons } from "@/components/ui/icons";
 
 const LIMIT_REQUEST_FEEDS = 10;
 
@@ -16,7 +17,7 @@ function Feeds() {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useInfiniteQuery({
+  } = useSuspenseInfiniteQuery({
     queryKey: ["feeds"],
     queryFn: ({ pageParam }) =>
       axios.get<GetNotesRes[]>("/api/note", {
@@ -62,6 +63,9 @@ function Feeds() {
       {notes && notes.map((note) => (
         <FeedCard key={note.id} ref={lastElementRef} {...note}/>
       ))}
+      {isLoading && (
+        <Icons.spinner className="mx-auto size-6"/>
+      )}
     </article>
   );
 }

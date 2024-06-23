@@ -6,6 +6,25 @@ import type { GetNotesRes } from "@/types/entity/note";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { Skeleton } from "@/components/ui/skeleton";
+
+export function FeedCardSkeleton() {
+  return (
+    <Card>
+      <CardHeader>
+        <Skeleton className="h-7 w-1/2" />
+        <Skeleton className="mt-[6px] h-5 w-1/4" />
+      </CardHeader>
+      <Skeleton className="mb-4 aspect-square w-full" />
+      <CardContent>
+        <Skeleton className="mt-1 h-4 w-full" />
+        <Skeleton className="mt-1 h-4 w-full" />
+        <Skeleton className="mt-1 h-4 w-full" />
+        <Skeleton className="mt-1 h-4 w-full" />
+      </CardContent>
+    </Card>
+  );
+}
 
 interface FeedCardProps extends GetNotesRes {}
 
@@ -36,13 +55,14 @@ const FeedCard = forwardRef<HTMLDivElement, FeedCardProps>(({
         <Carousel className="mb-6 border-y">
           <CarouselContent>
             {images.map((image, index) => (
-              <CarouselItem key={index}>
+              <CarouselItem key={index} className="max-h-[600px]">
                 <Image
                   src={image}
                   alt={whiskyName}
                   width={500}
                   height={500}
-                  className="mx-auto"
+                  className="mx-auto aspect-auto object-contain"
+                  priority
                 />
               </CarouselItem>
             ))}
@@ -59,7 +79,7 @@ const FeedCard = forwardRef<HTMLDivElement, FeedCardProps>(({
           href={`/note/${id}`}
           className={buttonVariants({variant: "link", size: "auto"})}
         >
-              더보기
+          더보기
         </Link>
       </CardContent>
     </Card>
