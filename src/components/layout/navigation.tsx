@@ -8,7 +8,7 @@ import Link from "next/link";
 import NavLink from "@/components/layout/nav-link";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import ToggleTheme from "@/components/layout/toggle-theme";
 
 const NAV_ITEMS = [
@@ -61,13 +61,13 @@ const Navigation = () => {
       <footer className="mt-auto">
         <ToggleTheme />
         <nav>
-          <NavLink
-            pathname="/report"
-            isActive={isActive("/report")}
+          <Button
+            variant="ghost"
+            className="px-3"
           >
-            <TriangleAlert className="size-4" />
+            <TriangleAlert className="mr-2 size-4" />
             <span>문제신고</span>
-          </NavLink>
+          </Button>
         </nav>
         <p className="text-muted-foreground px-3">
           © 2024 {siteConfig.name}
