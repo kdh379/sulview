@@ -7,14 +7,28 @@
 
 ## 디자인 노트
 
-- Next.js 14의 App Router와 RSC를 사용하였습니다.
-- React-Hook-Form, Drizzle ORM, Zod를 사용하여 데이터를 처리하였습니다.
-  - RSC의 경우 ServerAction, RCC는 React-Query를 이용하여 데이터를 처리합니다.
-- Auth.js를 이용하여 사용자 인증이 처리됩니다.
-- Tailwind, Shadcn UI를 사용하여 디자인을 구성하였습니다.
-- 이미지는 webP로 변경되어 S3에 업로드됩니다.
-  - 이미지 조회 시 CloudFront를 통해 제공됩니다.
-- pnpm을 사용하여 패키지를 관리합니다.
+### 프로젝트 개요
+
+### 주요 기능
+
+- **사용자 인증**: 이메일, 구글, 네이버 로그인을 지원합니다. Auth.js를 사용하여 인증을 처리합니다.
+- **위스키 리뷰**: 위스키 리뷰를 작성하고 조회할 수 있습니다.
+- **위스키 검색**: 작성한 리뷰를 검색합니다. OpenAI의 Embedding을 사용하여 검색을 처리합니다.
+- **프로필**: 사용자 정보 변경, 작성한 리뷰를 확인할 수 있습니다.
+
+### 기술 스택
+
+- 코어: Next.js 14 App Router, TypeScript
+- 폼: React-Hook-Form, Zod, Server Actions
+- 스타일: Tailwind, Shadcn UI(Radix-UI), Framer Motion
+- 상태: React-Query, Zustand
+- DB: Drizzle ORM, PostgreSQL
+- 패키지매니저: pnpm
+
+### 핵심 기능
+
+- 버킷 사용량 최소화 및 캐싱을 통해 최소의 Network I/O를 유지합니다.
+  - 이미지를 webP로 변경하여 S3에 업로드하며, 조회 시 CloudFront를 통해 제공됩니다.
 
 ## 개발 환경 셋업
 
@@ -36,6 +50,8 @@ AUTH_SECRET=NEXT_AUTH SECRET
 EMAIL_FROM=이메일 로그인 시 보내는 이메일
 EMAIL_SERVER=이메일 SMTP 서버
 
+OPENAI_API_KEY=OpenAI API KEY
+
 S3_UPLOAD_KEY=AWS S3 ACCESS KEY
 S3_UPLOAD_SECRET=AWS S3 SECRET KEY
 S3_UPLOAD_BUCKET=AWS S3 BUCKET
@@ -48,5 +64,5 @@ NEXT_PUBLIC_CLOUDFRONT=AWS CLOUDFRONT URL
 
 ```bash
 pnpm drizzle:generate
-pnpm drizzle:push
+pnpm drizzle:migrate
 ```
