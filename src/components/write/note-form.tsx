@@ -6,7 +6,7 @@ import { NotebookPen } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useS3Upload } from "next-s3-upload";
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 
@@ -64,9 +64,10 @@ function NoteForm({ onSubmitted, ...props }: NoteFormProps) {
   });
   const {
     mutate: handleSubmit,
-    isLoading,
-  } = useMutation((data: NoteFormSchemaType) =>
-    axios.post("/api/note", data), {
+    isPending,
+    isSuccess,
+  } = useMutation({
+    mutationFn: (data: NoteFormSchemaType) => axios.post("/api/note", data),
     onSuccess: (res) => {
       const { data } = res;
       router.push(`/note/${data.id}`);
@@ -107,7 +108,8 @@ function NoteForm({ onSubmitted, ...props }: NoteFormProps) {
         <div className="col-span-2 my-4 flex justify-end">
           <Button
             type="submit"
-            isLoading={form.formState.isSubmitting || isLoading}
+            isLoading={form.formState.isSubmitting || isPending}
+            disabled={isSuccess}
             className="w-full sm:w-[200px]"
             size="lg"
           >

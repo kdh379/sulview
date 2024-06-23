@@ -6,7 +6,7 @@ import { InfoIcon, Minus, NotebookPen, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useS3Upload } from "next-s3-upload";
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import { useForm, useFormContext, UseFormReturn } from "react-hook-form";
 import Link from "next/link";
