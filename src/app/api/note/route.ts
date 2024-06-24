@@ -70,7 +70,7 @@ const generateEmbedding = async (value: string[]) => {
   }
 };
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const user = await getCurrentUser();
   if (!user?.id)
     return NextResponse.json<ActionError>(

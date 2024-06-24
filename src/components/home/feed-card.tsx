@@ -5,7 +5,7 @@ import Image from "next/image";
 import type { GetNotesRes } from "@/types/entity/note";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselDotButton, CarouselItem } from "@/components/ui/carousel";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function FeedCardSkeleton() {
@@ -67,6 +67,7 @@ const FeedCard = forwardRef<HTMLDivElement, FeedCardProps>(({
               </CarouselItem>
             ))}
           </CarouselContent>
+          <CarouselDotButton className="absolute bottom-4 right-4" />
         </Carousel>
       )}
       <CardContent>
