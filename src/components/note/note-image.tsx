@@ -1,6 +1,5 @@
-import Image from "next/image";
-
 import { Carousel, CarouselContent, CarouselDotButton, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import Image from "@/components/ui/image";
 import { Note } from "@/types/entity/note";
 
 interface NoteImageProps {
@@ -26,9 +25,10 @@ function NoteImage({ images }: NoteImageProps) {
             <Image
               src={image}
               alt="위스키 이미지"
-              width={400}
-              height={400}
-              className="aspect-auto size-auto rounded-l-sm object-contain"
+              width={900}
+              height={900}
+              quality={100}
+              className="size-full rounded-l-sm object-contain"
               placeholder="blur"
             />
           </CarouselItem>

@@ -76,8 +76,8 @@ async function Note({ params }: Props) {
   const { note, user } = result;
 
   return (
-    <div className="mx-auto max-w-[900px] py-6">
-      <section className="grid max-h-[600px] rounded-sm border lg:grid-cols-2">
+    <div className="mx-auto max-w-[900px]">
+      <section className="grid rounded-sm border md:max-h-[600px] md:grid-cols-2">
         <NoteImage images={note.images} />
         <NoteInfo note={note} user={user} />
       </section>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { siteConfig } from "@/config/site";
 
+// TODO: md:아이콘만 표시, lg:아이콘+텍스트 표시
 export default function Sidebar() {
   return (
     <div className="w-sidebar fixed hidden h-full border-r duration-200 md:block">
