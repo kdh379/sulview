@@ -1,12 +1,12 @@
 import { forwardRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
 
 import type { GetNotesRes } from "@/types/entity/note";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselDotButton, CarouselItem } from "@/components/ui/carousel";
 import { Skeleton } from "@/components/ui/skeleton";
+import Image from "@/components/ui/image";
 
 export function FeedCardSkeleton() {
   return (
@@ -61,8 +61,8 @@ const FeedCard = forwardRef<HTMLDivElement, FeedCardProps>(({
                   alt={whiskyName}
                   width={500}
                   height={500}
+                  placeholder="blur"
                   className="mx-auto aspect-auto object-contain"
-                  priority
                 />
               </CarouselItem>
             ))}

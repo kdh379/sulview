@@ -29,6 +29,7 @@ function NoteImage({ images }: NoteImageProps) {
               width={400}
               height={400}
               className="aspect-auto size-auto rounded-l-sm object-contain"
+              placeholder="blur"
             />
           </CarouselItem>
         ))}

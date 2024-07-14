@@ -1,7 +1,7 @@
 type ImageFormat = "webp" | "jpeg";
 type ImageFit = "cover" | "contain" | "fill" | "inside" | "outside";
 
-type CloudfrontLoaderProps = {
+export type ImageLoaderProps = {
   src: string;
   width: number;
   height: number;
@@ -10,7 +10,6 @@ type CloudfrontLoaderProps = {
   format?: ImageFormat;
 };
 
-// TODO: Cloudfront Lambda@Edge로 small, medium, large 이미지 생성
 export default function imageLoader({
   src,
   width,
@@ -18,8 +17,7 @@ export default function imageLoader({
   quality = 75,
   fit = "inside",
   format = "webp",
-}: CloudfrontLoaderProps) {
-
+}: ImageLoaderProps) {
   const url = new URL(src);
   url.searchParams.set("w", width.toString());
   url.searchParams.set("h", height.toString());
