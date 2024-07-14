@@ -1,22 +1,19 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
 import { NotebookPen } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useS3Upload } from "next-s3-upload";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { noteTable } from "@/db/schema";
-import api, { handleApiError } from "@/lib/api";
 import { convertImageToWebP } from "@/lib/upload";
 import { customErrorMap } from "@/lib/zod";
 import NoteFormFields from "@/components/write/form-field/note-form-fields";
+import { useSubmitNote } from "@/hooks/useSubmitNote";
 
 const NoteFormSchema = z.object({
   whiskyName: z.string().min(1).max(255),
@@ -50,7 +47,6 @@ interface NoteFormProps extends NoteFormSchemaType {
 }
 
 function NoteForm({ onSubmitted, ...props }: NoteFormProps) {
-  const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const { uploadToS3 } = useS3Upload();
   const form = useForm<NoteFormSchemaType>({
@@ -66,17 +62,7 @@ function NoteForm({ onSubmitted, ...props }: NoteFormProps) {
     mutate: handleSubmit,
     isPending,
     isSuccess,
-  } = useMutation({
-    mutationFn: (data: NoteFormSchemaType) => api.post("/api/note", data),
-    onSuccess: (res) => {
-      const { data } = res;
-      router.push(`/note/${data.id}`);
-      onSubmitted?.();
-    },
-    onError: (err: AxiosError<ActionError>) => {
-      if (err.response?.data) handleApiError(err.response.data, form);
-    },
-  });
+  } = useSubmitNote({ form, onSubmitted });
 
 
   const onSubmit = async () => {
