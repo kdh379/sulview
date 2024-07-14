@@ -28,7 +28,7 @@ function NoteImage({ images }: NoteImageProps) {
               width={900}
               height={900}
               quality={100}
-              className="size-full rounded-l-sm object-contain"
+              className="size-full object-contain"
               placeholder="blur"
             />
           </CarouselItem>

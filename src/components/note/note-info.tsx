@@ -37,7 +37,7 @@ interface NoteInfoProps {
 
 function NoteInfo({ note, user }: NoteInfoProps) {
   return (
-    <article className="flex max-h-[600px] flex-col rounded-md border-l">
+    <article className="flex flex-col rounded-md border-l md:max-h-[600px]">
       <h1 className="p-4 text-2xl font-bold">{note.whiskyName}</h1>
       <div className="flex border-b p-4 pt-0">
         <Link
@@ -75,7 +75,7 @@ function NoteInfo({ note, user }: NoteInfoProps) {
           </Button>
         </div>
       </div>
-      <ul className="flex-1 space-y-4 overflow-y-auto p-4">
+      <ul className="flex-1 space-y-4 p-4 md:overflow-y-auto">
         <TastingNoteItem label="Nose" rating={note.noseScore} content={note.nose} />
         <TastingNoteItem label="Palate" rating={note.palateScore} content={note.palate} />
         <TastingNoteItem label="Finish" rating={note.finishScore} content={note.finish} />
