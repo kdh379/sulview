@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import EmailForm from "@/app/login/email-form";
-import SocialForm from "@/app/login/social-form";
+import EmailForm from "@/components/login/email-form";
+import SocialForm from "@/components/login/social-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCurrentUser } from "@/lib/session";
 

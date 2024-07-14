@@ -1,16 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useEmailLogin } from "@/hooks/useEmailLogin";
 
-import { Icons } from "../../components/ui/icons";
+import { Icons } from "../ui/icons";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -23,17 +22,11 @@ export default function EmailForm() {
       email: "",
     },
   });
-  const {
-    mutate: login,
-    isPending,
-    isSuccess,
-  } = useMutation({
-    mutationFn: () =>
-      signIn("nodemailer", {
-        email: form.getValues("email"),
-        redirect: false,
-      }),
-  });
+  const { mutate: login, isPending, isSuccess } = useEmailLogin();
+
+  const onSubmit = () => {
+    login(form.getValues());
+  };
 
   if (isSuccess) {
     return (
@@ -48,7 +41,7 @@ export default function EmailForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(() => login())} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="email"
