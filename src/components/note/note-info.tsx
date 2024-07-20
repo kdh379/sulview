@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDate } from "@/lib/dayjs";
 import { Progress } from "@/components/ui/progress";
+import Counter from "@/components/ui/counter";
 
 interface TastingNoteItemProps {
   label: string;
@@ -20,7 +21,7 @@ function TastingNoteItem({ label, rating, content }: TastingNoteItemProps) {
     <li>
       <h2 className="mb-2 flex items-center">
         <span className="font-semibold">{label}</span>
-        <strong className="ml-2 text-lg">{rating}</strong>
+        <Counter className="ml-2 text-lg font-bold" value={rating} />
         <Progress value={rating} className="ml-2 w-3/5" />
       </h2>
       <p className="whitespace-pre-wrap">{content}</p>
@@ -37,7 +38,7 @@ interface NoteInfoProps {
 
 function NoteInfo({ note, user }: NoteInfoProps) {
   return (
-    <article className="flex flex-col rounded-md border-l md:max-h-[600px]">
+    <article className="flex flex-col rounded-md border-l md:max-h-[750px]">
       <h1 className="p-4 text-2xl font-bold">{note.whiskyName}</h1>
       <div className="flex border-b p-4 pt-0">
         <Link

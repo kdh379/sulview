@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// 커스텀 훅: useIntersectionObserver
 export function useIntersectionObserver(options: IntersectionObserverInit = {}) {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const targetRef = useRef(null);

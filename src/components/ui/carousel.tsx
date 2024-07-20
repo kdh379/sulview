@@ -179,13 +179,13 @@ const CarouselPrevious = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        "absolute z-10 size-8 rounded-full",
+        "absolute z-10 size-8 rounded-full transition-opacity",
+        !canScrollPrev && "pointer-events-none opacity-0",
         orientation === "horizontal"
-          ? "left-0 top-1/2 -translate-y-1/2"
+          ? "left-4 top-1/2 -translate-y-1/2"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
         className
       )}
-      disabled={!canScrollPrev}
       onClick={scrollPrev}
       {...props}
     >
@@ -208,13 +208,13 @@ const CarouselNext = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        "absolute z-10 size-8 rounded-full",
+        "absolute z-10 size-8 rounded-full transition-opacity",
+        !canScrollNext && "pointer-events-none opacity-0",
         orientation === "horizontal"
-          ? "right-0 top-1/2 -translate-y-1/2"
+          ? "right-4 top-1/2 -translate-y-1/2"
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
         className
       )}
-      disabled={!canScrollNext}
       onClick={scrollNext}
       {...props}
     >

@@ -70,6 +70,7 @@ function NoteForm({ onSubmitted, ...props }: NoteFormProps) {
     form.setValue("images", images);
 
     for (const file of files) {
+      // 이미 업로드된 파일은 건너뜀.
       if (includesSubString(props.images, file.name)) continue;
 
       const webP = await convertImageToWebP(file);

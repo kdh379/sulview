@@ -39,7 +39,11 @@ const FeedCard = forwardRef<HTMLDivElement, FeedCardProps>(({
     <Card ref={ref}>
       <CardHeader className="flex">
         <CardTitle className="text-lg font-semibold">
-          {whiskyName}
+          <Link
+            href={`/note/${id}`}
+          >
+            {whiskyName}
+          </Link>
         </CardTitle>
         <CardDescription>
           write by
@@ -59,10 +63,10 @@ const FeedCard = forwardRef<HTMLDivElement, FeedCardProps>(({
                 <Image
                   src={image}
                   alt={whiskyName}
-                  width={500}
-                  height={500}
+                  width={600}
+                  height={600}
                   placeholder="blur"
-                  className="mx-auto aspect-auto object-contain"
+                  className="h-full object-contain"
                 />
               </CarouselItem>
             ))}
@@ -71,16 +75,14 @@ const FeedCard = forwardRef<HTMLDivElement, FeedCardProps>(({
         </Carousel>
       )}
       <CardContent>
-        <div className="before:to-background relative mb-1 before:absolute before:size-full before:max-h-[100px] before:bg-gradient-to-b before:from-transparent">
-          <p className="line-clamp-4 whitespace-pre-wrap">
-            {review}
-          </p>
-        </div>
         <Link
           href={`/note/${id}`}
-          className={buttonVariants({variant: "link", size: "auto"})}
         >
-          더보기
+          <div className="before:to-background hover:before:to-background/75 relative mb-1 before:absolute before:size-full before:max-h-[100px] before:bg-gradient-to-b before:from-transparent before:transition-colors">
+            <p className="line-clamp-4 whitespace-pre-wrap">
+              {review}
+            </p>
+          </div>
         </Link>
       </CardContent>
     </Card>
