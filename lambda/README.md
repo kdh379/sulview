@@ -17,12 +17,14 @@ cloudfront에 연결된 Lambda@edge 함수로 사용됩니다.
 
 ## 배포
 
+Linux 환경에서 sharp 패키지를 설치합니다.  
+`node_modules/@img/sharp-linux-x64`가 설치되어 있어야 합니다.  
 windows 환경의 경우, WSL 환경에서 의존성 패키지를 설치하고 zip으로 압축하여 업로드합니다.  
 
 ### node_modules 설치
 
 ```bash
-npm build
+npm run build
 ```
 
 ### 업로드

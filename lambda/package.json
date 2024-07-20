@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "npm install --only=prod"
+    "build": "npm install --omit=dev"
   },
   "author": "",
   "license": "ISC",

@@ -31,7 +31,7 @@ export const handler = async (event, _, callback) => {
   const format = (f === "jpg" ? "jpeg" : f) || extension;
 
   if (!width || !height)
-    return callback(null, request);
+    return callback(null, response);
 
   try {
     const s3Object = await getS3Object(s3, BUCKET, imageName, extension);
