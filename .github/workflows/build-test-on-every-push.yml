@@ -10,38 +10,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Use Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-    
-    - name: Use pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        run_install: false
-
-    - name: Create .env file
-      run: |
-        jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > .env
-      env:
-        SECRETS_CONTEXT: ${{ toJson(secrets) }}
-
-    - name: Get pnpm store directory
-      shell: bash
-      run: |
-        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-    - uses: actions/cache@v4
-      name: Setup pnpm cache
-      with:
-        path: ${{ env.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-store-
-
-    - name: Install dependencies
-      if: steps.cache-node-modules.outputs.cache-hit != 'true'
-      run: pnpm install
+    - name: Setup Project
+      uses: ./.github/actions/setup-project
 
     - name: Build Test
       run: pnpm build
