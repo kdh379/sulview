@@ -1,5 +1,5 @@
 name: 'Setup Project'
-description: 'Sets up Node.js, pnpm, installs dependencies, and creates .env file'
+description: 'Sets up Node.js, pnpm, and installs dependencies'
 
 runs:
   using: "composite"
@@ -30,10 +30,3 @@ runs:
     - name: Install dependencies
       shell: bash
       run: pnpm install
-
-    - name: Create .env file
-      shell: bash
-      run: |
-        jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > .env
-      env:
-        SECRETS_CONTEXT: ${{ toJson(secrets) }}

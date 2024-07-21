@@ -7,7 +7,11 @@ on:
       - completed
 
 jobs:
+  setup-env:
+    uses: ./.github/workflows/setup-env.yml
+
   unit-test:
+    needs: setup-env
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
@@ -16,6 +20,11 @@ jobs:
 
     - name: Setup Project
       uses: ./.github/actions/setup-project
+
+    - name: Download .env file
+      uses: actions/download-artifact@v3
+      with:
+        name: env-file
 
     - name: Run Unit Tests
       run: pnpm test

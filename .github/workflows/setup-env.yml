@@ -1,0 +1,19 @@
+name: Setup Environment Variables
+on:
+  workflow_call:
+
+jobs:
+  setup-env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create .env file
+        run: |
+          jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > .env
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+      
+      - name: Upload .env file
+        uses: actions/upload-artifact@v3
+        with:
+          name: env-file
+          path: .env

@@ -3,7 +3,11 @@ name: "build-test-on-every-push"
 on: push
 
 jobs:
+  setup-env:
+    uses: ./.github/workflows/setup-env.yml
+
   build:
+    needs: setup-env
     name: build test
     runs-on: ubuntu-latest
 
@@ -12,6 +16,11 @@ jobs:
 
     - name: Setup Project
       uses: ./.github/actions/setup-project
+
+    - name: Download .env file
+      uses: actions/download-artifact@v3
+      with:
+        name: env-file
 
     - name: Build Test
       run: pnpm build
