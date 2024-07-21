@@ -1,16 +1,10 @@
 name: "Run Unit Tests"
 
-on:
-  workflow_run:
-    workflows: ["build-test-on-every-push"]
-    types:
-      - completed
+on: push
 
 jobs:
   unit-test:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
     steps:
     - uses: actions/checkout@v4
 
