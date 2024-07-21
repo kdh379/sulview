@@ -23,17 +23,6 @@ jobs:
       run: pnpm build
       if: ${{ always() }}
 
-    - name: Set Status
-      id: set_status
-      run: |
-        if [ "${{ job.status }}" == "success" ]; then
-        echo "::set-output name=status_text::빌드 테스트가 완료되었어요."
-        elif [ "${{ job.status }}" == "failure" ]; then
-        echo "::set-output name=status_text::빌드 테스트가 실패했어요."
-        else
-        echo "::set-output name=status_text::빌드 테스트 상태를 확인하세요."
-        fi
-
     - name: Run Unit Tests
       run: pnpm test
     
@@ -44,4 +33,4 @@ jobs:
         webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
         status: ${{ job.status }}
         username: GitHub Actions
-        title: ${{ steps.set_status.outputs.status_text }}
+        title: ${{ github.workflow }}
