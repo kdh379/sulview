@@ -22,3 +22,12 @@ jobs:
     - name: Build Test
       run: pnpm build
       if: ${{ always() }}
+    
+    - name: Send Discord Message
+      uses: sarisia/actions-status-discord@v1.14.5
+      if: always()
+      with:
+        webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        status: ${{ job.status }}
+        username: GitHub Actions
+        title: ${{ github.workflow }} - ${{ job.status }}
