@@ -1,4 +1,5 @@
 name: Notify Discord
+
 on:
   workflow_run:
     workflows: [Build Test]
