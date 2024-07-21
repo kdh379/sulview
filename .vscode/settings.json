@@ -27,6 +27,8 @@
 
     // etc
     "sulview",
+    "webp",
+    "testid"
   ],
   "cSpell.ignorePaths": [
     "package-lock.json",

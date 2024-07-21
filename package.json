@@ -12,7 +12,8 @@
     "drizzle:migrate": "dotenv -e .env.local drizzle-kit migrate",
     "drizzle:up": "dotenv -e .env.local drizzle-kit up",
     "drizzle:drop": "dotenv -e .env.local drizzle-kit drop",
-    "test": "vitest --run"
+    "test": "vitest --run",
+    "test-watch": "vitest --watch"
   },
   "lint-staged": {
     "*.{ts, tsx}": "eslint --fix --max-warnings 0"
@@ -71,6 +72,9 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.14",
     "@types/react": "^18",
@@ -90,6 +94,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-tailwindcss": "^3.15.1",
     "husky": "^9.0.11",
+    "jsdom": "^24.1.1",
     "lint-staged": "^15.2.2",
     "postcss": "^8",
     "prettier": "^3.3.1",
