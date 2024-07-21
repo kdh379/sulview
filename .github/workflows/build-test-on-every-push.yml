@@ -3,11 +3,7 @@ name: "build-test-on-every-push"
 on: push
 
 jobs:
-  setup-env:
-    uses: ./.github/workflows/setup-env.yml
-
   build:
-    needs: setup-env
     name: build test
     runs-on: ubuntu-latest
 
@@ -17,10 +13,11 @@ jobs:
     - name: Setup Project
       uses: ./.github/actions/setup-project
 
-    - name: Download .env file
-      uses: actions/download-artifact@v3
-      with:
-        name: env-file
+    - name: Create .env file
+      run: |
+        jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > .env
+      env:
+        SECRETS_CONTEXT: ${{ toJson(secrets) }}
 
     - name: Build Test
       run: pnpm build
