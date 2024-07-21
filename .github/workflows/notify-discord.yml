@@ -1,0 +1,21 @@
+name: Notify Discord
+on:
+  workflow_call:
+  workflow_run:
+    workflows: [
+      "Build Test",
+      "Run Unit Tests"
+    ]
+    types:
+      - completed
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Send Discord Message
+      uses: tsickert/discord-webhook@v5.3.0
+      with:
+        webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        embed-title: ${{ github.event.workflow.name }}
+        embed-description: ${{ github.event.workflow_run.conclusion }}
+        embed-color: ${{ github.event.workflow_run.conclusion == 'success' && '45973' || '15548997' }}

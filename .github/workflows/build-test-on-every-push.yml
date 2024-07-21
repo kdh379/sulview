@@ -1,4 +1,4 @@
-name: "build-test-on-every-push"
+name: "Build Test"
 
 on: push
 
@@ -22,3 +22,10 @@ jobs:
     - name: Build Test
       run: pnpm build
       if: ${{ always() }}
+    
+    - name: Send Discord Message
+      uses: tsickert/discord-webhook@v5.3.0
+      with:
+        webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        embed-title: "Build Test"
+        embed-description: "Build Test has been completed successfully."
