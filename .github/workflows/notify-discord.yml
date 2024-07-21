@@ -1,8 +1,8 @@
-name: Notify Discord
+name: "notify-discord"
 
 on:
   workflow_run:
-    workflows: [Build Test]
+    workflows: ["build-test"]
     types:
       - completed
 
