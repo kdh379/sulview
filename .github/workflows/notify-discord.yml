@@ -13,9 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Send Discord Message
-      uses: tsickert/discord-webhook@v5.3.0
+      uses: tsickert/discord-webhook@v6.0.0
       with:
         webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
         embed-title: ${{ github.event.workflow.name }}
         embed-description: ${{ github.event.workflow_run.conclusion }}
-        embed-color: ${{ github.event.workflow_run.conclusion == 'success' && '45973' || '15548997' }}
+        embed-color: ${{ github.event.workflow_run.status == 'completed' && 45973 || 15548997 }}
