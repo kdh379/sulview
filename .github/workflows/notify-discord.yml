@@ -3,11 +3,10 @@ on:
   workflow_call:
   workflow_run:
     workflows: [
-      "Build Test",
-      "Run Unit Tests"
+      Build Test,
+      Run Unit Tests
     ]
-    types:
-      - completed
+    types: [completed]
 jobs:
   notify:
     runs-on: ubuntu-latest
