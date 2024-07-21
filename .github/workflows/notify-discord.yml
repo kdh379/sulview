@@ -17,5 +17,7 @@ jobs:
       with:
         webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
         embed-title: ${{ github.event.workflow.name }}
+        embed-url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        content: ${{ github.event.workflow_run.status }}
         embed-description: ${{ github.event.workflow_run.conclusion }}
-        embed-color: ${{ github.event.workflow_run.status == 'completed' && 45973 || 15548997 }}
+        embed-color: 15430476
