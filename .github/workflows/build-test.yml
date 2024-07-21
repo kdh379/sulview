@@ -45,4 +45,3 @@ jobs:
         status: ${{ job.status }}
         username: GitHub Actions
         title: ${{ steps.set_status.outputs.status_text }}
-        url: "https://github.com/kdh379/sulview/actions/runs/${{ github.run_id }}"
