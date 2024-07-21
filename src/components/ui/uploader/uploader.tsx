@@ -26,7 +26,7 @@ interface UploaderProps {
   onChange?: (files: FilePreview[]) => void;
 }
 
-export default function Uploader({ defaultImages = [], disabled, onChange }: UploaderProps) {
+export function Uploader({ defaultImages = [], disabled, onChange }: UploaderProps) {
   const [files, setFiles] = React.useState<FilePreview[]>([]);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -54,9 +54,9 @@ export default function Uploader({ defaultImages = [], disabled, onChange }: Upl
         return;
       }
 
-      setFiles([...files, ...acceptedFiles.map((file) => createPreviewMedia(file))]);
-
-      onChange?.([...files, ...acceptedFiles.map((file) => createPreviewMedia(file))]);
+      const newFiles = [...(files || []), ...acceptedFiles.map((file) => createPreviewMedia(file))];
+      setFiles(newFiles);
+      onChange?.(newFiles);
     },
   });
 
@@ -76,6 +76,7 @@ export default function Uploader({ defaultImages = [], disabled, onChange }: Upl
     <div className="grid auto-rows-min grid-cols-3 gap-4">
       <Button
         variant="dashed"
+        data-testid="dropzone"
         className="text-muted-foreground col-span-3 h-32 w-full flex-col"
         disabled={files.length >= MAX_FILES || disabled}
         {...getRootProps()}
@@ -88,6 +89,7 @@ export default function Uploader({ defaultImages = [], disabled, onChange }: Upl
       {files.map((file, index) => (
         <div
           key={file.name}
+          data-testid={`file-${index}`}
           className="border-border before:bg-accent relative rounded-md border p-4 before:absolute before:size-[calc(100%-2rem)] before:rounded-md before:opacity-0 before:transition-opacity before:hover:opacity-50"
         >
           <Image

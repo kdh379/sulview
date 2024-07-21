@@ -1,6 +1,6 @@
 import { imageConverter } from "upload-images-converter";
 
-import { FilePreview } from "@/components/uploader";
+import type { FilePreview } from "@/components/ui/uploader";
 
 type Options = {
   maxLength?: number;

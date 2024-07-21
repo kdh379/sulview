@@ -5,7 +5,7 @@ import { InfoIcon } from "lucide-react";
 
 import { FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import Uploader, { FilePreview } from "@/components/uploader";
+import { Uploader, type FilePreview } from "@/components/ui/uploader";
 import { TasteInput } from "@/components/write/form-field/taste-input";
 import WhiskyInput from "@/components/write/form-field/whisky-input";
 
