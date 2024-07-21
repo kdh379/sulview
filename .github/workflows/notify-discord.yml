@@ -1,12 +1,9 @@
 name: Notify Discord
 on:
-  workflow_call:
   workflow_run:
-    workflows: [
-      Build Test,
-      Run Unit Tests
-    ]
-    types: [completed]
+    workflows: ['Build Test','Run Unit Tests']
+    types: 
+      - completed
 jobs:
   notify:
     runs-on: ubuntu-latest
