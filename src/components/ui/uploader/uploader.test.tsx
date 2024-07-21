@@ -93,8 +93,7 @@ describe("Uploader", () => {
     }));
 
     // onChange 함수가 호출되지 않았는지 확인
-    // expect(onChange).not.toHaveBeenCalled();
-    expect(onChange).toHaveBeenCalled();
+    expect(onChange).not.toHaveBeenCalled();
 
     // 파일이 추가되지 않았는지 확인
     const renderedFiles = screen.queryAllByTestId(/^file-/);

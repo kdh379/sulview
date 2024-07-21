@@ -33,4 +33,5 @@ jobs:
         webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
         status: ${{ job.status }}
         username: GitHub Actions
-        title: ${{ github.workflow }}
+        title: push
+        description: Build and deploy to Sulview - ${{ job.status }}
