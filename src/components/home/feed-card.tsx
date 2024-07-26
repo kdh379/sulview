@@ -54,7 +54,7 @@ const FeedCard = forwardRef<HTMLDivElement, FeedCardProps>(({
               </Link>
             </CardDescription>
           </CardHeader>
-          {images.length > 1 && (
+          {images.length >= 1 && (
             <Image
               src={images[0]}
               alt={whiskyName}
