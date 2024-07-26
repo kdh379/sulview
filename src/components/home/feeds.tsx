@@ -8,14 +8,14 @@ function Feeds() {
   const { notes, isLoading, lastElementRef } = useFeeds();
 
   return (
-    <article className="space-y-2 md:max-w-[590px]">
+    <div className="space-y-2 md:max-w-[590px]">
       {notes && notes.map((note) => (
         <FeedCard key={note.id} ref={lastElementRef} {...note}/>
       ))}
       {isLoading && (
         <Icons.spinner className="mx-auto size-6"/>
       )}
-    </article>
+    </div>
   );
 }
 

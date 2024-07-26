@@ -4,7 +4,6 @@ import Link from "next/link";
 import type { GetNotesRes } from "@/types/entity/note";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
-import { Carousel, CarouselContent, CarouselDotButton, CarouselItem } from "@/components/ui/carousel";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "@/components/ui/image";
 
@@ -36,56 +35,45 @@ const FeedCard = forwardRef<HTMLDivElement, FeedCardProps>(({
   userName,
 }, ref) => {
   return (
-    <Card ref={ref}>
-      <CardHeader className="flex">
-        <CardTitle className="text-lg font-semibold">
-          <Link
-            href={`/note/${id}`}
-          >
-            {whiskyName}
-          </Link>
-        </CardTitle>
-        <CardDescription>
+    <article>
+      <Link
+        href={`/note/${id}`}
+      >
+        <Card ref={ref}>
+          <CardHeader className="flex">
+            <CardTitle className="text-lg font-semibold">
+              {whiskyName}
+            </CardTitle>
+            <CardDescription>
           write by
-          <Link
-            href={`/user/${userName}`}
-            className={buttonVariants({variant: "link", size: "auto"})}
-          >
-            <span className="ml-1 font-bold">{userName}</span>
-          </Link>
-        </CardDescription>
-      </CardHeader>
-      {images.length > 1 && (
-        <Carousel className="mb-6 border-y">
-          <CarouselContent>
-            {images.map((image, index) => (
-              <CarouselItem key={index} className="max-h-[600px]">
-                <Image
-                  src={image}
-                  alt={whiskyName}
-                  width={600}
-                  height={600}
-                  placeholder="blur"
-                  className="h-full object-contain"
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselDotButton className="absolute bottom-4 right-4" />
-        </Carousel>
-      )}
-      <CardContent>
-        <Link
-          href={`/note/${id}`}
-        >
-          <div className="before:to-background hover:before:to-background/75 relative mb-1 before:absolute before:size-full before:max-h-[100px] before:bg-gradient-to-b before:from-transparent before:transition-colors">
-            <p className="line-clamp-4 whitespace-pre-wrap">
-              {review}
-            </p>
-          </div>
-        </Link>
-      </CardContent>
-    </Card>
+              <Link
+                href={`/user/${userName}`}
+                className={buttonVariants({variant: "link", size: "auto"})}
+              >
+                <span className="ml-1 font-bold">{userName}</span>
+              </Link>
+            </CardDescription>
+          </CardHeader>
+          {images.length > 1 && (
+            <Image
+              src={images[0]}
+              alt={whiskyName}
+              width={600}
+              height={600}
+              placeholder="blur"
+              className="max-h-[600px] object-cover pb-4"
+            />
+          )}
+          <CardContent>
+            <div className="before:to-background hover:before:to-background/75 relative mb-1 before:absolute before:size-full before:max-h-[100px] before:bg-gradient-to-b before:from-transparent before:transition-colors">
+              <p className="line-clamp-4 whitespace-pre-wrap">
+                {review}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
+    </article>
   );
 });
 

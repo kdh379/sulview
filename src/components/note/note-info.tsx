@@ -9,6 +9,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDate } from "@/lib/dayjs";
 import { Progress } from "@/components/ui/progress";
 import Counter from "@/components/ui/counter";
+import NoteSeeMore from "@/components/note/note-see-more";
+import { getCurrentUser } from "@/lib/session";
 
 interface TastingNoteItemProps {
   label: string;
@@ -35,8 +37,8 @@ interface NoteInfoProps {
   user: Pick<User, "name" | "image">;
 }
 
-
-function NoteInfo({ note, user }: NoteInfoProps) {
+async function NoteInfo({ note, user }: NoteInfoProps) {
+  const currentUser = await getCurrentUser();
   return (
     <article className="flex flex-col rounded-md border-l md:max-h-[750px]">
       <h1 className="p-4 text-2xl font-bold">{note.whiskyName}</h1>
@@ -65,15 +67,21 @@ function NoteInfo({ note, user }: NoteInfoProps) {
           </div>
         </div>
         <div className="ml-auto">
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" disabled>
             <Heart className="text-destructive size-6" />
+            <span className="sr-only">좋아요</span>
           </Button>
           <Button variant="ghost" size="icon">
             <Share2 className="size-6" />
+            <span className="sr-only">공유</span>
           </Button>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" disabled>
             <MessageCircle className="size-6" />
+            <span className="sr-only">댓글</span>
           </Button>
+          {currentUser?.id === note.createdBy &&
+            <NoteSeeMore noteId={note.id} />
+          }
         </div>
       </div>
       <ul className="flex-1 space-y-4 p-4 md:overflow-y-auto">

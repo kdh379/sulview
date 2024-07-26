@@ -28,6 +28,7 @@ async function getNote({ params }: Props) {
     )
     .leftJoin(users, eq(users.id, noteTable.createdBy));
 
+  if(!result.length) return;
   const { note, userName, userImage } = result[0];
 
   return {

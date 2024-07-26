@@ -1,5 +1,3 @@
-// hooks/useFeeds.ts
-
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { useCallback, useMemo, useRef } from "react";
 

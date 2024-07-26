@@ -12,8 +12,8 @@ function NoteImage({ images }: NoteImageProps) {
       <Image
         src="/whisky-placeholder.png"
         alt="빈 위스키 이미지"
-        width={400}
-        height={400}
+        width={800}
+        height={800}
       />
     </div>
   ) : (

@@ -5,6 +5,16 @@ import { db } from "@/db/drizzle";
 import { noteTable } from "@/db/schema";
 import { getCurrentUser } from "@/lib/session";
 
+const createDeleteCondition = (noteId: number, userId: string, userRole: string) => {
+  if (userRole === "admin") {
+    return eq(noteTable.id, noteId);
+  }
+  return and(
+    eq(noteTable.id, noteId),
+    eq(noteTable.createdBy, userId)
+  );
+};
+
 export async function DELETE(_req: Request, { params }: { params: { noteId: string } }) {
   const noteId = Number(params.noteId);
 
@@ -21,17 +31,11 @@ export async function DELETE(_req: Request, { params }: { params: { noteId: stri
     );
 
   try {
+    const deleteCondition = createDeleteCondition(noteId, user.id, user.role);
     const deletedNote = await db
       .delete(noteTable)
-      .where(
-        and(
-          eq(noteTable.id, noteId),
-          user.role !== "admin" ? eq(noteTable.createdBy, user.id) : undefined
-        )
-      )
-      .returning({
-        deletedId: noteTable.id,
-      });
+      .where(deleteCondition)
+      .returning();
 
     if (!deletedNote.length)
       return NextResponse.json<ActionError>(
@@ -44,8 +48,13 @@ export async function DELETE(_req: Request, { params }: { params: { noteId: stri
         { status: 403 },
       );
 
-    return NextResponse.json({}, { status: 204 });
+    return NextResponse.json({
+      deletedId: deletedNote[0],
+    }, {
+      status: 200,
+    });
   } catch (error) {
+    console.error(error);
     return NextResponse.json<ActionError>(
       {
         error: {

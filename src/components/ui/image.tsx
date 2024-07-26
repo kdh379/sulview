@@ -22,6 +22,10 @@ const PLACEHOLDER_CLASSNAME: Record<PlaceholderType, string> = {
   empty: "invisible",
 };
 
+const isFullUrl = (url: string) => {
+  return url.startsWith("http://") || url.startsWith("https://");
+};
+
 export default function Image({
   src,
   width,
@@ -46,18 +50,26 @@ export default function Image({
     setHasError(true);
   };
 
-  return (
-    <img
-      {...props}
-      ref={targetRef}
-      src={imageLoader({
-        src: hasError ? fallback : src,
+  const getImageSrc = (imageSrc: string) => {
+    if (hasError) return fallback;
+    if (isFullUrl(imageSrc)) {
+      return imageLoader({
+        src: imageSrc,
         width,
         height,
         quality: isIntersecting ? quality : 5,
         fit,
         format,
-      })}
+      });
+    }
+    return imageSrc;  // 절대 경로나 상대 경로인 경우 그대로 반환
+  };
+
+  return (
+    <img
+      {...props}
+      ref={targetRef}
+      src={getImageSrc(src)}
       width={width}
       height={height}
       alt={alt}
