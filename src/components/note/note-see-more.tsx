@@ -3,6 +3,7 @@
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { Edit, Trash } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
@@ -37,9 +38,11 @@ function NoteSeeMore({ noteId }: NoteSeeMoreProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem className="gap-2">
-            <Edit className="size-4" />
+          <DropdownMenuItem asChild className="gap-2">
+            <Link href={`/note/${noteId}/edit`}>
+              <Edit className="size-4" />
               수정
+            </Link>
           </DropdownMenuItem>
           <AlertDialogTrigger asChild>
             <DropdownMenuItem className="text-destructive gap-2">

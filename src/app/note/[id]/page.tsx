@@ -7,11 +7,7 @@ import { noteTable, users } from "@/db/schema";
 import NoteInfo from "@/components/note/note-info";
 import NoteImage from "@/components/note/note-image";
 
-type Props = {
-  params: { id: string }
-}
-
-async function getNote({ params }: Props) {
+async function getNote({ params }: NotePageProps) {
   const id = Number(params.id);
 
   if(isNaN(id)) return;
@@ -40,7 +36,11 @@ async function getNote({ params }: Props) {
   };
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+type NotePageProps = {
+  params: { id: string }
+}
+
+export async function generateMetadata({ params }: NotePageProps): Promise<Metadata> {
   const result = await getNote({ params });
 
   if(!result) return {};
@@ -69,7 +69,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-async function Note({ params }: Props) {
+async function NotePage({ params }: NotePageProps) {
   const result = await getNote({ params });
 
   if(!result) notFound();
@@ -84,4 +84,4 @@ async function Note({ params }: Props) {
   );
 }
 
-export default Note;
+export default NotePage;
