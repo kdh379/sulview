@@ -24,7 +24,7 @@ export const hasError = (state: ActionError | unknown): state is ActionError => 
 
 export const handleApiError = <TFieldValues extends FieldValues>(
   err: ActionError,
-  form: UseFormReturn<TFieldValues> | null,
+  form?: UseFormReturn<TFieldValues>,
 ) => {
   const { error } = err;
 
