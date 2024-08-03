@@ -3,9 +3,9 @@ import Link from "next/link";
 
 import type { GetNotesRes } from "@/types/entity/note";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "@/components/ui/image";
+import { buttonVariants } from "@/components/ui/button";
 
 export function FeedCardSkeleton() {
   return (
@@ -36,24 +36,28 @@ const FeedCard = forwardRef<HTMLDivElement, FeedCardProps>(({
 }, ref) => {
   return (
     <article>
-      <Link
-        href={`/note/${id}`}
-      >
-        <Card ref={ref}>
-          <CardHeader className="flex">
-            <CardTitle className="text-lg font-semibold">
+      <Card ref={ref}>
+        <CardHeader className="flex">
+          <CardTitle className="text-lg font-semibold">
+            <Link
+              href={`/note/${id}`}
+            >
               {whiskyName}
-            </CardTitle>
-            <CardDescription>
-          write by
-              <Link
-                href={`/user/${userName}`}
-                className={buttonVariants({variant: "link", size: "auto"})}
-              >
-                <span className="ml-1 font-bold">{userName}</span>
-              </Link>
-            </CardDescription>
-          </CardHeader>
+            </Link>
+          </CardTitle>
+          <CardDescription>
+              write by
+            <Link
+              href={`/user/${userName}`}
+              className={buttonVariants({variant: "link", size: "auto"})}
+            >
+              <span className="ml-1 font-bold">{userName}</span>
+            </Link>
+          </CardDescription>
+        </CardHeader>
+        <Link
+          href={`/note/${id}`}
+        >
           {images.length >= 1 && (
             <Image
               src={images[0]}
@@ -71,8 +75,8 @@ const FeedCard = forwardRef<HTMLDivElement, FeedCardProps>(({
               </p>
             </div>
           </CardContent>
-        </Card>
-      </Link>
+        </Link>
+      </Card>
     </article>
   );
 });
