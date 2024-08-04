@@ -57,19 +57,22 @@ const FeedCard = forwardRef<HTMLDivElement, FeedCardProps>(({
         </CardHeader>
         <Link
           href={`/note/${id}`}
+          className="group"
         >
-          {images.length >= 1 && (
-            <Image
-              src={images[0]}
-              alt={whiskyName}
-              width={600}
-              height={600}
-              placeholder="blur"
-              className="max-h-[600px] object-cover pb-4"
-            />
-          )}
+          <div className="mb-4 overflow-hidden">
+            {images.length >= 1 && (
+              <Image
+                src={images[0]}
+                alt={whiskyName}
+                width={600}
+                height={600}
+                placeholder="blur"
+                className="max-h-[600px] object-cover transition-transform group-hover:scale-105"
+              />
+            )}
+          </div>
           <CardContent>
-            <div className="before:to-background hover:before:to-background/75 relative mb-1 before:absolute before:size-full before:max-h-[100px] before:bg-gradient-to-b before:from-transparent before:transition-colors">
+            <div className="before:to-background group-hover:before:to-background/75 relative mb-1 before:absolute before:size-full before:max-h-[100px] before:bg-gradient-to-b before:from-transparent before:transition-colors">
               <p className="line-clamp-4 whitespace-pre-wrap">
                 {review}
               </p>
